@@ -31,24 +31,6 @@ public class Func {
         public int getMonto() {
             return monto;
         }
-        public String getNombreComprador() {
-            return nombreComprador;
-        }
-        public int getEdad() {
-            return edad;
-        }
-        public char getMetodoPago() {
-            return metodoPago;
-        }
-        public double getMontoEnganche() {
-            return montoEnganche;
-        }
-        public double getLiquidacion() {
-            return liquidacion;
-        }
-        public String getMensualidad() {
-            return mensualidad;
-        }
         /*sets */
         public void setNumeroControl(int numeroControl) {
             this.numeroControl = numeroControl;
@@ -64,24 +46,6 @@ public class Func {
         }
         public void setMonto(int monto) {
             this.monto = monto;
-        }
-        public void setNombreComprador(String nombreComprador) {
-            this.nombreComprador = nombreComprador;
-        }
-        public void setEdad(int edad) {
-            this.edad = edad;
-        }
-        public void setMetodoPago(char metodoPago) {
-            this.metodoPago = metodoPago;
-        }
-        public void setMontoEnganche(double montoEnganche) {
-            this.montoEnganche = montoEnganche;
-        }
-        public void setLiquidacion(double liquidacion) {
-            this.liquidacion = liquidacion;
-        }
-        public void setMensualidad(String mensualidad) {
-            this.mensualidad = mensualidad;
         }
     }
     
@@ -101,11 +65,6 @@ public class Func {
     public static double[] adeudo = new double[10];
     public static double[] pagoPorMes = new double[10];
     
-    
-
-
-    
-
     public static void valoresAleatorios() {
         Random rand = new Random();
         for (int i = 0; i < array.length; i++) {
@@ -148,18 +107,18 @@ public class Func {
             System.out.print(String.format("\nMétodo de pago: %s", metodoPago[i]));
 
             if (montoEnganche[i] == liquidacion[i]) {
-                System.out.print(String.format("92nSe realizará el pago completo: %.2f", liquidacion[i]));
+                System.out.print(String.format("\nSe realizará el pago completo: %.2f", liquidacion[i]));
             } else {
                 System.out.print(String.format("\nMonto de Enganche: %.2f", montoEnganche[i]));
                 System.out.print(String.format("\nAdeudo: %.2f", adeudo[i]));
             }
 
-            System.out.print(String.format("\nModelo solicitado: %s %s", compradores[i].marca, compradores[i].modelo));
+            System.out.print(String.format("\nModelo solicitado: %s %s", compradores[i].getMarca(), compradores[i].getModelo()));
         }
         System.out.print("\n\n");
     }
 
-    public static void mostrarInfoPago(Carro[] compradores, int numCompradores) {
+    public static void mostrarInfoPago(int numCompradores) {
         for (int i = 0; i < numCompradores; i++) {
             System.out.print(String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i]));
             System.out.print(String.format("\nMétodo de pago: %s", metodoPago[i]));
@@ -232,7 +191,9 @@ public class Func {
         carrosVendidos[numCarrosVendidos].setMarca(carro.getMarca());
         carrosVendidos[numCarrosVendidos].setModelo(carro.getModelo());
         carrosVendidos[numCarrosVendidos].setMonto(carro.getMonto());
-        compradores[numCompradores] = carro;
+        compradores[numCompradores] = new Func().new Carro();
+        compradores[numCompradores].setMarca(carro.getMarca());
+        compradores[numCompradores].setModelo(carro.getModelo());
     }
 
     public static void datos(int i, Carro carro) {
@@ -369,7 +330,7 @@ public class Func {
                     mostrarDatos();
                     break;
                 case 5:
-                    mostrarInfoPago(compradores, numCompradores);
+                    mostrarInfoPago(numCompradores);
                     break;
                 case 6:
                     /*reciboPersonal(compradores, numCompradores);
