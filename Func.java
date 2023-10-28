@@ -106,7 +106,7 @@ public class Func {
         System.out.print("\n\n");
     }
 
-    public static void buscar(Carro carroSeleccionado, Carro[] carrosVendidos, int[] numCarrosVendidos, Carro[] compradores, int[] numCompradores) {
+    public static void buscar(Carro carroSeleccionado, Carro[] carrosVendidos, int numCarrosVendidos, Carro[] compradores, int numCompradores) {
         do {
             int valorEliminar = 0;
             int truE = 0;
@@ -135,7 +135,7 @@ public class Func {
         } while (true);
     }
 
-    public static void registroAutos(Carro carro, Carro[] carrosVendidos, int[] numCarrosVendidos, Carro[] compradores, int[] numCompradores) {
+    public static void registroAutos(Carro carro, Carro[] carrosVendidos, int numCarrosVendidos, Carro[] compradores, int numCompradores) {
         carro.numeroControl = array[inicio];
         carro.color = color[inicio];
         carro.marca = marca[inicio];
@@ -157,8 +157,8 @@ public class Func {
         monto[valores] = 0;
         valores--;
 
-        carrosVendidos[numCarrosVendidos[0]++] = carro;
-        compradores[numCompradores[0]++] = carro;
+        carrosVendidos[numCarrosVendidos++] = carro;
+        compradores[numCompradores++] = carro;
     }
 
     public static void datos(int i, Carro carro) {
@@ -246,7 +246,7 @@ public class Func {
         Scanner scanner2 = new Scanner(System.in);
         int TRUe = 1, A = 0, w = 0;
         char x;
-        Carro carroSeleccionado;
+        Carro carroSeleccionado = new Func().new Carro();
         Carro[] carrosVendidos = new Carro[10];
         Carro[] compradores = new Carro[10];
         int numCompradores = 0;
@@ -265,7 +265,7 @@ public class Func {
             System.out.println("  7.-Salir\n");
             System.out.print("Selecciona una opción: ");
 
-            String input = scanner.nextLine().trim();
+            String input = scanner2.nextLine().trim();
             try {
                 salir = Integer.parseInt(input);
             } catch (NumberFormatException e) {
