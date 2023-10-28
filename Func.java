@@ -15,6 +15,74 @@ public class Func {
         double montoEnganche;
         double liquidacion;
         String mensualidad;
+        /*gets */
+        public int getNumeroControl() {
+            return numeroControl;
+        }
+        public String getColor() {
+            return color;
+        }
+        public String getMarca() {
+            return marca;
+        }
+        public String getModelo() {
+            return modelo;
+        }
+        public int getMonto() {
+            return monto;
+        }
+        public String getNombreComprador() {
+            return nombreComprador;
+        }
+        public int getEdad() {
+            return edad;
+        }
+        public char getMetodoPago() {
+            return metodoPago;
+        }
+        public double getMontoEnganche() {
+            return montoEnganche;
+        }
+        public double getLiquidacion() {
+            return liquidacion;
+        }
+        public String getMensualidad() {
+            return mensualidad;
+        }
+        /*sets */
+        public void setNumeroControl(int numeroControl) {
+            this.numeroControl = numeroControl;
+        }
+        public void setColor(String color) {
+            this.color = color;
+        }
+        public void setMarca(String marca) {
+            this.marca = marca;
+        }
+        public void setModelo(String modelo) {
+            this.modelo = modelo;
+        }
+        public void setMonto(int monto) {
+            this.monto = monto;
+        }
+        public void setNombreComprador(String nombreComprador) {
+            this.nombreComprador = nombreComprador;
+        }
+        public void setEdad(int edad) {
+            this.edad = edad;
+        }
+        public void setMetodoPago(char metodoPago) {
+            this.metodoPago = metodoPago;
+        }
+        public void setMontoEnganche(double montoEnganche) {
+            this.montoEnganche = montoEnganche;
+        }
+        public void setLiquidacion(double liquidacion) {
+            this.liquidacion = liquidacion;
+        }
+        public void setMensualidad(String mensualidad) {
+            this.mensualidad = mensualidad;
+        }
     }
     
     public static int[] array = new int[10];
@@ -36,10 +104,11 @@ public class Func {
     
 
 
-    public static Random rand = new Random();
+    
 
     public static void valoresAleatorios() {
-        for (int i = 0; i < 10; i++) {
+        Random rand = new Random();
+        for (int i = 0; i < array.length; i++) {
             array[i] = rand.nextInt(9000) + 1000;
         }
     }
@@ -56,15 +125,15 @@ public class Func {
 
     public static void mostrarDatosSeleccionados(Carro carro) {
         System.out.print("\nElemento seleccionado:\n");
-        System.out.print(String.format("Carro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n", carro.numeroControl, carro.color, carro.marca, carro.modelo, carro.monto));
+        System.out.print(String.format("Carro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n", carro.getNumeroControl(), carro.getColor(), carro.getMarca(), carro.getModelo(), carro.getMonto()));
         System.out.print("\n\n");
     }
 
     public static void mostrarCarrosVendidos(Carro[] carrosVendidos, int numCarrosVendidos) {
-        System.out.print("\nCarros vendidos hasta el momento:\n");
 
+        System.out.print("\nCarros vendidos hasta el momento:\n");
         for (int i = 0; i < numCarrosVendidos; i++) {
-            System.out.print(String.format("\n\t\tVenta no.%d\n\nComprador: %sCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n", i + 1, nombreComprador[i], carrosVendidos[i].numeroControl, carrosVendidos[i].color, carrosVendidos[i].marca, carrosVendidos[i].modelo, carrosVendidos[i].monto));
+            System.out.print(String.format("\n\t\tVenta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n", i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(), carrosVendidos[i].getColor(), carrosVendidos[i].getMarca(), carrosVendidos[i].getModelo(), carrosVendidos[i].getMonto()));
         }
 
         System.out.print("\n\n");
@@ -79,9 +148,9 @@ public class Func {
             System.out.print(String.format("\nMétodo de pago: %s", metodoPago[i]));
 
             if (montoEnganche[i] == liquidacion[i]) {
-                System.out.print(String.format("Se realizará el pago completo: %.2f", liquidacion[i]));
+                System.out.print(String.format("92nSe realizará el pago completo: %.2f", liquidacion[i]));
             } else {
-                System.out.print(String.format("Monto de Enganche: %.2f", montoEnganche[i]));
+                System.out.print(String.format("\nMonto de Enganche: %.2f", montoEnganche[i]));
                 System.out.print(String.format("\nAdeudo: %.2f", adeudo[i]));
             }
 
@@ -96,9 +165,9 @@ public class Func {
             System.out.print(String.format("\nMétodo de pago: %s", metodoPago[i]));
 
             if (montoEnganche[i] == liquidacion[i]) {
-                System.out.print(String.format("Se realizará el pago completo: %.2f", liquidacion[i]));
+                System.out.print(String.format("\nSe realizará el pago completo: %.2f", liquidacion[i]));
             } else {
-                System.out.print(String.format("Monto de Enganche: %.2f", montoEnganche[i]));
+                System.out.print(String.format("\nMonto de Enganche: %.2f", montoEnganche[i]));
                 System.out.print(String.format("\nAdeudo: %.2f", adeudo[i]));
                 System.out.print(String.format("\nPlazo: %d años \nMensualidad: $%.2f", mesesAdeudo[i], pagoPorMes[i]));
             }
@@ -136,11 +205,11 @@ public class Func {
     }
 
     public static void registroAutos(Carro carro, Carro[] carrosVendidos, int numCarrosVendidos, Carro[] compradores, int numCompradores) {
-        carro.numeroControl = array[inicio];
-        carro.color = color[inicio];
-        carro.marca = marca[inicio];
-        carro.modelo = modelo[inicio];
-        carro.monto = monto[inicio];
+        carro.setNumeroControl(array[inicio]);
+        carro.setColor(color[inicio]);
+        carro.setMarca(marca[inicio]);
+        carro.setModelo(modelo[inicio]);
+        carro.setMonto(monto[inicio]);
 
         for (int i = inicio; i < valores; i++) {
             array[i] = array[i + 1];
@@ -157,15 +226,19 @@ public class Func {
         monto[valores] = 0;
         valores--;
 
-        carrosVendidos[numCarrosVendidos++] = carro;
-        compradores[numCompradores++] = carro;
+        carrosVendidos[numCarrosVendidos] = new Func().new Carro();
+        carrosVendidos[numCarrosVendidos].setNumeroControl(carro.getNumeroControl());
+        carrosVendidos[numCarrosVendidos].setColor(carro.getColor());
+        carrosVendidos[numCarrosVendidos].setMarca(carro.getMarca());
+        carrosVendidos[numCarrosVendidos].setModelo(carro.getModelo());
+        carrosVendidos[numCarrosVendidos].setMonto(carro.getMonto());
+        compradores[numCompradores] = carro;
     }
 
     public static void datos(int i, Carro carro) {
-        float a, b, c;
+        double a, b, c;
 
         System.out.println("\nIngresa el nombre del comprador: ");
-        scanner.nextLine();
         nombreComprador[i] = scanner.nextLine();
 
         while (true) {
@@ -197,7 +270,7 @@ public class Func {
             String str2 = scanner.nextLine();
 
             try {
-                b = Float.parseFloat(str2);
+                b = Double.parseDouble(str2);
             } catch (NumberFormatException e) {
                 System.out.println("Entrada no válida. Ingresa un número válido para el porcentaje de enganche.");
                 continue;
@@ -239,13 +312,14 @@ public class Func {
             pagoPorMes[i] = adeudo[i] / c;
             System.out.printf("\nMensualidad: %.2f\n", pagoPorMes[i]);
         }
+
     }
 
     public static void main(String[] args) {
 
         Scanner scanner2 = new Scanner(System.in);
         int TRUe = 1, A = 0, w = 0;
-        char x;
+        //char x;
         Carro carroSeleccionado = new Func().new Carro();
         Carro[] carrosVendidos = new Carro[10];
         Carro[] compradores = new Carro[10];
@@ -276,10 +350,13 @@ public class Func {
             switch (salir) {
                 case 1:
                     System.out.println("\n\t\tAdvertencia: el carro seleccionado se eliminará del inventario");
+                    valoresAleatorios();
                     mostrarDatos();
                     buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos, compradores, numCompradores);
                     mostrarDatosSeleccionados(carroSeleccionado);
                     datos(w, carroSeleccionado);
+                    numCompradores++;
+                    numCarrosVendidos++;
                     w++;
                     break;
                 case 2:
@@ -318,5 +395,6 @@ public class Func {
                 break;
             }
         } while (true);
+        scanner2.close();
     }
 }
