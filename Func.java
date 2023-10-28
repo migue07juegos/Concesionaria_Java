@@ -17,34 +17,34 @@ public class Func {
         String mensualidad;
     }
     
-    static int[] array = new int[10];
-    static int[] mesesAdeudo = new int[10];
-    static int i, l, valores = 9, a = 0, inicio, nuevoValor, valorEliminar, posicion;
-    static char eliminar;
-    static String[] color = {"Blanco", "Negro", "Azul", "Rojo", "Verde", "Amarillo", "Plata", "Gris", "Rosa", "Naranja"};
-    static String[] marca = {"Audi", "BMW", "MercedesBenz", "Mclaren", "Lamborghini", "Toyota", "Chevrolet", "Nissan", "Mazda", "Renoult"};
-    static String[] modelo = {"A1", "A2", "A3", "A4", "Aventador", "A6", "A7", "A8", "A9", "A10"};
-    static int[] monto = {1087000, 1000000, 900000, 800000, 600000, 500000, 400000, 300000, 200000, 100000};
-    static String[] nombreComprador = new String[10];
-    static int[] edad = new int[10];
-    static String[] metodoPago = new String[10];
-    static double[] montoEnganche = new double[10];
-    static double[] liquidacion = new double[10];
-    static double[] adeudo = new double[10];
-    static double[] pagoPorMes = new double[10];
+    public static int[] array = new int[10];
+    public static int[] mesesAdeudo = new int[10];
+    public static int i, l, valores = 9, a = 0, inicio, nuevoValor, valorEliminar, posicion;
+    public static char eliminar;
+    public static String[] color = {"Blanco", "Negro", "Azul", "Rojo", "Verde", "Amarillo", "Plata", "Gris", "Rosa", "Naranja"};
+    public static String[] marca = {"Audi", "BMW", "MercedesBenz", "Mclaren", "Lamborghini", "Toyota", "Chevrolet", "Nissan", "Mazda", "Renoult"};
+    public static String[] modelo = {"A1", "A2", "A3", "A4", "Aventador", "A6", "A7", "A8", "A9", "A10"};
+    public static int[] monto = {1087000, 1000000, 900000, 800000, 600000, 500000, 400000, 300000, 200000, 100000};
+    public static String[] nombreComprador = new String[10];
+    public static int[] edad = new int[10];
+    public static String[] metodoPago = new String[10];
+    public static double[] montoEnganche = new double[10];
+    public static double[] liquidacion = new double[10];
+    public static double[] adeudo = new double[10];
+    public static double[] pagoPorMes = new double[10];
     
     
 
 
-    static Random rand = new Random();
+    public static Random rand = new Random();
 
-    static void valoresAleatorios() {
+    public static void valoresAleatorios() {
         for (int i = 0; i < 10; i++) {
             array[i] = rand.nextInt(9000) + 1000;
         }
     }
 
-    static void mostrarDatos() {
+    public static void mostrarDatos() {
         System.out.print("\n\tInventario:\n");
 
         for (int i = 0; i <= valores; i++) {
@@ -54,13 +54,13 @@ public class Func {
         System.out.print("\n\n");
     }
 
-    static void mostrarDatosSeleccionados(Carro carro) {
+    public static void mostrarDatosSeleccionados(Carro carro) {
         System.out.print("\nElemento seleccionado:\n");
         System.out.print(String.format("Carro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n", carro.numeroControl, carro.color, carro.marca, carro.modelo, carro.monto));
         System.out.print("\n\n");
     }
 
-    static void mostrarCarrosVendidos(Carro[] carrosVendidos, int numCarrosVendidos) {
+    public static void mostrarCarrosVendidos(Carro[] carrosVendidos, int numCarrosVendidos) {
         System.out.print("\nCarros vendidos hasta el momento:\n");
 
         for (int i = 0; i < numCarrosVendidos; i++) {
@@ -70,9 +70,9 @@ public class Func {
         System.out.print("\n\n");
     }
 
-    static Scanner scanner = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
 
-    static void mostrarDatosComprador(Carro[] compradores, int numCompradores) {
+    public static void mostrarDatosComprador(Carro[] compradores, int numCompradores) {
         for (int i = 0; i < numCompradores; i++) {
             System.out.print(String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i]));
             System.out.print(String.format("\nEdad: %d", edad[i]));
@@ -90,7 +90,7 @@ public class Func {
         System.out.print("\n\n");
     }
 
-    static void mostrarInfoPago(Carro[] compradores, int numCompradores) {
+    public static void mostrarInfoPago(Carro[] compradores, int numCompradores) {
         for (int i = 0; i < numCompradores; i++) {
             System.out.print(String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i]));
             System.out.print(String.format("\nMétodo de pago: %s", metodoPago[i]));
@@ -106,7 +106,7 @@ public class Func {
         System.out.print("\n\n");
     }
 
-    static void buscar(Carro carroSeleccionado, Carro[] carrosVendidos, int[] numCarrosVendidos, Carro[] compradores, int[] numCompradores) {
+    public static void buscar(Carro carroSeleccionado, Carro[] carrosVendidos, int[] numCarrosVendidos, Carro[] compradores, int[] numCompradores) {
         do {
             int valorEliminar = 0;
             int truE = 0;
@@ -135,7 +135,7 @@ public class Func {
         } while (true);
     }
 
-    static void registroAutos(Carro carro, Carro[] carrosVendidos, int[] numCarrosVendidos, Carro[] compradores, int[] numCompradores) {
+    public static void registroAutos(Carro carro, Carro[] carrosVendidos, int[] numCarrosVendidos, Carro[] compradores, int[] numCompradores) {
         carro.numeroControl = array[inicio];
         carro.color = color[inicio];
         carro.marca = marca[inicio];
@@ -161,7 +161,7 @@ public class Func {
         compradores[numCompradores[0]++] = carro;
     }
 
-    static void datos(int i, Carro carro) {
+    public static void datos(int i, Carro carro) {
         float a, b, c;
 
         System.out.println("\nIngresa el nombre del comprador: ");
