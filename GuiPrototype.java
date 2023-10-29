@@ -2,16 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalTime;
+//import com.alee.laf.scroll.WebScrollPane;
 
 public class GuiPrototype extends JFrame implements ActionListener{
-    StringBuilder r = new StringBuilder();
-    boolean pass = false;
-    boolean pass2 = true;
-    private JButton btn;
-    private JLabel jLabel1;
-    private JLabel jLabel2;
-    private JPasswordField jPasswordField1;
-    private JTextField jTextField1;
+    JButton btn;
+    JLabel jLabel1;
+    JLabel jLabel2;
+    JPasswordField jPasswordField1;
+    JTextField jTextField1;
+
+    int i = 0;
 
     public GuiPrototype() {
         setLayout(null);
@@ -63,7 +63,6 @@ public class GuiPrototype extends JFrame implements ActionListener{
             String password = new String(passwordChars);
 
             if (password.equals("1234")) {
-                pass = true;
                 openNewWindow();
                 dispose();
             } else {
@@ -74,9 +73,8 @@ public class GuiPrototype extends JFrame implements ActionListener{
 
     public static void relojGui(JFrame frame) {
         JPanel panel = new JPanel();
-        
+
         panel.setLayout(new BorderLayout());
-        frame.setLayout(new BorderLayout());
 
         JLabel label = new JLabel();
         label.setFont(new Font("Arial", Font.PLAIN, 50));
@@ -85,7 +83,7 @@ public class GuiPrototype extends JFrame implements ActionListener{
         frame.add(panel, BorderLayout.NORTH);
 
         Timer timer = new Timer(1000, new ActionListener() {
-            @Override 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 LocalTime currentTime = LocalTime.now();
                 String time = String.format("%02d:%02d:%02d",
@@ -100,15 +98,49 @@ public class GuiPrototype extends JFrame implements ActionListener{
     }
 
     private static void openNewWindow() {
+        GuiPrototype frame = new GuiPrototype();
         JFrame newFrame = new JFrame("Concesionaria");
-        newFrame.setSize(1920, 1080);
+
+        newFrame.setLayout(new BorderLayout());
 
         SwingUtilities.invokeLater(() -> {
             relojGui(newFrame);
         });
 
+        JPanel contentPanel = new JPanel();
+        JButton boton = new JButton("Hola");
+        JButton boton2 = new JButton("nop");
+
+        contentPanel.setLayout(null);
+
+        boton.setBounds(0, 0, 150, 30);
+        contentPanel.add(boton);
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent y) {
+                frame.i++;
+                System.out.println("¡Se hizo clic en el botón: " + frame.i);
+            }
+        });
+
+        boton2.setBounds(0, 250, 150, 30);
+        contentPanel.add(boton2);
+        boton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent z) {
+                System.out.println("¡Se hizo clic en el botón!");
+            }
+        });
+
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        newFrame.add(scrollPane, BorderLayout.CENTER);
+
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.setResizable(false);
+        newFrame.setSize(1920, 1080);
         newFrame.setVisible(true);
     }
 
