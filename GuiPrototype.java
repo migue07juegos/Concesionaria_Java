@@ -1,16 +1,18 @@
 import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalTime;
-//import com.alee.laf.scroll.WebScrollPane;
 
 public class GuiPrototype extends JFrame implements ActionListener{
+    
     JButton btn;
     JLabel jLabel1;
     JLabel jLabel2;
     JPasswordField jPasswordField1;
     JTextField jTextField1;
-
+    Border lineBorder = new LineBorder(Color.RED, 1);
     int i = 0;
 
     public GuiPrototype() {
@@ -24,40 +26,57 @@ public class GuiPrototype extends JFrame implements ActionListener{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         jLabel1.setFont(new Font("Tahoma", 1, 18)); 
-        jLabel1.setForeground(new Color(0, 0, 0));
+        jLabel1.setForeground(new Color(255,255,255));
         jLabel1.setText("Usuario:");
-        jLabel1.setBounds(60, 125, 150, 50);
+        jLabel1.setBounds(40, 60, 150, 50);
         add(jLabel1);
 
-        jLabel2.setFont(new Font("Tahoma", 1, 18)); 
-        jLabel2.setForeground(new Color(0, 0, 0));
-        jLabel2.setText("Password:");
-        jLabel2.setBounds(60, 195, 150, 50);
-        add(jLabel2);
-
-        jTextField1.setBackground(new Color(0, 0, 51));
+        jTextField1.setBackground(new Color(0, 0, 0));
+        jTextField1.setBorder(lineBorder);
         jTextField1.setFont(new Font("Tahoma", 1, 14)); 
         jTextField1.setForeground(new Color(255, 255, 255));
-        jTextField1.setBounds(205, 140, 220, 30);
+        jTextField1.setBounds(40, 105, 220, 30);
         add(jTextField1);
 
-        jPasswordField1.setBackground(new Color(0, 0, 51));
+        jLabel2.setFont(new Font("Tahoma", 1, 18)); 
+        jLabel2.setForeground(new Color(255,255,255));
+        jLabel2.setText("Contraseña:");
+        jLabel2.setBounds(40, 150, 150, 50);
+        add(jLabel2);
+        
+        jPasswordField1.setBackground(new Color(0, 0, 0));
+        jPasswordField1.setBorder(lineBorder);
         jPasswordField1.setFont(new Font("Tahoma", 1, 14)); 
         jPasswordField1.setForeground(new Color(255, 255, 255));
-        jPasswordField1.setBounds(205, 200, 220, 30);
+        jPasswordField1.setBounds(40, 195, 220, 30);
         add(jPasswordField1);
 
-        btn.setBackground(new Color(0, 0, 51));
+        btn.setBackground(new Color(0, 0, 0));
+        btn.setBorder(lineBorder);
+        btn.setFocusPainted(false);
         btn.setFont(new Font("Tahoma", 1, 16)); 
         btn.setForeground(new Color(255, 255, 255));
         btn.setText("Iniciar Sesión");
-        btn.setBounds(170, 260, 150, 30);
+        btn.setBounds(75, 260, 150, 30);
         add(btn);
         btn.addActionListener(this);
 
     }
 
     public void actionPerformed(ActionEvent e) {
+        // Personalizar la apariencia del JOptionPane
+        UIManager.put("OptionPane.background", Color.BLACK);
+        UIManager.put("Panel.background", Color.BLACK);
+        UIManager.put("OptionPane.messageForeground", Color.WHITE);
+
+        // Personalizar el aspecto del botón "OK" en todos los JOptionPanes
+        int espacioInterno = 3;
+        Border buttonBorder = new CompoundBorder(new LineBorder(Color.RED), new EmptyBorder(espacioInterno, espacioInterno, espacioInterno, espacioInterno));
+        UIManager.put("Button.border", new BorderUIResource(buttonBorder));
+        UIManager.put("Button.background", new Color(0, 0, 0));  // Fondo negro
+        UIManager.put("Button.foreground", new Color(255, 255, 255));  // Texto blanco
+        UIManager.put("Button.focus", false);  // No mostrar foco
+
         if (e.getSource() == btn) {
             char[] passwordChars = jPasswordField1.getPassword();
             String password = new String(passwordChars);
@@ -78,7 +97,6 @@ public class GuiPrototype extends JFrame implements ActionListener{
 
         JLabel label = new JLabel();
         label.setFont(new Font("Arial", Font.PLAIN, 50));
-
         panel.add(label, BorderLayout.EAST);
         frame.add(panel, BorderLayout.NORTH);
 
@@ -114,6 +132,7 @@ public class GuiPrototype extends JFrame implements ActionListener{
         contentPanel.setLayout(null);
 
         boton.setBounds(0, 0, 150, 30);
+        boton.setFocusPainted(false);
         contentPanel.add(boton);
         boton.addActionListener(new ActionListener() {
             @Override
@@ -124,6 +143,7 @@ public class GuiPrototype extends JFrame implements ActionListener{
         });
 
         boton2.setBounds(0, 250, 150, 30);
+        boton2.setFocusPainted(false);
         contentPanel.add(boton2);
         boton2.addActionListener(new ActionListener() {
             @Override
@@ -155,6 +175,7 @@ public class GuiPrototype extends JFrame implements ActionListener{
         int xPos = (screenWidth -  width) / 2;
         int yPos = (screenHeight - height) / 2;
 
+        frame.getContentPane().setBackground(Color.BLACK);
         frame.setBounds(xPos, yPos, width, height);
         frame.setResizable(false);
         frame.setVisible(true);
