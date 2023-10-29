@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.BorderUIResource;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalTime;
@@ -153,8 +155,63 @@ public class GuiPrototype extends JFrame implements ActionListener{
         });
 
         JScrollPane scrollPane = new JScrollPane(contentPanel);
+
+        // Personalizar el aspecto del JScrollPane
+        scrollPane.getViewport().setBackground(Color.BLACK);  // Fondo del área visible
+        scrollPane.setBorder(null);  // Borde del JScrollPane
+
+        // Cambiar el color del JScrollBar
+        scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
+
+        // Cambiar el color del thumb (la parte móvil del JScrollBar)
+        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.RED;
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                JButton button = super.createDecreaseButton(orientation);
+                button.setBackground(Color.BLACK);
+                button.setForeground(Color.RED);
+                return button;
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                JButton button = super.createIncreaseButton(orientation);
+                button.setBackground(Color.BLACK);
+                button.setForeground(Color.RED);
+                return button;
+            }
+        });
+        scrollPane.getHorizontalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.RED;
+            }
+
+            @Override
+            protected JButton createDecreaseButton(int orientation) {
+                JButton button = super.createDecreaseButton(orientation);
+                button.setBackground(Color.BLACK);
+                button.setForeground(Color.RED);
+                button.setFocusPainted(false);
+                return button;
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                JButton button = super.createIncreaseButton(orientation);
+                button.setBackground(Color.BLACK);
+                button.setForeground(Color.RED);
+                button.setFocusPainted(false);
+                return button;
+            }
+        });
+
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         newFrame.add(scrollPane, BorderLayout.CENTER);
 
