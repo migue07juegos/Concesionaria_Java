@@ -1,5 +1,13 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.Scanner;
+
+import java.awt.*;
 
 public class Func {
 
@@ -276,20 +284,92 @@ public class Func {
 
     }
 
-    public static void main(String[] args) {
+    public static void recibo(Carro[] compradores, int num_compradores) throws IOException{
+        
 
+        LocalDateTime date = LocalDateTime.now();
         Scanner scanner2 = new Scanner(System.in);
-        int TRUe = 1, A = 0, w = 0;
+
+        DateTimeFormatter fecha_formateada = DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm:ss");
+        String fecha = date.format(fecha_formateada);
+
+        String file_name = "ticket.txt";
+
+        FileWriter fileWriter = new FileWriter(file_name, true);
+            
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+        try {
+
+            bufferedWriter.write("Fecha de impresion: "+fecha);
+            bufferedWriter.newLine(); 
+    
+            for (i = 0; i < num_compradores; i++){
+
+                bufferedWriter.write("Compradores: "+(compradores == null ? "" : compradores));
+                bufferedWriter.newLine();
+                bufferedWriter.write("Numero de compradores: "+num_compradores);
+                bufferedWriter.newLine();
+                bufferedWriter.write(String.format("\n\nComprador %i: %s",i+1,(nombreComprador[i] == null ? "" : nombreComprador[i])));
+                bufferedWriter.newLine();
+                bufferedWriter.write(String.format("Edad: %i",edad[i]));
+                bufferedWriter.newLine();
+                bufferedWriter.write(String.format("\nM�todo de pago: %s",(metodoPago[i] == null ? "" : metodoPago[i])));
+                bufferedWriter.newLine();
+
+                if (montoEnganche[i]==liquidacion[i]){
+                    
+                    bufferedWriter.write(String.format("Se realizar� el pago completo: %.2f",liquidacion[i]));
+                }else{
+                    bufferedWriter.write(String.format("Monto de Enganche: %.2f",montoEnganche[i]));
+                    bufferedWriter.newLine();
+                    bufferedWriter.write(String.format("\nAdeudo: %.2f",adeudo[i]));
+                }        
+                bufferedWriter.newLine();
+                bufferedWriter.write(String.format("\nModelo solicitado: %s %s",compradores[i].marca,compradores[i].modelo));
+            }
+        
+            System.out.println("El recibo se ha creado exitosamente!\nDesea abrir el recibo? (s/n): ");
+            String abrir = scanner2.nextLine();
+            
+            if (abrir.equals("S") || abrir.equals("s")) {
+                try {
+                    File file = new File(file_name);
+                    if (!Desktop.isDesktopSupported()) {
+                        System.out.println("not supported");
+                    }
+                    Desktop desktop = Desktop.getDesktop();
+                    if (file.exists())
+                        desktop.open(file);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            bufferedWriter.close();
+            fileWriter.close();
+            scanner2.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        Scanner scanner = new Scanner(System.in);
+        // int TRUe = 1, A = 0,
+        int w = 0;
         //char x;
         Carro carroSeleccionado = new Func().new Carro();
         Carro[] carrosVendidos = new Carro[10];
         Carro[] compradores = new Carro[10];
         int numCompradores = 0;
         int numCarrosVendidos = 0;
+        boolean True = true;
+        int salir = 0;
 
-    
-        do {
-            int salir = 0;
+        while (True) {
+
             System.out.println("\n\t\t Menú: ");
             System.out.println("\n  1.-Selecciona la venta que se realizará");
             System.out.println("  2.-Información de los compradores");
@@ -300,10 +380,11 @@ public class Func {
             System.out.println("  7.-Salir\n");
             System.out.print("Selecciona una opción: ");
 
-            String input = scanner2.nextLine().trim();
+            String input = scanner.nextLine().trim();
             try {
                 salir = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
+                
+            }catch (NumberFormatException e) {
                 System.out.println("Entrada no válida. Ingresa un número válido.");
                 continue;
             }
@@ -333,10 +414,12 @@ public class Func {
                     mostrarInfoPago(numCompradores);
                     break;
                 case 6:
+                recibo(compradores, numCompradores);
                     /*reciboPersonal(compradores, numCompradores);
                     scanner.nextLine();
-                    break;
+                    break;/*/
                 case 7:
+                /*
                     System.out.print("Desea imprimir la información de los compradores? (S/N): ");
                     x = scanner.nextLine().charAt(0);
                     if (x == 'S' || x == 's') {
@@ -345,17 +428,14 @@ public class Func {
                     } else if (x == 'N' || x == 'n') {
                         A = TRUe;
                     }*/
-                    A = TRUe;
+                    // A = TRUe;
+                    True = false;
                     break;
                 default:
                     System.out.println("\n\n\t\tERROR 404");
                     break;
             }
-
-            if (A == TRUe) {
-                break;
-            }
-        } while (true);
-        scanner2.close();
+        }
+        scanner.close();
     }
 }
