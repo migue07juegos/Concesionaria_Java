@@ -152,17 +152,11 @@ public class GuiPrototype extends JFrame implements ActionListener{
         do {
             int valorEliminar = 0;
             int truE = 0;
-            String input = JOptionPane.showInputDialog(null, "Selecciona un carro a través de su número de control: ");
 
-            try {
-                valorEliminar = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Entrada no válida. Introduce un número de control válido.");
-                continue;
-            }
+            valorEliminar = numBtn;
 
             for (int i = 0; i <= valores; i++) {
-                if (array[i] == valorEliminar && valorEliminar == numBtn) {
+                if (array[i] == valorEliminar) {
                     truE = 1;
                     a = 1;
                     inicio = i;
@@ -497,19 +491,29 @@ public class GuiPrototype extends JFrame implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            boolean confirm;
+            boolean confirm = true;
             int w = 0;
             Carro carroSeleccionado = new GuiPrototype().new Carro();
             Carro[] carrosVendidos = new Carro[10];
             Carro[] compradores = new Carro[10];
             int numCompradores = 0;
             int numCarrosVendidos = 0;
-            
-            confirm = buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos, compradores, numCompradores, array[ho]);
-            datos(w, carroSeleccionado);
-            numCompradores++;
-            numCarrosVendidos++;    
-            w++;
+            String[] opciones = {"Realizar venta"};
+
+            int seleccion = JOptionPane.showOptionDialog(null, "Selecciona una opción", "Venta del auto seleccionado", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+            switch (seleccion) {
+                case 0:
+                    confirm = buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos, compradores, numCompradores, array[ho]);
+                    datos(w, carroSeleccionado);
+                    numCompradores++;
+                    numCarrosVendidos++;    
+                    w++;
+                    break;
+            }
+            if (seleccion == JOptionPane.CLOSED_OPTION) {
+                JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+
             button.setVisible(confirm);
             associatedLabel.setVisible(confirm);
         }
