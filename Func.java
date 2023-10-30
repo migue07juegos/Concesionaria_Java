@@ -284,7 +284,7 @@ public class Func {
 
     }
 
-    public static void recibo(Carro[] compradores, int num_compradores) throws IOException{
+    public static void reciboPersonal(Carro[] compradores, int num_compradores) throws IOException{
         
 
         LocalDateTime date = LocalDateTime.now();
@@ -310,20 +310,20 @@ public class Func {
                 bufferedWriter.newLine();
                 bufferedWriter.write("Numero de compradores: "+num_compradores);
                 bufferedWriter.newLine();
-                bufferedWriter.write(String.format("\n\nComprador %i: %s",i+1,(nombreComprador[i] == null ? "" : nombreComprador[i])));
+                bufferedWriter.write(String.format("\n\nComprador %d: %s",i+1,(nombreComprador[i] == null ? "" : nombreComprador[i])));
                 bufferedWriter.newLine();
-                bufferedWriter.write(String.format("Edad: %i",edad[i]));
+                bufferedWriter.write(String.format("Edad: %d",edad[i]));
                 bufferedWriter.newLine();
                 bufferedWriter.write(String.format("\nM�todo de pago: %s",(metodoPago[i] == null ? "" : metodoPago[i])));
                 bufferedWriter.newLine();
 
                 if (montoEnganche[i]==liquidacion[i]){
                     
-                    bufferedWriter.write(String.format("Se realizar� el pago completo: %.2f",liquidacion[i]));
+                    bufferedWriter.write(String.format("Se realizar� el pago completo: %.2d",liquidacion[i]));
                 }else{
-                    bufferedWriter.write(String.format("Monto de Enganche: %.2f",montoEnganche[i]));
+                    bufferedWriter.write(String.format("Monto de Enganche: %.2d",montoEnganche[i]));
                     bufferedWriter.newLine();
-                    bufferedWriter.write(String.format("\nAdeudo: %.2f",adeudo[i]));
+                    bufferedWriter.write(String.format("\nAdeudo: %.2d",adeudo[i]));
                 }        
                 bufferedWriter.newLine();
                 bufferedWriter.write(String.format("\nModelo solicitado: %s %s",compradores[i].marca,compradores[i].modelo));
@@ -414,7 +414,7 @@ public class Func {
                     mostrarInfoPago(numCompradores);
                     break;
                 case 6:
-                recibo(compradores, numCompradores);
+                reciboPersonal(compradores, numCompradores);
                     /*reciboPersonal(compradores, numCompradores);
                     scanner.nextLine();
                     break;/*/
