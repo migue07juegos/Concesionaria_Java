@@ -284,75 +284,94 @@ public class Func {
 
     }
 
-    public static void reciboPersonal(Carro[] compradores, int num_compradores) throws IOException{
+    public static void recibo_personal(Carro[] compradores, int num_compradores) throws IOException{
         
-
         LocalDateTime date = LocalDateTime.now();
-        Scanner scanner2 = new Scanner(System.in);
 
-        DateTimeFormatter fecha_formateada = DateTimeFormatter.ofPattern("dd/MMM/yyyy HH:mm:ss");
+        DateTimeFormatter fecha_formateada = DateTimeFormatter.ofPattern("dd/MMM/yyyy");
+        DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
+
         String fecha = date.format(fecha_formateada);
+        String hora = date.format(hora_formateada);
 
-        String file_name = "ticket.txt";
+        Scanner scanner3 = new Scanner(System.in);
 
-        FileWriter fileWriter = new FileWriter(file_name, true);
-            
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        System.out.println("Ingrese el nombre de su recibo");
+        String file_name = scanner3.nextLine();
 
-        try {
 
-            bufferedWriter.write("Fecha de impresion: "+fecha);
-            bufferedWriter.newLine(); 
-    
-            for (i = 0; i < num_compradores; i++){
+        for (i = 0; i < num_compradores; i++){
+            System.out.println(String.format("\nComprador %d: %s\n",i+1,nombreComprador[i]));
+        }
 
-                bufferedWriter.write("Compradores: "+(compradores == null ? "" : compradores));
-                bufferedWriter.newLine();
-                bufferedWriter.write("Numero de compradores: "+num_compradores);
-                bufferedWriter.newLine();
-                bufferedWriter.write(String.format("\n\nComprador %d: %s",i+1,(nombreComprador[i] == null ? "" : nombreComprador[i])));
-                bufferedWriter.newLine();
-                bufferedWriter.write(String.format("Edad: %d",edad[i]));
-                bufferedWriter.newLine();
-                bufferedWriter.write(String.format("\nM�todo de pago: %s",(metodoPago[i] == null ? "" : metodoPago[i])));
-                bufferedWriter.newLine();
-
-                if (montoEnganche[i]==liquidacion[i]){
-                    
-                    bufferedWriter.write(String.format("Se realizar� el pago completo: %.2d",liquidacion[i]));
-                }else{
-                    bufferedWriter.write(String.format("Monto de Enganche: %.2d",montoEnganche[i]));
-                    bufferedWriter.newLine();
-                    bufferedWriter.write(String.format("\nAdeudo: %.2d",adeudo[i]));
-                }        
-                bufferedWriter.newLine();
-                bufferedWriter.write(String.format("\nModelo solicitado: %s %s",compradores[i].marca,compradores[i].modelo));
-            }
+        System.out.println("Ingrese el nombre del comprador para imprimir su recibo");
+        String nombre = scanner3.nextLine();
         
-            System.out.println("El recibo se ha creado exitosamente!\nDesea abrir el recibo? (s/n): ");
-            String abrir = scanner2.nextLine();
-            
-            if (abrir.equals("S") || abrir.equals("s")) {
-                try {
-                    File file = new File(file_name);
-                    if (!Desktop.isDesktopSupported()) {
-                        System.out.println("not supported");
-                    }
-                    Desktop desktop = Desktop.getDesktop();
-                    if (file.exists())
-                        desktop.open(file);
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            bufferedWriter.close();
-            fileWriter.close();
-            scanner2.close();
+        while (!new File(file_name+".txt").exists()) {
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {    
+            
+                FileWriter fileWriter = new FileWriter(new File(file_name+".txt"), true);
+            
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);            
+    
+                bufferedWriter.write("Fecha de impresion: "+fecha+"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"+hora);
+                bufferedWriter.newLine(); 
+    
+                for (i = 0; i < num_compradores; i++){
+    
+                    if (nombre.equals(nombreComprador[i])) {
+    
+            
+                        bufferedWriter.write(String.format("\n\nComprador %d: %s",i+1,(nombreComprador[i] == null ? "" : nombreComprador[i])));
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("Edad: %d",edad[i]));
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("M�todo de pago: %s",(metodoPago[i] == null ? "" : metodoPago[i])));
+                        bufferedWriter.newLine();
+    
+                        if (montoEnganche[i]==liquidacion[i]){
+                            
+                            bufferedWriter.write(String.format("Se realizar� el pago completo: %.2f",liquidacion[i]));
+                        }else{
+                            bufferedWriter.write(String.format("Monto de Enganche: %.2f",montoEnganche[i]));
+                            bufferedWriter.newLine();
+                            bufferedWriter.write(String.format("Adeudo: %.2f",adeudo[i]));
+                            bufferedWriter.newLine();
+                            bufferedWriter.write(String.format("Plazo: %d años\nMensualidad %.2f", mesesAdeudo[i], pagoPorMes[i]));
+                            bufferedWriter.newLine();
+                            bufferedWriter.write(String.format("Si tarda mas de 3 meses en pagar su mensualidad se le embargar�"));
+                        }        
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("Modelo solicitado: %s %s",compradores[i].marca,compradores[i].modelo));
+                    }
+                }
+            
+                System.out.println("El recibo se ha creado exitosamente!\nDesea abrir el recibo? (s/n): ");
+                String abrir = scanner3.nextLine();
+                scanner3.close();
+                if (abrir.equals("S") || abrir.equals("s")) {
+                    try {
+                        File file = new File(file_name+".txt");
+                        if (!Desktop.isDesktopSupported()) {
+                            System.out.println("not supported");
+                        }
+                        Desktop desktop = Desktop.getDesktop();
+                        if (file.exists())
+                            desktop.open(file);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+    
+                bufferedWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }    
+            
         }
     }
+
 
     public static void main(String[] args) throws IOException {
 
@@ -414,7 +433,7 @@ public class Func {
                     mostrarInfoPago(numCompradores);
                     break;
                 case 6:
-                reciboPersonal(compradores, numCompradores);
+                recibo_personal(compradores, numCompradores);
                     /*reciboPersonal(compradores, numCompradores);
                     scanner.nextLine();
                     break;/*/

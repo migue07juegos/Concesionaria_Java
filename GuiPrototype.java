@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.time.LocalTime;
 import java.util.Random;
 
-public class GuiPrototype extends JFrame implements ActionListener{
+public class GuiPrototype extends JFrame {
     public class Carro {
         int numeroControl;
         String color;
@@ -54,11 +54,6 @@ public class GuiPrototype extends JFrame implements ActionListener{
         }
     }
 
-    JButton btn;
-    JLabel jLabel1;
-    JLabel jLabel2;
-    JPasswordField jPasswordField1;
-    JTextField jTextField1;
     Border lineBorder = new LineBorder(Color.RED, 1);
 
     public static int[] array = new int[10];
@@ -66,7 +61,7 @@ public class GuiPrototype extends JFrame implements ActionListener{
     public static int i, l, valores = 9, a = 0, inicio, nuevoValor, valorEliminar, posicion;
     public static char eliminar;
     public static String[] color = {"Blanco", "Negro", "Azul", "Rojo", "Verde", "Amarillo", "Plata", "Gris", "Rosa", "Naranja"};
-    public static String[] marca = {"Audi", "BMW", "MercedesBenz", "Mclaren", "Lamborghini", "Toyota", "Chevrolet", "Nissan", "Mazda", "Renoult"};
+    public static String[] marca = {"Audi", "BMW", "Mercedes-Benz", "Mclaren", "Lamborghini", "Toyota", "Chevrolet", "Nissan", "Mazda", "Renault"};
     public static String[] modelo = {"A1", "A2", "A3", "A4", "Aventador", "A6", "A7", "A8", "A9", "A10"};
     public static int[] monto = {1087000, 1000000, 900000, 800000, 600000, 500000, 400000, 300000, 200000, 100000};
     public static String[] nombreComprador = new String[10];
@@ -87,65 +82,59 @@ public class GuiPrototype extends JFrame implements ActionListener{
     public static String[] mostrarDatos() {
         String[] mostrarDatosStr = new String[10];
         valoresAleatorios();
-        //System.out.print("\n\tInventario:\n");
 
         for (int i = 0; i <= valores; i++) {
             mostrarDatosStr[i] = (String.format("Carro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d", array[i], color[i], marca[i], modelo[i], monto[i]));
         }
 
-        //System.out.print("\n\n");
         return mostrarDatosStr;
     }
 
-    public static void mostrarDatosSeleccionados(Carro carro) {
-        System.out.print("\nElemento seleccionado:\n");
-        System.out.print(String.format("Carro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n", carro.getNumeroControl(), carro.getColor(), carro.getMarca(), carro.getModelo(), carro.getMonto()));
-        System.out.print("\n\n");
-    }
+    public static String mostrarCarrosVendidos(Carro[] carrosVendidos, int numCarrosVendidos) {
+        String CarrosVendidosHastaElMomento = "";
 
-    public static void mostrarCarrosVendidos(Carro[] carrosVendidos, int numCarrosVendidos) {
-
-        System.out.print("\nCarros vendidos hasta el momento:\n");
         for (int i = 0; i < numCarrosVendidos; i++) {
-            System.out.print(String.format("\n\t\tVenta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n", i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(), carrosVendidos[i].getColor(), carrosVendidos[i].getMarca(), carrosVendidos[i].getModelo(), carrosVendidos[i].getMonto()));
+            CarrosVendidosHastaElMomento = (String.format("Carros vendidos hasta el momento:\n\n\t\tVenta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n", i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(), carrosVendidos[i].getColor(), carrosVendidos[i].getMarca(), carrosVendidos[i].getModelo(), carrosVendidos[i].getMonto()));
         }
 
-        System.out.print("\n\n");
+        return CarrosVendidosHastaElMomento;
     }
 
 
-    public static void mostrarDatosComprador(Carro[] compradores, int numCompradores) {
+    public static StringBuilder mostrarDatosComprador(Carro[] compradores, int numCompradores) {
+        StringBuilder datosCompradorF = new StringBuilder();
         for (int i = 0; i < numCompradores; i++) {
-            System.out.print(String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i]));
-            System.out.print(String.format("\nEdad: %d", edad[i]));
-            System.out.print(String.format("\nMétodo de pago: %s", metodoPago[i]));
+            datosCompradorF.append((String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i])));
+            datosCompradorF.append((String.format("\nEdad: %d", edad[i])));
+            datosCompradorF.append((String.format("\nMétodo de pago: %s", metodoPago[i])));
 
             if (montoEnganche[i] == liquidacion[i]) {
-                System.out.print(String.format("\nSe realizará el pago completo: %.2f", liquidacion[i]));
+                datosCompradorF.append((String.format("\nSe realizará el pago completo: %.2f", liquidacion[i])));
             } else {
-                System.out.print(String.format("\nMonto de Enganche: %.2f", montoEnganche[i]));
-                System.out.print(String.format("\nAdeudo: %.2f", adeudo[i]));
+                datosCompradorF.append((String.format("\nMonto de Enganche: %.2f", montoEnganche[i])));
+                datosCompradorF.append((String.format("\nAdeudo: %.2f", adeudo[i])));
             }
 
-            System.out.print(String.format("\nModelo solicitado: %s %s", compradores[i].getMarca(), compradores[i].getModelo()));
+            datosCompradorF.append((String.format("\nModelo solicitado: %s %s", compradores[i].getMarca(), compradores[i].getModelo())));
         }
-        System.out.print("\n\n");
+        return datosCompradorF;
     }
 
-    public static void mostrarInfoPago(int numCompradores) {
+    public static StringBuilder mostrarInfoPago(int numCompradores) {
+        StringBuilder InfoDePagoF = new StringBuilder();
         for (int i = 0; i < numCompradores; i++) {
-            System.out.print(String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i]));
-            System.out.print(String.format("\nMétodo de pago: %s", metodoPago[i]));
+            InfoDePagoF.append((String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i])));
+            InfoDePagoF.append((String.format("\nMétodo de pago: %s", metodoPago[i])));
 
             if (montoEnganche[i] == liquidacion[i]) {
-                System.out.print(String.format("\nSe realizará el pago completo: %.2f", liquidacion[i]));
+                InfoDePagoF.append((String.format("\nSe realizará el pago completo: %.2f", liquidacion[i])));
             } else {
-                System.out.print(String.format("\nMonto de Enganche: %.2f", montoEnganche[i]));
-                System.out.print(String.format("\nAdeudo: %.2f", adeudo[i]));
-                System.out.print(String.format("\nPlazo: %d años \nMensualidad: $%.2f", mesesAdeudo[i], pagoPorMes[i]));
+                InfoDePagoF.append((String.format("\nMonto de Enganche: %.2f", montoEnganche[i])));
+                InfoDePagoF.append((String.format("\nAdeudo: %.2f", adeudo[i])));
+                InfoDePagoF.append((String.format("\nPlazo: %d años \nMensualidad: $%.2f", mesesAdeudo[i], pagoPorMes[i])));
             }
         }
-        System.out.print("\n\n");
+        return InfoDePagoF;
     }
 
     public static boolean buscar(Carro carroSeleccionado, Carro[] carrosVendidos, int numCarrosVendidos, Carro[] compradores, int numCompradores, int numBtn) {
@@ -248,7 +237,6 @@ public class GuiPrototype extends JFrame implements ActionListener{
                 break;
             }
         }
-
         a = b / 100;
         montoEnganche[i] = a * carro.monto;
         adeudo[i] = carro.monto - montoEnganche[i];
@@ -279,76 +267,85 @@ public class GuiPrototype extends JFrame implements ActionListener{
 
     }
 
-    public GuiPrototype() {
-        setLayout(null);
-        jLabel1 = new JLabel();
-        jLabel2 = new JLabel();
-        jTextField1 = new JTextField();
-        jPasswordField1 = new JPasswordField();
-        btn = new JButton();
+    public GuiPrototype() {}
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    public GuiPrototype(boolean Ventana) {
+        if (Ventana) {
+            UIManager.put("OptionPane.background", Color.BLACK);
+            UIManager.put("Panel.background", Color.BLACK);
+            UIManager.put("OptionPane.messageForeground", new Color(155,155,155));
 
-        jLabel1.setFont(new Font("Tahoma", 1, 18)); 
-        jLabel1.setForeground(new Color(255,255,255));
-        jLabel1.setText("Usuario:");
-        jLabel1.setBounds(40, 60, 150, 50);
-        add(jLabel1);
+            int espacioInterno = 3;
+            Border buttonBorder = new CompoundBorder(new LineBorder(new Color(0, 85, 119)), new EmptyBorder(espacioInterno, espacioInterno, espacioInterno, espacioInterno));
+            UIManager.put("Button.border", new BorderUIResource(buttonBorder));
+            UIManager.put("Button.background", new Color(0,0,0));
+            UIManager.put("Button.foreground", new Color(155,155,155));
+            UIManager.put("Button.focus", false);
 
-        jTextField1.setBackground(new Color(0, 0, 0));
-        jTextField1.setBorder(lineBorder);
-        jTextField1.setFont(new Font("Tahoma", 1, 14)); 
-        jTextField1.setForeground(new Color(255, 255, 255));
-        jTextField1.setBounds(40, 105, 220, 30);
-        add(jTextField1);
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            setLayout(new BorderLayout());
 
-        jLabel2.setFont(new Font("Tahoma", 1, 18)); 
-        jLabel2.setForeground(new Color(255,255,255));
-        jLabel2.setText("Contraseña:");
-        jLabel2.setBounds(40, 150, 150, 50);
-        add(jLabel2);
-        
-        jPasswordField1.setBackground(new Color(0, 0, 0));
-        jPasswordField1.setBorder(lineBorder);
-        jPasswordField1.setFont(new Font("Tahoma", 1, 14)); 
-        jPasswordField1.setForeground(new Color(255, 255, 255));
-        jPasswordField1.setBounds(40, 195, 220, 30);
-        add(jPasswordField1);
+            SwingUtilities.invokeLater(() -> {
+                relojGui(this);
+            });
 
-        btn.setBackground(new Color(0, 0, 0));
-        btn.setBorder(lineBorder);
-        btn.setFocusPainted(false);
-        btn.setFont(new Font("Tahoma", 1, 16)); 
-        btn.setForeground(new Color(255, 255, 255));
-        btn.setText("Iniciar Sesión");
-        btn.setBounds(75, 260, 150, 30);
-        add(btn);
-        btn.addActionListener(this);
+            JPanel contentPanel = new JPanel();
+            contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-    }
+            String[] moDaStr = mostrarDatos();
 
-    public void actionPerformed(ActionEvent e) {
-        UIManager.put("OptionPane.background", Color.BLACK);
-        UIManager.put("Panel.background", Color.BLACK);
-        UIManager.put("OptionPane.messageForeground", Color.WHITE);
+            for (int h = 0; h < 10; h++) {
+                // Crear un JPanel para agrupar el JLabel y el JButton
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50)); // Espaciado vertical de 50
 
-        int espacioInterno = 3;
-        Border buttonBorder = new CompoundBorder(new LineBorder(Color.RED), new EmptyBorder(espacioInterno, espacioInterno, espacioInterno, espacioInterno));
-        UIManager.put("Button.border", new BorderUIResource(buttonBorder));
-        UIManager.put("Button.background", new Color(0, 0, 0));
-        UIManager.put("Button.foreground", new Color(255, 255, 255));
-        UIManager.put("Button.focus", false);
+                JLabel label = new JLabel("<html><font color='#9B9B9B'>" + moDaStr[h].replace("\n", "<br>") + "</font></html>");
+                label.setPreferredSize(new Dimension(300, 300));
+                label.setFont(new Font("Arial", Font.PLAIN, 25)); // Ajustar la fuente y el tamaño
+                panel.add(label, BorderLayout.CENTER);
 
-        if (e.getSource() == btn) {
-            char[] passwordChars = jPasswordField1.getPassword();
-            String password = new String(passwordChars);
+                JButton button = new JButton(new ImageIcon(obtenerImagen(h)));
+                button.setPreferredSize(new Dimension(300, 300));
+                button.addActionListener(new BotonListener(button, label, h));
+                button.setVerticalTextPosition(SwingConstants.BOTTOM);
+                button.setHorizontalTextPosition(SwingConstants.CENTER);
+                panel.add(button, BorderLayout.EAST);
 
-            if (password.equals("1234")) {
-                openNewWindow();
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(null, "Contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+                contentPanel.add(panel);
             }
+
+            JScrollPane scrollPane = new JScrollPane(contentPanel);
+            scrollPane.getViewport().setBackground(Color.BLACK); 
+            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+
+            scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
+
+            scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+                @Override
+                protected void configureScrollBarColors() {
+                    this.thumbColor = new Color(0, 85, 119);
+                }
+
+                @Override
+                protected JButton createDecreaseButton(int orientation) {
+                    JButton button = super.createDecreaseButton(orientation);
+                    button.setBackground(Color.BLACK);
+                    button.setForeground(new Color(0, 85, 119));
+                    return button;
+                }
+
+                @Override
+                protected JButton createIncreaseButton(int orientation) {
+                    JButton button = super.createIncreaseButton(orientation);
+                    button.setBackground(Color.BLACK);
+                    button.setForeground(new Color(0, 85, 119));
+                    return button;
+                }
+            });
+
+            scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+
+            add(scrollPane, BorderLayout.CENTER);
         }
     }
 
@@ -358,6 +355,7 @@ public class GuiPrototype extends JFrame implements ActionListener{
         panel.setLayout(new BorderLayout());
 
         JLabel label = new JLabel();
+        label.setForeground(new Color(155,155,155));
         label.setFont(new Font("Arial", Font.PLAIN, 50));
         panel.add(label, BorderLayout.EAST);
         frame.add(panel, BorderLayout.NORTH);
@@ -377,100 +375,8 @@ public class GuiPrototype extends JFrame implements ActionListener{
         timer.start();
     }
 
-    private static void openNewWindow() {
+    private static void newFrame() {
         JFrame newFrame = new JFrame("Concesionaria");
-
-        newFrame.setLayout(new BorderLayout());
-
-        SwingUtilities.invokeLater(() -> {
-            relojGui(newFrame);
-        });
-
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-
-        String[] moDaStr = mostrarDatos();
-
-        for (int h = 0; h < 10; h++) {
-            // Crear un JPanel para agrupar el JLabel y el JButton
-            JPanel panel = new JPanel(new BorderLayout());
-            panel.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0)); // Espaciado vertical de 50
-
-            JLabel label = new JLabel("<html>" + moDaStr[h].replace("\n", "<br>") + "</html>");
-            label.setPreferredSize(new Dimension(300, 300));
-            label.setFont(new Font("Arial", Font.PLAIN, 25)); // Ajustar la fuente y el tamaño
-            panel.add(label, BorderLayout.CENTER);
-
-            JButton button = new JButton(new ImageIcon(obtenerImagen(h)));
-            button.setPreferredSize(new Dimension(300, 300));
-            button.addActionListener(new BotonListener(button, label, h));
-            button.setVerticalTextPosition(SwingConstants.BOTTOM);
-            button.setHorizontalTextPosition(SwingConstants.CENTER);
-            panel.add(button, BorderLayout.EAST);
-
-            contentPanel.add(panel);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
-        scrollPane.getViewport().setBackground(Color.BLACK); 
-        scrollPane.setBorder(BorderFactory.createLineBorder(Color.RED));
-
-        scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
-        scrollPane.getHorizontalScrollBar().setBackground(Color.BLACK);
-
-        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = Color.RED;
-            }
-
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                JButton button = super.createDecreaseButton(orientation);
-                button.setBackground(Color.BLACK);
-                button.setForeground(Color.RED);
-                return button;
-            }
-
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                JButton button = super.createIncreaseButton(orientation);
-                button.setBackground(Color.BLACK);
-                button.setForeground(Color.RED);
-                return button;
-            }
-        });
-
-        scrollPane.getHorizontalScrollBar().setUI(new BasicScrollBarUI() {
-            @Override
-            protected void configureScrollBarColors() {
-                this.thumbColor = Color.RED;
-            }
-
-            @Override
-            protected JButton createDecreaseButton(int orientation) {
-                JButton button = super.createDecreaseButton(orientation);
-                button.setBackground(Color.BLACK);
-                button.setForeground(Color.RED);
-                button.setFocusPainted(false);
-                button.setBorder(null);
-                return button;
-            }
-
-            @Override
-            protected JButton createIncreaseButton(int orientation) {
-                JButton button = super.createIncreaseButton(orientation);
-                button.setBackground(Color.BLACK);
-                button.setForeground(Color.RED);
-                button.setFocusPainted(false);
-                button.setBorder(null);
-                return button;
-            }
-        });
-
-        scrollPane.getVerticalScrollBar().setUnitIncrement(15);
-        scrollPane.getHorizontalScrollBar().setUnitIncrement(15);
-        newFrame.add(scrollPane, BorderLayout.CENTER);
 
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.setResizable(false);
@@ -516,6 +422,7 @@ public class GuiPrototype extends JFrame implements ActionListener{
 
             button.setVisible(confirm);
             associatedLabel.setVisible(confirm);
+            newFrame();
         }
     }
 
@@ -525,8 +432,8 @@ public class GuiPrototype extends JFrame implements ActionListener{
     }
 
     public static void main(String args[]) {
-        
-        GuiPrototype frame = new GuiPrototype();
+        boolean ventana = true;
+        GuiPrototype frame = new GuiPrototype(ventana);
         int width = 500;
         int height = 500;
         
@@ -535,9 +442,8 @@ public class GuiPrototype extends JFrame implements ActionListener{
         int xPos = (screenWidth -  width) / 2;
         int yPos = (screenHeight - height) / 2;
 
-        frame.getContentPane().setBackground(Color.BLACK);
         frame.setBounds(xPos, yPos, width, height);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setVisible(true);
     }
 }
