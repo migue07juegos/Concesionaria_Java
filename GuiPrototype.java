@@ -4,7 +4,13 @@ import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class GuiPrototype extends JFrame {
@@ -404,7 +410,7 @@ public class GuiPrototype extends JFrame {
             Carro[] compradores = new Carro[10];
             int numCompradores = 0;
             int numCarrosVendidos = 0;
-            String[] opciones = {"Realizar venta"};
+            String[] opciones = {"Realizar venta", "Cancelar"};
 
             int seleccion = JOptionPane.showOptionDialog(null, "Selecciona una opción", "Venta del auto seleccionado", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
             switch (seleccion) {
@@ -414,7 +420,10 @@ public class GuiPrototype extends JFrame {
                     numCompradores++;
                     numCarrosVendidos++;    
                     w++;
-                    break;
+                break;
+                case 1:
+                    
+                break;
             }
             if (seleccion == JOptionPane.CLOSED_OPTION) {
                 JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -430,6 +439,183 @@ public class GuiPrototype extends JFrame {
         //return new ImageIcon("carro_" + index + ".jpg").getImage();
         return new ImageIcon("carro_0.jpg").getImage();
     }
+
+
+    public static void mensaje(String str, String variable, boolean True) {
+
+        while (True) {
+            
+            try {
+                variable = JOptionPane.showInputDialog(str);
+                True = false;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error");
+                True = true;
+            }
+        }
+        True = true;
+    }
+
+    public static void recibo_personal(Carro[] compradores, int num_compradores) throws IOException{
+        
+        LocalDateTime date = LocalDateTime.now();
+
+        DateTimeFormatter fecha_formateada = DateTimeFormatter.ofPattern("dd/MMM/yyyy");
+        DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        String fecha = date.format(fecha_formateada);
+        String hora = date.format(hora_formateada);
+        String file_name="", nombre="",abrir = "";
+        String x = "";
+        boolean True = true;
+
+        mensaje("Ingrese el nombre de su recibo", file_name, True);
+        
+        mostrar_compradores(num_compradores, x);
+        
+        mensaje(x+"\nIngrese el nombre del comprador para imprimir su recibo", nombre, True);
+
+        while (!new File(file_name+".txt").exists()) {
+
+            try {    
+            
+                FileWriter fileWriter = new FileWriter(new File(file_name+".txt"), true);
+            
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);            
+    
+                bufferedWriter.write("Fecha de impresion: "+fecha+"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"+hora);
+                bufferedWriter.newLine(); 
+    
+                for (i = 0; i < num_compradores; i++){
+    
+                    if (nombre.equals(nombreComprador[i])) {
+    
+            
+                        bufferedWriter.write(String.format("\n\nComprador %d: %s",i+1,(nombreComprador[i] == null ? "" : nombreComprador[i])));
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("Edad: %d",edad[i]));
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("M�todo de pago: %s",(metodoPago[i] == null ? "" : metodoPago[i])));
+                        bufferedWriter.newLine();
+    
+                        if (montoEnganche[i]==liquidacion[i]){
+                            
+                            bufferedWriter.write(String.format("Se realizar� el pago completo: %.2f",liquidacion[i]));
+                        }else{
+                            bufferedWriter.write(String.format("Monto de Enganche: %.2f",montoEnganche[i]));
+                            bufferedWriter.newLine();
+                            bufferedWriter.write(String.format("Adeudo: %.2f",adeudo[i]));
+                            bufferedWriter.newLine();
+                            bufferedWriter.write(String.format("Plazo: %d años\nMensualidad %.2f", mesesAdeudo[i], pagoPorMes[i]));
+                            bufferedWriter.newLine();
+                            bufferedWriter.write(String.format("Si tarda mas de 3 meses en pagar su mensualidad se le embargar�"));
+                        }        
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("Modelo solicitado: %s %s",compradores[i].marca,compradores[i].modelo));
+                    }
+                }
+            
+                mensaje("El recibo se ha creado exitosamente!\nDesea abrir el recibo? (s/n): ", abrir, True);
+
+                if (abrir.equals("S") || abrir.equals("s")) {
+                    try {
+                        File file = new File(file_name+".txt");
+                        if (!Desktop.isDesktopSupported()) {
+
+                            JOptionPane.showMessageDialog(null, "not supported");
+                        }
+                        Desktop desktop = Desktop.getDesktop();
+                        if (file.exists())
+                            desktop.open(file);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+    
+                bufferedWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }    
+        }
+    }
+
+    public static void mostrar_compradores(int num, String x) {
+
+        for (i = 0; i < num; i++){
+            x += String.format("\nComprador %d: %s\n",i+1,nombreComprador[i]);
+        }
+    }
+
+
+    public static void recibo(Carro[] compradores, int num_compradores) {
+
+        LocalDateTime date = LocalDateTime.now();
+
+        DateTimeFormatter fecha_formateada = DateTimeFormatter.ofPattern("dd/MMM/yyyy");
+        DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        String fecha = date.format(fecha_formateada);
+        String hora = date.format(hora_formateada);
+        String file_name="",abrir = "";
+        boolean True = true;
+
+        mensaje("Ingrese el nombre de su recibo", file_name, True);
+        
+        while (!new File(file_name+".txt").exists()) {
+
+            try {    
+            
+                FileWriter fileWriter = new FileWriter(new File(file_name+".txt"), true);
+            
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);            
+    
+                bufferedWriter.write("Fecha de impresion: "+fecha+"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"+hora);
+                bufferedWriter.newLine(); 
+    
+                for (i = 0; i < num_compradores; i++){
+        
+                        bufferedWriter.write(String.format("\n\nComprador %d: %s",i+1,(nombreComprador[i] == null ? "" : nombreComprador[i])));
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("Edad: %d",edad[i]));
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("M�todo de pago: %s",(metodoPago[i] == null ? "" : metodoPago[i])));
+                        bufferedWriter.newLine();
+    
+                        if (montoEnganche[i]==liquidacion[i]){
+                            
+                            bufferedWriter.write(String.format("Se realizar� el pago completo: %.2f",liquidacion[i]));
+                        }else{
+                            bufferedWriter.write(String.format("Monto de Enganche: %.2f",montoEnganche[i]));
+                            bufferedWriter.newLine();
+                            bufferedWriter.write(String.format("Adeudo: %.2f",adeudo[i]));
+                        }        
+                        bufferedWriter.newLine();
+                        bufferedWriter.write(String.format("Modelo solicitado: %s %s",compradores[i].marca,compradores[i].modelo));
+                        bufferedWriter.newLine();
+                }
+            
+                mensaje("El recibo se ha creado exitosamente!\nDesea abrir el recibo? (s/n): ", abrir, True);
+                if (abrir.equals("S") || abrir.equals("s")) {
+                    try {
+                        File file = new File(file_name+".txt");
+                        if (!Desktop.isDesktopSupported()) {
+                            JOptionPane.showMessageDialog(null, "not supported");
+                        }
+                        Desktop desktop = Desktop.getDesktop();
+                        if (file.exists())
+                            desktop.open(file);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+    
+                bufferedWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }    
+        }
+    }
+
 
     public static void main(String args[]) {
         boolean ventana = true;

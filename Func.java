@@ -512,7 +512,15 @@ public class Func {
                     scanner.nextLine();
                     break;/*/
                 case 7:
-                recibo(compradores, numCompradores);
+                if (compradores != null) {
+                    recibo(compradores, numCompradores);
+                }else{
+                    System.out.println("No se hizo ninguna compra :(\nDesea imprimir el recibo? (s/n)");
+                    String confirmar = scanner.nextLine();
+                    if (confirmar.equals("s") || confirmar.equals("S")) {
+                        recibo(compradores, numCompradores);
+                    }
+                }
                 /*
                     System.out.print("Desea imprimir la información de los compradores? (S/N): ");
                     x = scanner.nextLine().charAt(0);
