@@ -273,174 +273,6 @@ public class GuiPrototype extends JFrame {
 
     }
 
-    public GuiPrototype() {}
-
-    public GuiPrototype(boolean Ventana) {
-        if (Ventana) {
-            UIManager.put("OptionPane.background", Color.BLACK);
-            UIManager.put("Panel.background", Color.BLACK);
-            UIManager.put("OptionPane.messageForeground", new Color(155,155,155));
-
-            int espacioInterno = 3;
-            Border buttonBorder = new CompoundBorder(new LineBorder(new Color(0, 85, 119)), new EmptyBorder(espacioInterno, espacioInterno, espacioInterno, espacioInterno));
-            UIManager.put("Button.border", new BorderUIResource(buttonBorder));
-            UIManager.put("Button.background", new Color(0,0,0));
-            UIManager.put("Button.foreground", new Color(155,155,155));
-            UIManager.put("Button.focus", false);
-
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
-            setLayout(new BorderLayout());
-
-            SwingUtilities.invokeLater(() -> {
-                relojGui(this);
-            });
-
-            JPanel contentPanel = new JPanel();
-            contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-
-            String[] moDaStr = mostrarDatos();
-
-            for (int h = 0; h < 10; h++) {
-                // Crear un JPanel para agrupar el JLabel y el JButton
-                JPanel panel = new JPanel(new BorderLayout());
-                panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50)); // Espaciado vertical de 50
-
-                JLabel label = new JLabel("<html><font color='#9B9B9B'>" + moDaStr[h].replace("\n", "<br>") + "</font></html>");
-                label.setPreferredSize(new Dimension(300, 300));
-                label.setFont(new Font("Arial", Font.PLAIN, 25)); // Ajustar la fuente y el tamaño
-                panel.add(label, BorderLayout.CENTER);
-
-                JButton button = new JButton(new ImageIcon(obtenerImagen(h)));
-                button.setPreferredSize(new Dimension(300, 300));
-                button.addActionListener(new BotonListener(button, label, h));
-                button.setVerticalTextPosition(SwingConstants.BOTTOM);
-                button.setHorizontalTextPosition(SwingConstants.CENTER);
-                panel.add(button, BorderLayout.EAST);
-
-                contentPanel.add(panel);
-            }
-
-            JScrollPane scrollPane = new JScrollPane(contentPanel);
-            scrollPane.getViewport().setBackground(Color.BLACK); 
-            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
-
-            scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
-
-            scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-                @Override
-                protected void configureScrollBarColors() {
-                    this.thumbColor = new Color(0, 85, 119);
-                }
-
-                @Override
-                protected JButton createDecreaseButton(int orientation) {
-                    JButton button = super.createDecreaseButton(orientation);
-                    button.setBackground(Color.BLACK);
-                    button.setForeground(new Color(0, 85, 119));
-                    return button;
-                }
-
-                @Override
-                protected JButton createIncreaseButton(int orientation) {
-                    JButton button = super.createIncreaseButton(orientation);
-                    button.setBackground(Color.BLACK);
-                    button.setForeground(new Color(0, 85, 119));
-                    return button;
-                }
-            });
-
-            scrollPane.getVerticalScrollBar().setUnitIncrement(15);
-
-            add(scrollPane, BorderLayout.CENTER);
-        }
-    }
-
-    public static void relojGui(JFrame frame) {
-        JPanel panel = new JPanel();
-
-        panel.setLayout(new BorderLayout());
-
-        JLabel label = new JLabel();
-        label.setForeground(new Color(155,155,155));
-        label.setFont(new Font("Arial", Font.PLAIN, 50));
-        panel.add(label, BorderLayout.EAST);
-        frame.add(panel, BorderLayout.NORTH);
-
-        Timer timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                LocalTime currentTime = LocalTime.now();
-                String time = String.format("%02d:%02d:%02d",
-                        currentTime.getHour(),
-                        currentTime.getMinute(),
-                        currentTime.getSecond());
-                label.setText(time);
-            }
-        });
-
-        timer.start();
-    }
-
-    private static void newFrame() {
-        JFrame newFrame = new JFrame("Concesionaria");
-
-        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newFrame.setResizable(false);
-        newFrame.setSize(1920, 1080);
-        newFrame.setVisible(true);
-    }
-
-    static class BotonListener implements ActionListener {
-        private JButton button;
-        private JLabel associatedLabel;
-        private int ho;
-
-        public BotonListener(JButton button, JLabel associatedLabel, int ho) {
-            this.button = button;
-            this.associatedLabel = associatedLabel;
-            this.ho = ho;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            boolean confirm = true;
-            int w = 0;
-            Carro carroSeleccionado = new GuiPrototype().new Carro();
-            Carro[] carrosVendidos = new Carro[10];
-            Carro[] compradores = new Carro[10];
-            int numCompradores = 0;
-            int numCarrosVendidos = 0;
-            String[] opciones = {"Realizar venta", "Cancelar"};
-
-            int seleccion = JOptionPane.showOptionDialog(null, "Selecciona una opción", "Venta del auto seleccionado", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
-            switch (seleccion) {
-                case 0:
-                    confirm = buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos, compradores, numCompradores, array[ho]);
-                    datos(w, carroSeleccionado);
-                    numCompradores++;
-                    numCarrosVendidos++;    
-                    w++;
-                break;
-                case 1:
-                    
-                break;
-            }
-            if (seleccion == JOptionPane.CLOSED_OPTION) {
-                JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            }
-
-            button.setVisible(confirm);
-            associatedLabel.setVisible(confirm);
-            newFrame();
-        }
-    }
-
-    private static Image obtenerImagen(int index) {
-        //return new ImageIcon("carro_" + index + ".jpg").getImage();
-        return new ImageIcon("carro_0.jpg").getImage();
-    }
-
-
     public static void mensaje(String str, String variable, boolean True) {
 
         while (True) {
@@ -616,6 +448,172 @@ public class GuiPrototype extends JFrame {
         }
     }
 
+    public GuiPrototype() {}
+
+    public GuiPrototype(boolean Ventana) {
+        if (Ventana) {
+            UIManager.put("OptionPane.background", Color.BLACK);
+            UIManager.put("Panel.background", Color.BLACK);
+            UIManager.put("OptionPane.messageForeground", new Color(155,155,155));
+
+            int espacioInterno = 3;
+            Border buttonBorder = new CompoundBorder(new LineBorder(new Color(0, 85, 119)), new EmptyBorder(espacioInterno, espacioInterno, espacioInterno, espacioInterno));
+            UIManager.put("Button.border", new BorderUIResource(buttonBorder));
+            UIManager.put("Button.background", new Color(0,0,0));
+            UIManager.put("Button.foreground", new Color(155,155,155));
+            UIManager.put("Button.focus", false);
+
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            setLayout(new BorderLayout());
+
+            SwingUtilities.invokeLater(() -> {
+                relojGui(this);
+            });
+
+            JPanel contentPanel = new JPanel();
+            contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
+            String[] moDaStr = mostrarDatos();
+
+            for (int h = 0; h < 10; h++) {
+                // Crear un JPanel para agrupar el JLabel y el JButton
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50)); // Espaciado vertical de 50
+
+                JLabel label = new JLabel("<html><font color='#9B9B9B'>" + moDaStr[h].replace("\n", "<br>") + "</font></html>");
+                label.setPreferredSize(new Dimension(300, 300));
+                label.setFont(new Font("Arial", Font.PLAIN, 25)); // Ajustar la fuente y el tamaño
+                panel.add(label, BorderLayout.CENTER);
+
+                JButton button = new JButton(new ImageIcon(obtenerImagen(h)));
+                button.setPreferredSize(new Dimension(300, 300));
+                button.addActionListener(new BotonListener(button, label, h));
+                button.setVerticalTextPosition(SwingConstants.BOTTOM);
+                button.setHorizontalTextPosition(SwingConstants.CENTER);
+                panel.add(button, BorderLayout.EAST);
+
+                contentPanel.add(panel);
+            }
+
+            JScrollPane scrollPane = new JScrollPane(contentPanel);
+            scrollPane.getViewport().setBackground(Color.BLACK); 
+            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+
+            scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
+
+            scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+                @Override
+                protected void configureScrollBarColors() {
+                    this.thumbColor = new Color(0, 85, 119);
+                }
+
+                @Override
+                protected JButton createDecreaseButton(int orientation) {
+                    JButton button = super.createDecreaseButton(orientation);
+                    button.setBackground(Color.BLACK);
+                    button.setForeground(new Color(0, 85, 119));
+                    return button;
+                }
+
+                @Override
+                protected JButton createIncreaseButton(int orientation) {
+                    JButton button = super.createIncreaseButton(orientation);
+                    button.setBackground(Color.BLACK);
+                    button.setForeground(new Color(0, 85, 119));
+                    return button;
+                }
+            });
+
+            scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+
+            add(scrollPane, BorderLayout.CENTER);
+        }
+    }
+
+    public static void relojGui(JFrame frame) {
+        JPanel panel = new JPanel();
+
+        panel.setLayout(new BorderLayout());
+
+        JLabel label = new JLabel();
+        label.setForeground(new Color(155,155,155));
+        label.setFont(new Font("Arial", Font.PLAIN, 50));
+        panel.add(label, BorderLayout.EAST);
+        frame.add(panel, BorderLayout.NORTH);
+
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LocalTime currentTime = LocalTime.now();
+                String time = String.format("%02d:%02d:%02d",
+                        currentTime.getHour(),
+                        currentTime.getMinute(),
+                        currentTime.getSecond());
+                label.setText(time);
+            }
+        });
+
+        timer.start();
+    }
+
+    private static void newFrame() {
+        JFrame newFrame = new JFrame("Concesionaria");
+
+        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newFrame.setResizable(false);
+        newFrame.setSize(1920, 1080);
+        newFrame.setVisible(true);
+    }
+
+    static class BotonListener implements ActionListener {
+        private JButton button;
+        private JLabel associatedLabel;
+        private int ho;
+
+        public BotonListener(JButton button, JLabel associatedLabel, int ho) {
+            this.button = button;
+            this.associatedLabel = associatedLabel;
+            this.ho = ho;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean confirm = true;
+            int w = 0;
+            Carro carroSeleccionado = new GuiPrototype().new Carro();
+            Carro[] carrosVendidos = new Carro[10];
+            Carro[] compradores = new Carro[10];
+            int numCompradores = 0;
+            int numCarrosVendidos = 0;
+            String[] opciones = {"Realizar venta", "Cancelar"};
+
+            int seleccion = JOptionPane.showOptionDialog(null, "Selecciona una opción", "Venta del auto seleccionado", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+            switch (seleccion) {
+                case 0:
+                    confirm = buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos, compradores, numCompradores, array[ho]);
+                    datos(w, carroSeleccionado);
+                    numCompradores++;
+                    numCarrosVendidos++;    
+                    w++;
+                break;
+                case 1:
+                    
+                break;
+            }
+            if (seleccion == JOptionPane.CLOSED_OPTION) {
+                JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+
+            button.setVisible(confirm);
+            associatedLabel.setVisible(confirm);
+            newFrame();
+        }
+    }
+
+    private static Image obtenerImagen(int index) {
+        //return new ImageIcon("carro_" + index + ".jpg").getImage();
+        return new ImageIcon("carro_0.jpg").getImage();
+    }
 
     public static void main(String args[]) {
         boolean ventana = true;
