@@ -68,7 +68,7 @@ public class GuiPrototype extends JFrame {
     public static char eliminar;
     public static String[] color = {"Blanco", "Negro", "Azul", "Rojo", "Verde", "Amarillo", "Plata", "Gris", "Rosa", "Naranja"};
     public static String[] marca = {"Audi", "BMW", "Mercedes-Benz", "Mclaren", "Lamborghini", "Toyota", "Chevrolet", "Nissan", "Mazda", "Renault"};
-    public static String[] modelo = {"A1", "A2", "A3", "A4", "Aventador", "A6", "A7", "A8", "A9", "A10"};
+    public static String[] modelo = {"A1", "A2", "A3", "A4", "Aventador", "A6", "Mustang", "A8", "A9", "A10"};
     public static int[] monto = {1087000, 1000000, 900000, 800000, 600000, 500000, 400000, 300000, 200000, 100000};
     public static String[] nombreComprador = new String[10];
     public static int[] edad = new int[10];
@@ -77,6 +77,11 @@ public class GuiPrototype extends JFrame {
     public static double[] liquidacion = new double[10];
     public static double[] adeudo = new double[10];
     public static double[] pagoPorMes = new double[10];
+    public JButton toggleButton;
+    public boolean menuExpandido = false;
+    public JPanel menuPanel;
+
+
     
     public static void valoresAleatorios() {
         Random rand = new Random();
@@ -431,7 +436,7 @@ public class GuiPrototype extends JFrame {
                     try {
                         File file = new File(file_name+".txt");
                         if (!Desktop.isDesktopSupported()) {
-                            JOptionPane.showMessageDialog(null, "not supported");
+                            JOptionPane.showMessageDialog(null, "No soportado!");
                         }
                         Desktop desktop = Desktop.getDesktop();
                         if (file.exists())
@@ -448,9 +453,60 @@ public class GuiPrototype extends JFrame {
         }
     }
 
+    private void agregarElementoMenu(ImageIcon icono, boolean menuEx, String funcion) {
+        JButton button = new JButton(icono);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
+        button.setText(funcion);
+        button.getVerifyInputWhenFocusTarget();
+        if (menuEx) {
+            // Si el menú está expandido, agregar etiquetas al lado de los botones
+            JLabel label = new JLabel("Opción " + (menuPanel.getComponentCount() + 1));
+            label.setForeground(Color.WHITE);
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setLayout(new GridLayout());
+            buttonPanel.add(button);
+            // buttonPanel.add(label, BorderLayout.EAST);
+            menuPanel.add(buttonPanel);
+        } else {
+            // Si el menú está retraído, agregar botones sin etiquetas
+            menuPanel.add(button);
+        }
+    }
+
+    private void toggleMenu() {
+        if (menuExpandido) {
+            ocultarMenu();
+        } else {
+            menuExpandido = true;
+            mostrarMenu();
+        }
+    }
+
+
+
+    private void mostrarMenu() {
+        // Ajustar el ancho del menú al máximo
+        agregarElementoMenu(new ImageIcon("Mazda.png"), true, "Informacion compradores");
+        agregarElementoMenu(new ImageIcon("Mercedes.png"), true, "Ventas realizadas");
+        agregarElementoMenu(new ImageIcon("nissan.png"), true, "Consultar inventario");
+        menuPanel.revalidate();
+        menuPanel.repaint();
+    }
+
+    private void ocultarMenu() {
+        // Ajustar el ancho del menú al mínimo
+        menuPanel.setPreferredSize(new Dimension(50, getHeight()));
+        menuExpandido = false;
+        menuPanel.removeAll(); // Limpiar los componentes existentes
+        menuPanel.revalidate();
+        menuPanel.repaint();
+    }
+
+
     public GuiPrototype() {}
 
     public GuiPrototype(boolean Ventana) {
+
         if (Ventana) {
             UIManager.put("OptionPane.background", Color.BLACK);
             UIManager.put("Panel.background", Color.BLACK);
@@ -471,21 +527,43 @@ public class GuiPrototype extends JFrame {
             });
 
             JPanel contentPanel = new JPanel();
+            JButton toggleButton = new JButton("?");
+            toggleButton.setSize(50, 50);
+            
+            toggleButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    toggleMenu();
+                }
+            });
+    
+
+            JPanel menuPanel = new JPanel();
+            menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+            menuPanel.setBackground(new Color(54, 57, 63)); // Color de fondo del menú
+            menuPanel.setPreferredSize(new Dimension(50, getHeight())); // Ancho del menú retraído
+    
+            contentPanel.add(toggleButton);
+            contentPanel.add(menuPanel, BorderLayout.WEST);
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
+            ImageIcon images[] = {new ImageIcon("Audi.png"), new ImageIcon("bmw.png"), new ImageIcon("Mercedes.png"), new ImageIcon("Mclaren.png"), new ImageIcon("Lamborghini.png"), new ImageIcon("Toyota.png"), new ImageIcon("Chevrolet.png"), new ImageIcon("nissan.png"), new ImageIcon("Mazda.png"), new ImageIcon("Renault.png")};
             String[] moDaStr = mostrarDatos();
 
             for (int h = 0; h < 10; h++) {
                 // Crear un JPanel para agrupar el JLabel y el JButton
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50)); // Espaciado vertical de 50
+                panel.setBorder(BorderFactory.createLineBorder(new Color(0,85,119))); 
 
                 JLabel label = new JLabel("<html><font color='#9B9B9B'>" + moDaStr[h].replace("\n", "<br>") + "</font></html>");
                 label.setPreferredSize(new Dimension(300, 300));
                 label.setFont(new Font("Arial", Font.PLAIN, 25)); // Ajustar la fuente y el tamaño
                 panel.add(label, BorderLayout.CENTER);
 
-                JButton button = new JButton(new ImageIcon(obtenerImagen(h)));
+                JButton button = new JButton(images[h]);
+
+                
                 button.setPreferredSize(new Dimension(300, 300));
                 button.addActionListener(new BotonListener(button, label, h));
                 button.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -545,7 +623,7 @@ public class GuiPrototype extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 LocalTime currentTime = LocalTime.now();
-                String time = String.format("%02d:%02d:%02d",
+                String time = String.format("%02d:%02d:%02d ",
                         currentTime.getHour(),
                         currentTime.getMinute(),
                         currentTime.getSecond());
@@ -604,30 +682,10 @@ public class GuiPrototype extends JFrame {
                 JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
 
-            button.setVisible(confirm);
-            associatedLabel.setVisible(confirm);
-            newFrame();
+            // button.setVisible(confirm);
+            // button.setBorder(BorderFactory.createLineBorder(Color.white, 2));
+            // associatedLabel.setVisible(confirm);
+            // newFrame();
         }
-    }
-
-    private static Image obtenerImagen(int index) {
-        //return new ImageIcon("carro_" + index + ".jpg").getImage();
-        return new ImageIcon("carro_0.jpg").getImage();
-    }
-
-    public static void main(String args[]) {
-        boolean ventana = true;
-        GuiPrototype frame = new GuiPrototype(ventana);
-        int width = 500;
-        int height = 500;
-        
-        int screenWidth = 1920;
-        int screenHeight = 1080;
-        int xPos = (screenWidth -  width) / 2;
-        int yPos = (screenHeight - height) / 2;
-
-        frame.setBounds(xPos, yPos, width, height);
-        frame.setResizable(true);
-        frame.setVisible(true);
     }
 }

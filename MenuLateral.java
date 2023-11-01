@@ -16,9 +16,11 @@ public class MenuLateral extends JFrame {
         setLocationRelativeTo(null);
 
         // Crear el botón para expandir/ocultar el menú
-        toggleButton = new JButton("Toggle Menu");
-        toggleButton.setPreferredSize(new Dimension(50, 15)); // Tamaño del botón igual al menú retraído
-        toggleButton.addMouseListener(new MouseAdapter() {
+        this.toggleButton = new JButton("-");
+        this.toggleButton.setSize(50, 50);
+        
+        // toggleButton.setPreferredSize(new Dimension(50, 15)); // Tamaño del botón igual al menú retraído
+        this.toggleButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 toggleMenu();
@@ -31,14 +33,9 @@ public class MenuLateral extends JFrame {
         menuPanel.setBackground(new Color(54, 57, 63)); // Color de fondo del menú
         menuPanel.setPreferredSize(new Dimension(50, getHeight())); // Ancho del menú retraído
 
-        // Agregar elementos al menú
-        agregarElementoMenu(new ImageIcon("icono1.png"), menuExpandido);
-        agregarElementoMenu(new ImageIcon("icono2.png"), menuExpandido);
-        agregarElementoMenu(new ImageIcon("icono3.png"), menuExpandido);
-
         // Configurar el diseño del JFrame principal con BorderLayout
         setLayout(new BorderLayout());
-        add(toggleButton, BorderLayout.NORTH); // Agregar el botón en la parte superior
+        add(toggleButton); // Agregar el botón en la parte superior
         add(menuPanel, BorderLayout.WEST); // Agregar el menú en la parte izquierda
 
         // Configurar el contenido principal del JFrame
@@ -46,39 +43,21 @@ public class MenuLateral extends JFrame {
         contenidoPanel.setBackground(Color.WHITE);
         add(contenidoPanel, BorderLayout.CENTER);
 
-        // Configurar eventos de hover para la barra lateral
-        menuPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (!menuExpandido) {
-                    mostrarMenu();
-                }
-                
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (!menuExpandido) {
-                    ocultarMenu();
-                }
-
-            }
-
-        });
     }
 
-    private void agregarElementoMenu(Icon icono, boolean menuEx) {
-        JButton button = new JButton(icono);
-        button.setAlignmentX(Component.LEFT_ALIGNMENT); // Centrar los iconos verticalmente
-
+    private void agregarElementoMenu(ImageIcon icono, boolean menuEx, String funcion) {
+        JButton button = new JButton();
+        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
+        button.setText(funcion);
+        button.getVerifyInputWhenFocusTarget();
         if (menuEx) {
             // Si el menú está expandido, agregar etiquetas al lado de los botones
             JLabel label = new JLabel("Opción " + (menuPanel.getComponentCount() + 1));
             label.setForeground(Color.WHITE);
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setLayout(new BorderLayout());
-            buttonPanel.add(button, BorderLayout.WEST);
-            buttonPanel.add(label, BorderLayout.EAST);
+            buttonPanel.setLayout(new GridLayout());
+            buttonPanel.add(button);
+            // buttonPanel.add(label, BorderLayout.EAST);
             menuPanel.add(buttonPanel);
         } else {
             // Si el menú está retraído, agregar botones sin etiquetas
@@ -99,9 +78,10 @@ public class MenuLateral extends JFrame {
         // Ajustar el ancho del menú al máximo
         menuPanel.setPreferredSize(new Dimension(200, getHeight()));
         menuPanel.removeAll(); // Limpiar los componentes existentes
-        agregarElementoMenu(new ImageIcon("icono1.png"), true);
-        agregarElementoMenu(new ImageIcon("icono2.png"), true);
-        agregarElementoMenu(new ImageIcon("icono3.png"), true);
+        
+        agregarElementoMenu(new ImageIcon("Mazda.png"), true, "Informacion compradores");
+        agregarElementoMenu(new ImageIcon("Mercedes.png"), true, "Ventas realizadas");
+        agregarElementoMenu(new ImageIcon("nissan.png"), true, "Consultar inventario");
         menuPanel.revalidate();
         menuPanel.repaint();
     }
@@ -111,9 +91,6 @@ public class MenuLateral extends JFrame {
         menuPanel.setPreferredSize(new Dimension(50, getHeight()));
         menuExpandido = false;
         menuPanel.removeAll(); // Limpiar los componentes existentes
-        agregarElementoMenu(new ImageIcon("icono1.png"), false);
-        agregarElementoMenu(new ImageIcon("icono2.png"), false);
-        agregarElementoMenu(new ImageIcon("icono3.png"), false);
         menuPanel.revalidate();
         menuPanel.repaint();
     }
