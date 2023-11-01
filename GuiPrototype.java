@@ -453,61 +453,14 @@ public class GuiPrototype extends JFrame {
         }
     }
 
-    private void agregarElementoMenu(ImageIcon icono, boolean menuEx, String funcion) {
-        JButton button = new JButton(icono);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
-        button.setText(funcion);
-        button.getVerifyInputWhenFocusTarget();
-        if (menuEx) {
-            // Si el menú está expandido, agregar etiquetas al lado de los botones
-            JLabel label = new JLabel("Opción " + (menuPanel.getComponentCount() + 1));
-            label.setForeground(Color.WHITE);
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.setLayout(new GridLayout());
-            buttonPanel.add(button);
-            // buttonPanel.add(label, BorderLayout.EAST);
-            menuPanel.add(buttonPanel);
-        } else {
-            // Si el menú está retraído, agregar botones sin etiquetas
-            menuPanel.add(button);
-        }
-    }
-
-    private void toggleMenu() {
-        if (menuExpandido) {
-            ocultarMenu();
-        } else {
-            menuExpandido = true;
-            mostrarMenu();
-        }
-    }
-
-
-
-    private void mostrarMenu() {
-        // Ajustar el ancho del menú al máximo
-        agregarElementoMenu(new ImageIcon("Mazda.png"), true, "Informacion compradores");
-        agregarElementoMenu(new ImageIcon("Mercedes.png"), true, "Ventas realizadas");
-        agregarElementoMenu(new ImageIcon("nissan.png"), true, "Consultar inventario");
-        menuPanel.revalidate();
-        menuPanel.repaint();
-    }
-
-    private void ocultarMenu() {
-        // Ajustar el ancho del menú al mínimo
-        menuPanel.setPreferredSize(new Dimension(50, getHeight()));
-        menuExpandido = false;
-        menuPanel.removeAll(); // Limpiar los componentes existentes
-        menuPanel.revalidate();
-        menuPanel.repaint();
-    }
-
-
     public GuiPrototype() {}
 
     public GuiPrototype(boolean Ventana) {
 
         if (Ventana) {
+            JPanel gridMenuContent = new JPanel();
+            gridMenuContent.setLayout(new GridLayout(0, 2));
+
             UIManager.put("OptionPane.background", Color.BLACK);
             UIManager.put("Panel.background", Color.BLACK);
             UIManager.put("OptionPane.messageForeground", new Color(155,155,155));
@@ -527,24 +480,6 @@ public class GuiPrototype extends JFrame {
             });
 
             JPanel contentPanel = new JPanel();
-            JButton toggleButton = new JButton("?");
-            toggleButton.setSize(50, 50);
-            
-            toggleButton.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    toggleMenu();
-                }
-            });
-    
-
-            JPanel menuPanel = new JPanel();
-            menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-            menuPanel.setBackground(new Color(54, 57, 63)); // Color de fondo del menú
-            menuPanel.setPreferredSize(new Dimension(50, getHeight())); // Ancho del menú retraído
-    
-            contentPanel.add(toggleButton);
-            contentPanel.add(menuPanel, BorderLayout.WEST);
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
             ImageIcon images[] = {new ImageIcon("Audi.png"), new ImageIcon("bmw.png"), new ImageIcon("Mercedes.png"), new ImageIcon("Mclaren.png"), new ImageIcon("Lamborghini.png"), new ImageIcon("Toyota.png"), new ImageIcon("Chevrolet.png"), new ImageIcon("nissan.png"), new ImageIcon("Mazda.png"), new ImageIcon("Renault.png")};
@@ -563,7 +498,6 @@ public class GuiPrototype extends JFrame {
 
                 JButton button = new JButton(images[h]);
 
-                
                 button.setPreferredSize(new Dimension(300, 300));
                 button.addActionListener(new BotonListener(button, label, h));
                 button.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -634,14 +568,14 @@ public class GuiPrototype extends JFrame {
         timer.start();
     }
 
-    private static void newFrame() {
+   /*private static void newFrame() {
         JFrame newFrame = new JFrame("Concesionaria");
 
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.setResizable(false);
         newFrame.setSize(1920, 1080);
         newFrame.setVisible(true);
-    }
+    }*/
 
     static class BotonListener implements ActionListener {
         private JButton button;
@@ -682,10 +616,25 @@ public class GuiPrototype extends JFrame {
                 JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
 
-            // button.setVisible(confirm);
-            // button.setBorder(BorderFactory.createLineBorder(Color.white, 2));
-            // associatedLabel.setVisible(confirm);
-            // newFrame();
+            button.setVisible(confirm);
+            //button.setBorder(BorderFactory.createLineBorder(Color.white, 2));
+            associatedLabel.setVisible(confirm);
+            //newFrame();
         }
+    }
+
+    public static void main(String[] args){
+        GuiPrototype frame = new GuiPrototype(true);
+        int width = 500;
+        int height = 500;
+        
+        int screenWidth = 1920;
+        int screenHeight = 1080;
+        int xPos = (screenWidth -  width) / 2;
+        int yPos = (screenHeight - height) / 2;
+
+        frame.setBounds(xPos, yPos, width, height);
+        frame.setResizable(true);
+        frame.setVisible(true);
     }
 }
