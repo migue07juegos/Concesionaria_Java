@@ -78,7 +78,7 @@ public class GuiPrototype extends JFrame {
     public static double[] adeudo = new double[10];
     public static double[] pagoPorMes = new double[10];
     public JButton toggleButton;
-    public boolean menuExpandido = false;
+    public static boolean menuExpandido = false;
     public JPanel menuPanel;
 
 
@@ -489,11 +489,11 @@ public class GuiPrototype extends JFrame {
                 // Crear un JPanel para agrupar el JLabel y el JButton
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50)); // Espaciado vertical de 50
-                panel.setBorder(BorderFactory.createLineBorder(new Color(0,85,119))); 
+                // panel.setBorder(BorderFactory.createLineBorder(new Color(54, 57, 63))); 
 
                 JLabel label = new JLabel("<html><font color='#9B9B9B'>" + moDaStr[h].replace("\n", "<br>") + "</font></html>");
                 label.setPreferredSize(new Dimension(300, 300));
-                label.setFont(new Font("Arial", Font.PLAIN, 25)); // Ajustar la fuente y el tamaño
+                label.setFont(new Font("Arial", Font.PLAIN, 25)); 
                 panel.add(label, BorderLayout.CENTER);
 
                 JButton button = new JButton(images[h]);
@@ -543,7 +543,29 @@ public class GuiPrototype extends JFrame {
     }
 
     public static void relojGui(JFrame frame) {
+
         JPanel panel = new JPanel();
+        JButton button = new JButton("=");
+        JPanel menuPanel = new JPanel();
+        
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+        menuPanel.setBackground(Color.black); // Color de fondo del menú
+        menuPanel.setPreferredSize(new Dimension(50, menuPanel.getHeight())); // Ancho del menú retraído
+        menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+
+        frame.setLayout(new BorderLayout());
+        frame.add(menuPanel, BorderLayout.WEST); // Agregar el menú en la parte izquierda
+        frame.add(panel, BorderLayout.NORTH);
+
+        button.setSize(50, 50);
+        button.setOpaque(isDefaultLookAndFeelDecorated());
+        button.setBackground(Color.gray);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                toggleMenu(menuPanel);
+            }
+        });
 
         panel.setLayout(new BorderLayout());
 
@@ -551,8 +573,8 @@ public class GuiPrototype extends JFrame {
         label.setForeground(new Color(155,155,155));
         label.setFont(new Font("Arial", Font.PLAIN, 50));
         panel.add(label, BorderLayout.EAST);
-        frame.add(panel, BorderLayout.NORTH);
-
+        panel.add(button, BorderLayout.WEST);
+        
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -568,14 +590,73 @@ public class GuiPrototype extends JFrame {
         timer.start();
     }
 
-   /*private static void newFrame() {
-        JFrame newFrame = new JFrame("Concesionaria");
 
-        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newFrame.setResizable(false);
-        newFrame.setSize(1920, 1080);
-        newFrame.setVisible(true);
-    }*/
+    public static void agregarElementoMenu(JPanel menuPanel, boolean menuEx, String funcion) {
+        
+        JButton button = new JButton(funcion);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
+        button.setText(funcion);
+        button.getVerifyInputWhenFocusTarget();
+
+        if (menuEx) {
+
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setLayout(new GridLayout());
+            buttonPanel.add(button);
+            // buttonPanel.add(label, BorderLayout.EAST);
+            menuPanel.add(buttonPanel);
+            // button.addMouseListener(new MouseAdapter() {
+            //     @Override
+            //     public void mouseClicked(MouseEvent e) {
+            //         toggleMenu(menuPanel);
+            //     }
+            // });
+    
+        } else {
+            // Si el menú está retraído, agregar botones sin etiquetas
+            menuPanel.add(button);
+        }
+        
+    }
+
+
+    public static void toggleMenu(JPanel panel) {
+
+        if (menuExpandido) {
+            ocultarMenu(panel);
+        } else {
+            menuExpandido = true;
+            mostrarMenu(panel);
+        }
+    }
+
+
+    public static void mostrarMenu(JPanel panel) {
+        // Ajustar el ancho del menú al máximo
+        panel.setPreferredSize(new Dimension(200, panel.getHeight()));
+        panel.removeAll(); // Limpiar los componentes existentes
+
+        
+        agregarElementoMenu(panel, true, "Informacion compradores");
+        agregarElementoMenu(panel, true, "Ventas realizadas");
+        agregarElementoMenu(panel, true, "Consultar inventario");
+        agregarElementoMenu(panel, true, "Informacion de pago");
+        agregarElementoMenu(panel, true, "Recibo personal");
+        agregarElementoMenu(panel, true, "Salir");
+
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    public static void ocultarMenu(JPanel panel) {
+        // Ajustar el ancho del menú al mínimo
+        panel.setPreferredSize(new Dimension(50, panel.getHeight()));
+        menuExpandido = false;
+        panel.removeAll(); // Limpiar los componentes existentes
+        panel.revalidate();
+        panel.repaint();
+    }
+
 
     static class BotonListener implements ActionListener {
         private JButton button;
@@ -608,18 +689,13 @@ public class GuiPrototype extends JFrame {
                     numCarrosVendidos++;    
                     w++;
                 break;
-                case 1:
-                    
-                break;
             }
             if (seleccion == JOptionPane.CLOSED_OPTION) {
                 JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
 
             button.setVisible(confirm);
-            //button.setBorder(BorderFactory.createLineBorder(Color.white, 2));
             associatedLabel.setVisible(confirm);
-            //newFrame();
         }
     }
 

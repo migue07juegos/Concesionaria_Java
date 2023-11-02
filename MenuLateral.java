@@ -32,7 +32,7 @@ public class MenuLateral extends JFrame {
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
         menuPanel.setBackground(new Color(54, 57, 63)); // Color de fondo del menú
         menuPanel.setPreferredSize(new Dimension(50, getHeight())); // Ancho del menú retraído
-
+        System.out.println(getHeight());
         // Configurar el diseño del JFrame principal con BorderLayout
         setLayout(new BorderLayout());
         add(toggleButton); // Agregar el botón en la parte superior
@@ -97,5 +97,6 @@ public class MenuLateral extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MenuLateral().setVisible(true));
+        System.out.println();
     }
 }
