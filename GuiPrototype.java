@@ -80,8 +80,6 @@ public class GuiPrototype extends JFrame {
     public JButton toggleButton;
     public static boolean menuExpandido = false;
     public JPanel menuPanel;
-
-
     
     public static void valoresAleatorios() {
         Random rand = new Random();
@@ -456,7 +454,6 @@ public class GuiPrototype extends JFrame {
     public GuiPrototype() {}
 
     public GuiPrototype(boolean Ventana) {
-
         if (Ventana) {
             JPanel gridMenuContent = new JPanel();
             gridMenuContent.setLayout(new GridLayout(0, 2));
@@ -474,10 +471,6 @@ public class GuiPrototype extends JFrame {
 
             setDefaultCloseOperation(EXIT_ON_CLOSE);
             setLayout(new BorderLayout());
-
-            SwingUtilities.invokeLater(() -> {
-                relojGui(this);
-            });
 
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -506,6 +499,10 @@ public class GuiPrototype extends JFrame {
 
                 contentPanel.add(panel);
             }
+
+            SwingUtilities.invokeLater(() -> {
+                relojGui(this, contentPanel);
+            });
 
             JScrollPane scrollPane = new JScrollPane(contentPanel);
             scrollPane.getViewport().setBackground(Color.BLACK); 
@@ -542,15 +539,14 @@ public class GuiPrototype extends JFrame {
         }
     }
 
-    public static void relojGui(JFrame frame) {
-
+    public static void relojGui(JFrame frame, JPanel panelInicio) {
         JPanel panel = new JPanel();
-        JButton button = new JButton("=");
+        JButton button = new JButton("  ≡  ");
         JPanel menuPanel = new JPanel();
         
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
         menuPanel.setBackground(Color.black); // Color de fondo del menú
-        menuPanel.setPreferredSize(new Dimension(50, menuPanel.getHeight())); // Ancho del menú retraído
+        menuPanel.setPreferredSize(new Dimension(60, menuPanel.getHeight())); // Ancho del menú retraído
         menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
 
         frame.setLayout(new BorderLayout());
@@ -558,12 +554,14 @@ public class GuiPrototype extends JFrame {
         frame.add(panel, BorderLayout.NORTH);
 
         button.setSize(50, 50);
+        button.setFocusPainted(false);
+        button.setFont(new Font("Arial", Font.PLAIN, 30));
         button.setOpaque(isDefaultLookAndFeelDecorated());
         button.setBackground(Color.gray);
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                toggleMenu(menuPanel);
+                toggleMenu(menuPanel, panelInicio);
             }
         });
 
@@ -590,73 +588,92 @@ public class GuiPrototype extends JFrame {
         timer.start();
     }
 
-
-    public static void agregarElementoMenu(JPanel menuPanel, boolean menuEx, String funcion) {
+    public static void agregarElementoMenu(JPanel menuPanel, boolean menuEx, String funcion, int indexButton, JPanel panelInicio) {
         
         JButton button = new JButton(funcion);
         button.setAlignmentX(Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
         button.setText(funcion);
+        button.addActionListener(new MenuBotonListener(indexButton, panelInicio));
+        button.setFocusPainted(false);
         button.getVerifyInputWhenFocusTarget();
 
         if (menuEx) {
-
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new GridLayout());
             buttonPanel.add(button);
-            // buttonPanel.add(label, BorderLayout.EAST);
             menuPanel.add(buttonPanel);
-            // button.addMouseListener(new MouseAdapter() {
-            //     @Override
-            //     public void mouseClicked(MouseEvent e) {
-            //         toggleMenu(menuPanel);
-            //     }
-            // });
-    
         } else {
-            // Si el menú está retraído, agregar botones sin etiquetas
             menuPanel.add(button);
         }
         
     }
 
-
-    public static void toggleMenu(JPanel panel) {
+    public static void toggleMenu(JPanel panel, JPanel panelInicio) {
 
         if (menuExpandido) {
             ocultarMenu(panel);
         } else {
             menuExpandido = true;
-            mostrarMenu(panel);
+            mostrarMenu(panel, panelInicio);
         }
     }
 
-
-    public static void mostrarMenu(JPanel panel) {
-        // Ajustar el ancho del menú al máximo
+    public static void mostrarMenu(JPanel panel, JPanel panelInicio) {
         panel.setPreferredSize(new Dimension(200, panel.getHeight()));
-        panel.removeAll(); // Limpiar los componentes existentes
+        panel.removeAll();
 
-        
-        agregarElementoMenu(panel, true, "Informacion compradores");
-        agregarElementoMenu(panel, true, "Ventas realizadas");
-        agregarElementoMenu(panel, true, "Consultar inventario");
-        agregarElementoMenu(panel, true, "Informacion de pago");
-        agregarElementoMenu(panel, true, "Recibo personal");
-        agregarElementoMenu(panel, true, "Salir");
+        agregarElementoMenu(panel, true, "Inicio", 1, panelInicio);
+        agregarElementoMenu(panel, true, "Informacion compradores", 2, panelInicio);
+        agregarElementoMenu(panel, true, "Ventas realizadas", 3, panelInicio);
+        agregarElementoMenu(panel, true, "Informacion de pago", 4, panelInicio);
+        agregarElementoMenu(panel, true, "Recibo personal", 5, panelInicio);
+        agregarElementoMenu(panel, true, "Recibo General", 6, panelInicio);
 
         panel.revalidate();
         panel.repaint();
     }
 
     public static void ocultarMenu(JPanel panel) {
-        // Ajustar el ancho del menú al mínimo
-        panel.setPreferredSize(new Dimension(50, panel.getHeight()));
+        panel.setPreferredSize(new Dimension(60, panel.getHeight()));
         menuExpandido = false;
-        panel.removeAll(); // Limpiar los componentes existentes
+        panel.removeAll();
         panel.revalidate();
         panel.repaint();
     }
 
+    static class MenuBotonListener implements ActionListener{
+        private int indexButton;
+        private JPanel panelInicio;
+
+        public MenuBotonListener(int indexButton, JPanel panelInicio) {
+            this.indexButton = indexButton;
+            this.panelInicio = panelInicio;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            switch (indexButton) {
+                case 1:
+                    panelInicio.setVisible(true);
+                    break;
+                case 2:
+                    panelInicio.setVisible(false);
+                    break;
+                case 3:
+                    
+                    break;
+                case 4:
+                    
+                    break;
+                case 5:
+                    
+                    break;
+                case 6:
+                    
+                    break;
+            }
+        }
+    }
 
     static class BotonListener implements ActionListener {
         private JButton button;
