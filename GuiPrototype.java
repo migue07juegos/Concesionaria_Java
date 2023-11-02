@@ -486,7 +486,7 @@ public class GuiPrototype extends JFrame {
 
                 JLabel label = new JLabel("<html><font color='#9B9B9B'>" + moDaStr[h].replace("\n", "<br>") + "</font></html>");
                 label.setPreferredSize(new Dimension(300, 300));
-                label.setFont(new Font("Arial", Font.PLAIN, 25)); 
+                label.setFont(new Font("Arial", Font.PLAIN, 25)); //texto
                 panel.add(label, BorderLayout.CENTER);
 
                 JButton button = new JButton(images[h]);
@@ -539,6 +539,73 @@ public class GuiPrototype extends JFrame {
         }
     }
 
+
+    public static void informacion_compradores(Carro[] compradores, int numComprador, boolean ventana) {
+
+        if (ventana) {
+        
+            JPanel informacion = new JPanel();
+            informacion.setLayout(new BoxLayout(informacion, BoxLayout.Y_AXIS));
+
+            for (int h = 0; h < 10; h++) {
+
+                if(mostrarDatosComprador(compradores, numComprador) != null) {
+                    
+                    // Crear un JPanel para agrupar el JLabel y el JButton
+                    JPanel panel = new JPanel(new BorderLayout());
+                    panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50)); // Espaciado vertical de 50
+                    panel.setBorder(BorderFactory.createLineBorder(new Color(54, 57, 63))); 
+
+                    JLabel label = new JLabel("<html><font color='#9B9B9B'>" +mostrarDatosComprador(compradores, numComprador)+"</font></html>");
+                    label.setPreferredSize(new Dimension(300, 300));
+                    label.setFont(new Font("Arial", Font.PLAIN, 25)); //texto
+
+                    panel.add(label, BorderLayout.CENTER);
+
+                    informacion.add(panel);
+                }
+            }
+
+            SwingUtilities.invokeLater(() -> {
+                relojGui(new GuiPrototype(), informacion);
+            });
+
+            JScrollPane scrollPane = new JScrollPane(informacion);
+            scrollPane.getViewport().setBackground(Color.BLACK); 
+            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+
+            scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
+
+            scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+                @Override
+                protected void configureScrollBarColors() {
+                    this.thumbColor = new Color(0, 85, 119);
+                }
+
+                @Override
+                protected JButton createDecreaseButton(int orientation) {
+                    JButton button = super.createDecreaseButton(orientation);
+                    button.setBackground(Color.BLACK);
+                    button.setForeground(new Color(0, 85, 119));
+                    return button;
+                }
+
+                @Override
+                protected JButton createIncreaseButton(int orientation) {
+                    JButton button = super.createIncreaseButton(orientation);
+                    button.setBackground(Color.BLACK);
+                    button.setForeground(new Color(0, 85, 119));
+                    return button;
+                }
+            });
+
+            scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+
+            informacion.add(scrollPane, BorderLayout.CENTER);
+        }
+    }
+    
+    
     public static void relojGui(JFrame frame, JPanel panelInicio) {
         JPanel panel = new JPanel();
         JButton button = new JButton("  ≡  ");
@@ -546,7 +613,7 @@ public class GuiPrototype extends JFrame {
         
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
         menuPanel.setBackground(Color.black); // Color de fondo del menú
-        menuPanel.setPreferredSize(new Dimension(60, menuPanel.getHeight())); // Ancho del menú retraído
+        menuPanel.setPreferredSize(new Dimension(72, menuPanel.getHeight())); // Ancho del menú retraído
         menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
 
         frame.setLayout(new BorderLayout());
@@ -622,7 +689,7 @@ public class GuiPrototype extends JFrame {
         panel.setPreferredSize(new Dimension(200, panel.getHeight()));
         panel.removeAll();
 
-        agregarElementoMenu(panel, true, "Inicio", 1, panelInicio);
+        agregarElementoMenu(panel, true, "Realizar venta", 1, panelInicio);
         agregarElementoMenu(panel, true, "Informacion compradores", 2, panelInicio);
         agregarElementoMenu(panel, true, "Ventas realizadas", 3, panelInicio);
         agregarElementoMenu(panel, true, "Informacion de pago", 4, panelInicio);
@@ -634,7 +701,7 @@ public class GuiPrototype extends JFrame {
     }
 
     public static void ocultarMenu(JPanel panel) {
-        panel.setPreferredSize(new Dimension(60, panel.getHeight()));
+        panel.setPreferredSize(new Dimension(72, panel.getHeight()));
         menuExpandido = false;
         panel.removeAll();
         panel.revalidate();
@@ -642,8 +709,8 @@ public class GuiPrototype extends JFrame {
     }
 
     static class MenuBotonListener implements ActionListener{
-        private int indexButton;
-        private JPanel panelInicio;
+        public int indexButton;
+        public JPanel panelInicio;
 
         public MenuBotonListener(int indexButton, JPanel panelInicio) {
             this.indexButton = indexButton;
@@ -657,19 +724,19 @@ public class GuiPrototype extends JFrame {
                     panelInicio.setVisible(true);
                     break;
                 case 2:
-                    panelInicio.setVisible(false);
+                    panelInicio.setVisible(true);
                     break;
                 case 3:
-                    
+                    panelInicio.setVisible(true);
                     break;
                 case 4:
-                    
+                    panelInicio.setVisible(true);
                     break;
                 case 5:
-                    
+                    panelInicio.setVisible(true);
                     break;
                 case 6:
-                    
+                    panelInicio.setVisible(true);
                     break;
             }
         }
