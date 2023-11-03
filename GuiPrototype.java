@@ -871,6 +871,7 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void main(String[] args) {
+    System.setProperty("awt.useSystemAAFontSettings", "on");
     GuiPrototype frame = new GuiPrototype(true);
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setVisible(true);
