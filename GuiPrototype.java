@@ -14,6 +14,7 @@ import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class GuiPrototype extends JFrame {
+
   public class Carro {
     int numeroControl;
     String color;
@@ -69,6 +70,10 @@ public class GuiPrototype extends JFrame {
   public JButton toggleButton;
   public static boolean menuExpandido = false;
   public JPanel menuPanel;
+  public static JPanel informacion = new JPanel();
+  public static JPanel contentPanel = new JPanel();
+  public static JScrollPane scrollPane = new JScrollPane(contentPanel);
+
 
   public static void valoresAleatorios() {
     Random rand = new Random();
@@ -421,6 +426,7 @@ public class GuiPrototype extends JFrame {
     }
   }
 
+
   public static void mostrar_compradores(int num, String x) {
 
     for (i = 0; i < num; i++) {
@@ -534,84 +540,92 @@ public class GuiPrototype extends JFrame {
       setDefaultCloseOperation(EXIT_ON_CLOSE);
       setLayout(new BorderLayout());
 
-      JPanel contentPanel = new JPanel();
-      contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-      ImageIcon images[] = {new ImageIcon("images/Audi.png"),
-                            new ImageIcon("images/bmw.png"),
-                            new ImageIcon("images/Mercedes.png"),
-                            new ImageIcon("images/Mclaren.png"),
-                            new ImageIcon("images/Lamborghini.png"),
-                            new ImageIcon("images/Toyota.png"),
-                            new ImageIcon("images/Chevrolet.png"),
-                            new ImageIcon("images/nissan.png"),
-                            new ImageIcon("images/Mazda.png"),
-                            new ImageIcon("images/Renault.png")};
-      String[] moDaStr = mostrarDatos();
-
-      for (int h = 0; h < 10; h++) {
-        // Crear un JPanel para agrupar el JLabel y el JButton
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(
-            50, 50, 0, 50)); // Espaciado vertical de 50
-        // panel.setBorder(BorderFactory.createLineBorder(new Color(54, 57,
-        // 63)));
-
-        JLabel label =
-            new JLabel("<html><font color='#9B9B9B'>" +
-                       moDaStr[h].replace("\n", "<br>") + "</font></html>");
-        label.setPreferredSize(new Dimension(300, 300));
-        label.setFont(new Font("Arial", Font.PLAIN, 25)); // texto
-        panel.add(label, BorderLayout.CENTER);
-
-        JButton button = new JButton(images[h]);
-
-        button.setPreferredSize(new Dimension(300, 300));
-        button.addActionListener(new BotonListener(button, label, h));
-        button.setVerticalTextPosition(SwingConstants.BOTTOM);
-        button.setHorizontalTextPosition(SwingConstants.CENTER);
-        panel.add(button, BorderLayout.EAST);
-
-        contentPanel.add(panel);
-      }
-
-      SwingUtilities.invokeLater(() -> { relojGui(this, contentPanel); });
-
-      JScrollPane scrollPane = new JScrollPane(contentPanel);
-      scrollPane.getViewport().setBackground(Color.BLACK);
-      scrollPane.setBorder(
-          BorderFactory.createLineBorder(new Color(0, 85, 119)));
-
-      scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
-
-      scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-        @Override
-        protected void configureScrollBarColors() {
-          this.thumbColor = new Color(0, 85, 119);
-        }
-
-        @Override
-        protected JButton createDecreaseButton(int orientation) {
-          JButton button = super.createDecreaseButton(orientation);
-          button.setBackground(Color.BLACK);
-          button.setForeground(new Color(0, 85, 119));
-          return button;
-        }
-
-        @Override
-        protected JButton createIncreaseButton(int orientation) {
-          JButton button = super.createIncreaseButton(orientation);
-          button.setBackground(Color.BLACK);
-          button.setForeground(new Color(0, 85, 119));
-          return button;
-        }
-      });
-
-      scrollPane.getVerticalScrollBar().setUnitIncrement(15);
-
+      SwingUtilities.invokeLater(() -> { relojGui(this, contentPanel, informacion); });
+      Realizar_venta(contentPanel, scrollPane);
+      
       add(scrollPane, BorderLayout.CENTER);
+
     }
   }
+
+
+  public static void Realizar_venta(JPanel contentPanel, JScrollPane scrollPane){
+
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
+    ImageIcon images[] = {new ImageIcon("images/Audi.png"),
+                          new ImageIcon("images/bmw.png"),
+                          new ImageIcon("images/Mercedes.png"),
+                          new ImageIcon("images/Mclaren.png"),
+                          new ImageIcon("images/Lamborghini.png"),
+                          new ImageIcon("images/Toyota.png"),
+                          new ImageIcon("images/Chevrolet.png"),
+                          new ImageIcon("images/nissan.png"),
+                          new ImageIcon("images/Mazda.png"),
+                          new ImageIcon("images/Renault.png")};
+    String[] moDaStr = mostrarDatos();
+
+    for (int h = 0; h < 10; h++) {
+      // Crear un JPanel para agrupar el JLabel y el JButton
+      JPanel panel = new JPanel(new BorderLayout());
+      panel.setBorder(BorderFactory.createEmptyBorder(
+          50, 50, 0, 50)); // Espaciado vertical de 50
+      // panel.setBorder(BorderFactory.createLineBorder(new Color(54, 57,
+      // 63)));
+
+      JLabel label =
+          new JLabel("<html><font color='#9B9B9B'>" +
+                     moDaStr[h].replace("\n", "<br>") + "</font></html>");
+      label.setPreferredSize(new Dimension(300, 300));
+      label.setFont(new Font("Arial", Font.PLAIN, 25)); // texto
+      panel.add(label, BorderLayout.CENTER);
+
+      JButton button = new JButton(images[h]);
+
+      button.setPreferredSize(new Dimension(300, 300));
+      button.addActionListener(new BotonListener(button, label, h));
+      button.setVerticalTextPosition(SwingConstants.BOTTOM);
+      button.setHorizontalTextPosition(SwingConstants.CENTER);
+      panel.add(button, BorderLayout.EAST);
+
+      contentPanel.add(panel);
+    }
+
+
+    scrollPane.getViewport().setBackground(Color.BLACK);
+    scrollPane.setBorder(
+        BorderFactory.createLineBorder(new Color(0, 85, 119)));
+
+    scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
+
+    scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+      @Override
+      protected void configureScrollBarColors() {
+        this.thumbColor = new Color(0, 85, 119);
+      }
+
+      @Override
+      protected JButton createDecreaseButton(int orientation) {
+        JButton button = super.createDecreaseButton(orientation);
+        button.setBackground(Color.BLACK);
+        button.setForeground(new Color(0, 85, 119));
+        return button;
+      }
+
+      @Override
+      protected JButton createIncreaseButton(int orientation) {
+        JButton button = super.createIncreaseButton(orientation);
+        button.setBackground(Color.BLACK);
+        button.setForeground(new Color(0, 85, 119));
+        return button;
+      }
+    });
+
+    scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+  }
+
+
 
   public static void informacion_compradores(Carro[] compradores,
                                              int numComprador,
@@ -619,7 +633,9 @@ public class GuiPrototype extends JFrame {
 
     if (ventana) {
 
-      JPanel informacion = new JPanel();
+      new MenuBotonListener(2, contentPanel, informacion);
+
+      // System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
       informacion.setLayout(new BoxLayout(informacion, BoxLayout.Y_AXIS));
 
       for (int h = 0; h < 10; h++) {
@@ -647,7 +663,7 @@ public class GuiPrototype extends JFrame {
       }
 
       SwingUtilities.invokeLater(
-          () -> { relojGui(new GuiPrototype(), informacion); });
+          () -> { relojGui(new GuiPrototype(), contentPanel, informacion); });
 
       JScrollPane scrollPane = new JScrollPane(informacion);
       scrollPane.getViewport().setBackground(Color.BLACK);
@@ -682,10 +698,11 @@ public class GuiPrototype extends JFrame {
       scrollPane.getVerticalScrollBar().setUnitIncrement(15);
 
       informacion.add(scrollPane, BorderLayout.CENTER);
+
     }
   }
 
-  public static void relojGui(JFrame frame, JPanel panelInicio) {
+  public static void relojGui(JFrame frame, JPanel panelInicio, JPanel panelInfo) {
     JPanel panel = new JPanel();
     JButton button = new JButton("  ≡  ");
     JPanel menuPanel = new JPanel();
@@ -709,7 +726,7 @@ public class GuiPrototype extends JFrame {
     button.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-        toggleMenu(menuPanel, panelInicio);
+        toggleMenu(menuPanel, panelInicio, panelInfo);
       }
     });
 
@@ -737,13 +754,13 @@ public class GuiPrototype extends JFrame {
 
   public static void agregarElementoMenu(JPanel menuPanel, boolean menuEx,
                                          String funcion, int indexButton,
-                                         JPanel panelInicio) {
+                                         JPanel panelInicio, JPanel panelInfo) {
 
     JButton button = new JButton(funcion);
     button.setAlignmentX(
         Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
     button.setText(funcion);
-    button.addActionListener(new MenuBotonListener(indexButton, panelInicio));
+    button.addActionListener(new MenuBotonListener(indexButton, panelInicio, panelInfo));
     button.setFocusPainted(false);
     button.getVerifyInputWhenFocusTarget();
 
@@ -757,26 +774,26 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void toggleMenu(JPanel panel, JPanel panelInicio) {
+  public static void toggleMenu(JPanel panel, JPanel panelInicio, JPanel panelInfo) {
 
     if (menuExpandido) {
       ocultarMenu(panel);
     } else {
       menuExpandido = true;
-      mostrarMenu(panel, panelInicio);
+      mostrarMenu(panel, panelInicio, panelInfo);
     }
   }
 
-  public static void mostrarMenu(JPanel panel, JPanel panelInicio) {
+  public static void mostrarMenu(JPanel panel, JPanel panelInicio, JPanel panelInfo) {
     panel.setPreferredSize(new Dimension(200, panel.getHeight()));
     panel.removeAll();
 
-    agregarElementoMenu(panel, true, "Realizar venta", 1, panelInicio);
-    agregarElementoMenu(panel, true, "Informacion compradores", 2, panelInicio);
-    agregarElementoMenu(panel, true, "Ventas realizadas", 3, panelInicio);
-    agregarElementoMenu(panel, true, "Informacion de pago", 4, panelInicio);
-    agregarElementoMenu(panel, true, "Recibo personal", 5, panelInicio);
-    agregarElementoMenu(panel, true, "Recibo General", 6, panelInicio);
+    agregarElementoMenu(panel, true, "Realizar venta", 1, panelInicio, panelInfo);
+    agregarElementoMenu(panel, true, "Informacion compradores", 2, panelInicio, panelInfo);
+    agregarElementoMenu(panel, true, "Ventas realizadas", 3, panelInicio, panelInfo);
+    agregarElementoMenu(panel, true, "Informacion de pago", 4, panelInicio, panelInfo);
+    agregarElementoMenu(panel, true, "Recibo personal", 5, panelInicio, panelInfo);
+    agregarElementoMenu(panel, true, "Recibo General", 6, panelInicio, panelInfo);
 
     panel.revalidate();
     panel.repaint();
@@ -793,10 +810,12 @@ public class GuiPrototype extends JFrame {
   static class MenuBotonListener implements ActionListener {
     public int indexButton;
     public JPanel panelInicio;
+    public JPanel panel2;
 
-    public MenuBotonListener(int indexButton, JPanel panelInicio) {
+    public MenuBotonListener(int indexButton, JPanel panelInicio, JPanel panel2) {
       this.indexButton = indexButton;
       this.panelInicio = panelInicio;
+      this.panel2 = panel2;
     }
 
     @Override
@@ -806,19 +825,20 @@ public class GuiPrototype extends JFrame {
         panelInicio.setVisible(true);
         break;
       case 2:
-        panelInicio.setVisible(true);
+        panelInicio.setVisible(false);
+        panel2.setVisible(true);
         break;
       case 3:
-        panelInicio.setVisible(true);
+        panelInicio.setVisible(false);
         break;
       case 4:
-        panelInicio.setVisible(true);
+        panelInicio.setVisible(false);
         break;
       case 5:
-        panelInicio.setVisible(true);
+        panelInicio.setVisible(false);
         break;
       case 6:
-        panelInicio.setVisible(true);
+        panelInicio.setVisible(false);
         break;
       }
     }
@@ -835,7 +855,7 @@ public class GuiPrototype extends JFrame {
       this.ho = ho;
     }
 
-    @Override
+    // @Override
     public void actionPerformed(ActionEvent e) {
       boolean confirm = true;
       int w = 0;
@@ -850,6 +870,7 @@ public class GuiPrototype extends JFrame {
           null, "Selecciona una opción", "Venta del auto seleccionado",
           JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
           opciones, opciones[0]);
+
       switch (seleccion) {
       case 0:
         confirm = buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
@@ -858,6 +879,10 @@ public class GuiPrototype extends JFrame {
         numCompradores++;
         numCarrosVendidos++;
         w++;
+        break;
+      case 1:
+        JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia",
+        JOptionPane.WARNING_MESSAGE);
         break;
       }
       if (seleccion == JOptionPane.CLOSED_OPTION) {
@@ -868,6 +893,18 @@ public class GuiPrototype extends JFrame {
       button.setVisible(confirm);
       associatedLabel.setVisible(confirm);
     }
+    // @Override
+    // public void actionPerformed(ActionEvent e){
+
+    //   JPanel panel = new JPanel();
+    //   JTextField texto = new JTextField("Nombre", 20);
+
+      
+    //   panel.add(texto);
+    //   panel.add(associatedLabel);
+    //   panel.setVisible(true);
+    //   associatedLabel.setVisible(true);
+    // }
   }
 
   public static void main(String[] args) {
