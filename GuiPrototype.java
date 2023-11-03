@@ -738,6 +738,12 @@ public class GuiPrototype extends JFrame {
     panel.add(label, BorderLayout.EAST);
     panel.add(button, BorderLayout.WEST);
 
+    LocalTime currentTime = LocalTime.now();
+    String time =
+        String.format("%02d:%02d:%02d ", currentTime.getHour(),
+                      currentTime.getMinute(), currentTime.getSecond());
+    label.setText(time);
+
     Timer timer = new Timer(1000, new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
