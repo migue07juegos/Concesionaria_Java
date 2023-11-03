@@ -53,7 +53,7 @@ public class GuiPrototype extends JFrame {
                                   "Verde",  "Amarillo", "Plata", "Gris",
                                   "Rosa",   "Naranja"};
   public static String[] marca = {
-      "Audi",   "BMW",       "Mercedes-Benz", "Mclaren", "Lamborghini",
+      "Audi",   "BMW",       "Mercedes-Benz", "McLaren", "Lamborghini",
       "Toyota", "Chevrolet", "Nissan",        "Mazda",   "Renault"};
   public static String[] modelo = {"A1", "A2",      "A3", "A4", "Aventador",
                                    "A6", "Mustang", "A8", "A9", "A10"};
