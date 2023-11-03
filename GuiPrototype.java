@@ -475,7 +475,9 @@ public class GuiPrototype extends JFrame {
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-            ImageIcon images[] = {new ImageIcon("Audi.png"), new ImageIcon("bmw.png"), new ImageIcon("Mercedes.png"), new ImageIcon("Mclaren.png"), new ImageIcon("Lamborghini.png"), new ImageIcon("Toyota.png"), new ImageIcon("Chevrolet.png"), new ImageIcon("nissan.png"), new ImageIcon("Mazda.png"), new ImageIcon("Renault.png")};
+            ImageIcon images[] = {new ImageIcon("images/Audi.png"), new ImageIcon("images/bmw.png"), new ImageIcon("images/Mercedes.png"), new ImageIcon("images/Mclaren.png"),
+                new ImageIcon("images/Lamborghini.png"), new ImageIcon("images/Toyota.png"), new ImageIcon("images/Chevrolet.png"), new ImageIcon("images/nissan.png"),
+                new ImageIcon("images/Mazda.png"), new ImageIcon("images/Renault.png")};
             String[] moDaStr = mostrarDatos();
 
             for (int h = 0; h < 10; h++) {
