@@ -5,13 +5,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class GuiPrototype extends JFrame {
 
@@ -675,46 +677,6 @@ public class GuiPrototype extends JFrame {
           informacion.add(panel);
         }
       }
-
-      
-      
-      // SwingUtilities.invokeLater(
-      //     () -> { relojGui(new GuiPrototype(), contentPanel, informacion); });
-
-      // JScrollPane scrollPane = new JScrollPane(informacion);
-      // scrollPane.getViewport().setBackground(Color.BLACK);
-      // scrollPane.setBorder(
-      //     BorderFactory.createLineBorder(new Color(0, 85, 119)));
-
-      // scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
-
-      // scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-      //   @Override
-      //   protected void configureScrollBarColors() {
-      //     this.thumbColor = new Color(0, 85, 119);
-      //   }
-
-      //   @Override
-      //   protected JButton createDecreaseButton(int orientation) {
-      //     JButton button = super.createDecreaseButton(orientation);
-      //     button.setBackground(Color.BLACK);
-      //     button.setForeground(new Color(0, 85, 119));
-      //     return button;
-      //   }
-
-      //   @Override
-      //   protected JButton createIncreaseButton(int orientation) {
-      //     JButton button = super.createIncreaseButton(orientation);
-      //     button.setBackground(Color.BLACK);
-      //     button.setForeground(new Color(0, 85, 119));
-      //     return button;
-      //   }
-      // });
-
-      // scrollPane.getVerticalScrollBar().setUnitIncrement(15);
-
-      // informacion.add(scrollPane, BorderLayout.CENTER);
-
     }
   }
 
@@ -759,20 +721,27 @@ public class GuiPrototype extends JFrame {
     panel.add(label, BorderLayout.EAST);
     panel.add(button, BorderLayout.WEST);
 
-    LocalTime currentTime = LocalTime.now();
-    String time =
-        String.format("%02d:%02d:%02d ", currentTime.getHour(),
-                      currentTime.getMinute(), currentTime.getSecond());
-    label.setText(time);
+    // LocalTime currentTime = LocalTime.now();
+    // String time =
+    //     String.format("%02d:%02d:%02d ", currentTime.getHour(),
+    //                   currentTime.getMinute(), currentTime.getSecond());
+    // label.setText(time);
 
     Timer timer = new Timer(1000, new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        LocalTime currentTime = LocalTime.now();
-        String time =
-            String.format("%02d:%02d:%02d ", currentTime.getHour(),
-                          currentTime.getMinute(), currentTime.getSecond());
-        label.setText(time);
+        // LocalTime currentTime = LocalTime.now();
+        // String time =
+        //     String.format("%02d:%02d:%02d ", currentTime.getHour(),
+        //                   currentTime.getMinute(), currentTime.getSecond());
+        // label.setText(time);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+        String formattedTime = formatter.format(now);
+
+        // Actualiza el texto del JLabel
+        label.setText(formattedTime);
+
       }
     });
 
@@ -810,7 +779,7 @@ public class GuiPrototype extends JFrame {
     menuPanel.add(buttonPanel);
 
 
-    JPanel panel = new JPanel();
+    // JPanel panel = new JPanel();
     
   }
 
