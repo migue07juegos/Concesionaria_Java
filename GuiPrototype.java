@@ -43,8 +43,6 @@ public class GuiPrototype extends JFrame {
     public void setMonto(int monto) { this.monto = monto; }
   }
 
-  Border lineBorder = new LineBorder(Color.RED, 1);
-
   public static int[] array = new int[10];
   public static int[] mesesAdeudo = new int[10];
   public static int i, l, valores = 9, a = 0, inicio, nuevoValor, valorEliminar,
@@ -67,10 +65,15 @@ public class GuiPrototype extends JFrame {
   public static double[] liquidacion = new double[10];
   public static double[] adeudo = new double[10];
   public static double[] pagoPorMes = new double[10];
+  public static Carro carroSeleccionado = new GuiPrototype().new Carro();
+  public static Carro[] carrosVendidos = new Carro[10];
+  public static Carro[] compradores = new Carro[10];
+  public static int numCompradores = 0;
+  public static int numCarrosVendidos = 0;
+  public static int w = 0;
   public JButton toggleButton;
   public static boolean menuExpandido = false;
   public JPanel menuPanel;
-
 
   public static void valoresAleatorios() {
     Random rand = new Random();
@@ -112,7 +115,7 @@ public class GuiPrototype extends JFrame {
     StringBuilder datosCompradorF = new StringBuilder();
     for (int i = 0; i < numCompradores; i++) {
       datosCompradorF.append(
-          (String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i])));
+          (String.format("Comprador %d: %s", i + 1, nombreComprador[i])));
       datosCompradorF.append((String.format("\nEdad: %d", edad[i])));
       datosCompradorF.append(
           (String.format("\nMétodo de pago: %s", metodoPago[i])));
@@ -126,7 +129,7 @@ public class GuiPrototype extends JFrame {
         datosCompradorF.append((String.format("\nAdeudo: %.2f", adeudo[i])));
       }
 
-      datosCompradorF.append((String.format("\nModelo solicitado: %s %s",
+      datosCompradorF.append((String.format("\nModelo solicitado: %s %s\n\n",
                                             compradores[i].getMarca(),
                                             compradores[i].getModelo())));
     }
@@ -295,7 +298,7 @@ public class GuiPrototype extends JFrame {
           continue;
         }
 
-        if (mesesAdeudo[i] < 10 && mesesAdeudo[i] > 0) {
+        if (mesesAdeudo[i] <= 10 && mesesAdeudo[i] > 0) {
           break;
         }
 
@@ -538,20 +541,32 @@ public class GuiPrototype extends JFrame {
       setDefaultCloseOperation(EXIT_ON_CLOSE);
       setLayout(new BorderLayout());
 
-      JPanel contentPanel = new JPanel();
-      JScrollPane scrollPane = new JScrollPane(contentPanel);    
+      JPanel inicioPanel = new JPanel();
+      JPanel infoPanel = new JPanel();
+      JPanel panelPrincipal = new JPanel();
 
-      SwingUtilities.invokeLater(() -> { relojGui(this, contentPanel); });
-      Realizar_venta(contentPanel, scrollPane);
+      panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+
+      if (infoPanel.getComponentCount() == 0) {
+        Dimension emptyPanelSize = new Dimension(0, 0);
+        infoPanel.setPreferredSize(emptyPanelSize);
+        infoPanel.setMinimumSize(emptyPanelSize);
+      }
+
+      panelPrincipal.add(inicioPanel);
+      panelPrincipal.add(infoPanel);
+
+      JScrollPane scrollPane = new JScrollPane(panelPrincipal);  
+
+      SwingUtilities.invokeLater(() -> { relojGui(this, inicioPanel, infoPanel); });
+      Realizar_venta(inicioPanel, scrollPane);
       
       add(scrollPane, BorderLayout.CENTER);
 
     }
   }
 
-
   public static void Realizar_venta(JPanel contentPanel, JScrollPane scrollPane){
-
 
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
@@ -637,98 +652,29 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+    scrollPane.getVerticalScrollBar().setUnitIncrement(40);
   }
 
-
-
-  public static void informacion_compradores(Carro[] compradores,
-                                             int numComprador,
-                                             boolean ventana, JPanel informacion) {
-
-    if (ventana) {
-
-      new MenuBotonListener(2, informacion);
-
-      informacion.setLayout(new BoxLayout(informacion, BoxLayout.Y_AXIS));
-
-      for (int h = 0; h < 10; h++) {
-
-        if (mostrarDatosComprador(compradores, numComprador) != null) {
-
-          // Crear un JPanel para agrupar el JLabel y el JButton
-          JPanel panel = new JPanel(new BorderLayout());
-          panel.setBorder(BorderFactory.createEmptyBorder(
-              50, 50, 0, 50)); // Espaciado vertical de 50
-          panel.setBorder(
-              BorderFactory.createLineBorder(new Color(54, 57, 63)));
-
-          JLabel label =
-              new JLabel("<html><font color='#9B9B9B'>" +
-                         mostrarDatosComprador(compradores, numComprador) +
-                         "</font></html>");
-          label.setPreferredSize(new Dimension(300, 300));
-          label.setFont(new Font("Arial", Font.PLAIN, 25)); // texto
-
-          panel.add(label, BorderLayout.CENTER);
-
-          informacion.add(panel);
-        }
-      }
-
-      
-      
-      // SwingUtilities.invokeLater(
-      //     () -> { relojGui(new GuiPrototype(), contentPanel, informacion); });
-
-      // JScrollPane scrollPane = new JScrollPane(informacion);
-      // scrollPane.getViewport().setBackground(Color.BLACK);
-      // scrollPane.setBorder(
-      //     BorderFactory.createLineBorder(new Color(0, 85, 119)));
-
-      // scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
-
-      // scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-      //   @Override
-      //   protected void configureScrollBarColors() {
-      //     this.thumbColor = new Color(0, 85, 119);
-      //   }
-
-      //   @Override
-      //   protected JButton createDecreaseButton(int orientation) {
-      //     JButton button = super.createDecreaseButton(orientation);
-      //     button.setBackground(Color.BLACK);
-      //     button.setForeground(new Color(0, 85, 119));
-      //     return button;
-      //   }
-
-      //   @Override
-      //   protected JButton createIncreaseButton(int orientation) {
-      //     JButton button = super.createIncreaseButton(orientation);
-      //     button.setBackground(Color.BLACK);
-      //     button.setForeground(new Color(0, 85, 119));
-      //     return button;
-      //   }
-      // });
-
-      // scrollPane.getVerticalScrollBar().setUnitIncrement(15);
-
-      // informacion.add(scrollPane, BorderLayout.CENTER);
-
-    }
+  public static void informacion_compradores(boolean ventana, JPanel informacion) {
+    informacion.removeAll();
+    informacion.revalidate();
+    informacion.repaint();
+    JTextArea txt = new JTextArea(mostrarDatosComprador(compradores, numCompradores).toString());
+    informacion.add(txt);
   }
 
-  public static void relojGui(JFrame frame, JPanel panelInicio) {
+  public static void relojGui(JFrame frame, JPanel panelInicio, JPanel infoPanel) {
 
     JPanel panel = new JPanel();
     JButton button = new JButton("  ≡  ");
     JPanel menuPanel = new JPanel();
 
     menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+    menuPanel.setBorder(null);
     menuPanel.setBackground(Color.black); // Color de fondo del menú
     menuPanel.setPreferredSize(
-        new Dimension(72, menuPanel.getHeight())); // Ancho del menú retraído
-    menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+        new Dimension(60, menuPanel.getHeight())); // Ancho del menú retraído
+    //menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
 
 
     frame.setLayout(new BorderLayout());
@@ -736,16 +682,19 @@ public class GuiPrototype extends JFrame {
               BorderLayout.WEST); // Agregar el menú en la parte izquierda
     frame.add(panel, BorderLayout.NORTH);
 
-    button.setSize(50, 50);
+    Dimension buttonSize = new Dimension(60, 50);
+    button.setPreferredSize(buttonSize);
+    button.setMaximumSize(buttonSize);
     button.setFocusPainted(false);
     button.setFont(new Font("Arial", Font.PLAIN, 30));
     button.setOpaque(isDefaultLookAndFeelDecorated());
     button.setBackground(Color.gray);
+    //button.setBorder(null);
     button.addMouseListener(new MouseAdapter() {
       
       @Override
       public void mouseClicked(MouseEvent e) {
-        toggleMenu(menuPanel, panelInicio);
+        toggleMenu(menuPanel, panelInicio, infoPanel);
       }
       
     });
@@ -758,7 +707,6 @@ public class GuiPrototype extends JFrame {
     label.setFont(new Font("Arial", Font.PLAIN, 50));
     panel.add(label, BorderLayout.EAST);
     panel.add(button, BorderLayout.WEST);
-
     LocalTime currentTime = LocalTime.now();
     String time =
         String.format("%02d:%02d:%02d ", currentTime.getHour(),
@@ -781,13 +729,13 @@ public class GuiPrototype extends JFrame {
 
   public static void agregarElementoMenu(JPanel menuPanel,
                                          String funcion, int indexButton,
-                                         JPanel panelInicio) {
+                                         JPanel panelInicio, JPanel infoPanel) {
 
     JButton button = new JButton(funcion);
     button.setAlignmentX(
         Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
     button.setText(funcion);
-    button.addActionListener(new MenuBotonListener(indexButton, panelInicio));
+    button.addActionListener(new MenuBotonListener(indexButton, panelInicio, infoPanel));
     button.setFocusPainted(false);
     button.getVerifyInputWhenFocusTarget();
     button.addMouseListener(new MouseAdapter() {
@@ -809,33 +757,30 @@ public class GuiPrototype extends JFrame {
     buttonPanel.add(button);
     menuPanel.add(buttonPanel);
 
-
-    JPanel panel = new JPanel();
-    
   }
 
-  public static void toggleMenu(JPanel panel, JPanel panelInicio) {
+  public static void toggleMenu(JPanel panel, JPanel panelInicio, JPanel infoPanel) {
 
     if (menuExpandido) {
       ocultarMenu(panel);
     } else {
       menuExpandido = true;
-      mostrarMenu(panel, panelInicio);
+      mostrarMenu(panel, panelInicio, infoPanel);
     }
   }
 
-  public static void mostrarMenu(JPanel panel, JPanel panelInicio) {
+  public static void mostrarMenu(JPanel panel, JPanel panelInicio, JPanel infoPanel) {
     
     
     panel.setPreferredSize(new Dimension(200, panel.getHeight()));
     panel.removeAll();
 
-    agregarElementoMenu(panel, "Realizar venta", 1, panelInicio);
-    agregarElementoMenu(panel, "Informacion compradores", 2, panelInicio);
-    agregarElementoMenu(panel, "Ventas realizadas", 3, panelInicio);
-    agregarElementoMenu(panel, "Informacion de pago", 4, panelInicio);
-    agregarElementoMenu(panel, "Recibo personal", 5, panelInicio);
-    agregarElementoMenu(panel, "Recibo General", 6, panelInicio);
+    agregarElementoMenu(panel, "Realizar venta", 1, panelInicio, infoPanel);
+    agregarElementoMenu(panel, "Informacion compradores", 2, panelInicio, infoPanel);
+    agregarElementoMenu(panel, "Ventas realizadas", 3, panelInicio, infoPanel);
+    agregarElementoMenu(panel, "Informacion de pago", 4, panelInicio, infoPanel);
+    agregarElementoMenu(panel, "Recibo personal", 5, panelInicio, infoPanel);
+    agregarElementoMenu(panel, "Recibo General", 6, panelInicio, infoPanel);
 
 
     panel.revalidate();
@@ -844,7 +789,7 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void ocultarMenu(JPanel panel) {
-    panel.setPreferredSize(new Dimension(72, panel.getHeight()));
+    panel.setPreferredSize(new Dimension(60, panel.getHeight()));
     menuExpandido = false;
     panel.removeAll();
     panel.revalidate();
@@ -854,10 +799,12 @@ public class GuiPrototype extends JFrame {
   static class MenuBotonListener implements ActionListener {
     public int indexButton;
     public JPanel panelInicio;
+    public JPanel infoPanel;
 
-    public MenuBotonListener(int indexButton, JPanel panelInicio) {
+    public MenuBotonListener(int indexButton, JPanel panelInicio, JPanel infoPanel) {
       this.indexButton = indexButton;
       this.panelInicio = panelInicio;
+      this.infoPanel = infoPanel;
     }
 
     @Override
@@ -865,21 +812,28 @@ public class GuiPrototype extends JFrame {
       switch (indexButton) {
       case 1:
         panelInicio.setVisible(true);
+        infoPanel.setVisible(false);
         break;
       case 2:
         panelInicio.setVisible(false);
+        informacion_compradores(menuExpandido, infoPanel);
+        infoPanel.setVisible(true);
         break;
       case 3:
         panelInicio.setVisible(false);
+        infoPanel.setVisible(false);
         break;
       case 4:
         panelInicio.setVisible(false);
+        infoPanel.setVisible(false);
         break;
       case 5:
         panelInicio.setVisible(false);
+        infoPanel.setVisible(false);
         break;
       case 6:
         panelInicio.setVisible(false);
+        infoPanel.setVisible(false);
         break;
       }
     }
@@ -894,17 +848,13 @@ public class GuiPrototype extends JFrame {
       this.button = button;
       this.associatedLabel = associatedLabel;
       this.ho = ho;
+      
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
       boolean confirm = true;
-      int w = 0;
-      Carro carroSeleccionado = new GuiPrototype().new Carro();
-      Carro[] carrosVendidos = new Carro[10];
-      Carro[] compradores = new Carro[10];
-      int numCompradores = 0;
-      int numCarrosVendidos = 0;
+
       String[] opciones = {"Realizar venta", "Cancelar"};
 
       int seleccion = JOptionPane.showOptionDialog(
