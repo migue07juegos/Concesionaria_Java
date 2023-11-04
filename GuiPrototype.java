@@ -659,80 +659,12 @@ public class GuiPrototype extends JFrame {
 
 
 
-  public static void informacion_compradores(Carro[] compradores,
-                                             int numComprador,
-                                             boolean ventana, JPanel informacion) {
-
-    if (ventana) {
-
-      new MenuBotonListener(2, informacion);
-
-      informacion.setLayout(new BoxLayout(informacion, BoxLayout.Y_AXIS));
-
-      for (int h = 0; h < 10; h++) {
-
-        if (mostrarDatosComprador(compradores, numComprador) != null) {
-
-          // Crear un JPanel para agrupar el JLabel y el JButton
-          JPanel panel = new JPanel(new BorderLayout());
-          panel.setBorder(BorderFactory.createEmptyBorder(
-              50, 50, 0, 50)); // Espaciado vertical de 50
-          panel.setBorder(
-              BorderFactory.createLineBorder(new Color(54, 57, 63)));
-
-          JLabel label =
-              new JLabel("<html><font color='#9B9B9B'>" +
-                         mostrarDatosComprador(compradores, numComprador) +
-                         "</font></html>");
-          label.setPreferredSize(new Dimension(300, 300));
-          label.setFont(new Font("Arial", Font.PLAIN, 25)); // texto
-
-          panel.add(label, BorderLayout.CENTER);
-
-          informacion.add(panel);
-        }
-      }
-
-      
-      
-      // SwingUtilities.invokeLater(
-      //     () -> { relojGui(new GuiPrototype(), contentPanel, informacion); });
-
-      // JScrollPane scrollPane = new JScrollPane(informacion);
-      // scrollPane.getViewport().setBackground(Color.BLACK);
-      // scrollPane.setBorder(
-      //     BorderFactory.createLineBorder(new Color(0, 85, 119)));
-
-      // scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
-
-      // scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-      //   @Override
-      //   protected void configureScrollBarColors() {
-      //     this.thumbColor = new Color(0, 85, 119);
-      //   }
-
-      //   @Override
-      //   protected JButton createDecreaseButton(int orientation) {
-      //     JButton button = super.createDecreaseButton(orientation);
-      //     button.setBackground(Color.BLACK);
-      //     button.setForeground(new Color(0, 85, 119));
-      //     return button;
-      //   }
-
-      //   @Override
-      //   protected JButton createIncreaseButton(int orientation) {
-      //     JButton button = super.createIncreaseButton(orientation);
-      //     button.setBackground(Color.BLACK);
-      //     button.setForeground(new Color(0, 85, 119));
-      //     return button;
-      //   }
-      // });
-
-      // scrollPane.getVerticalScrollBar().setUnitIncrement(15);
-
-      // informacion.add(scrollPane, BorderLayout.CENTER);
-
-    }
+  public static void informacion_compradores(boolean ventana, JPanel informacion) {
+    informacion.removeAll();
+    informacion.revalidate();
+    informacion.repaint();
+    JTextArea txt = new JTextArea(mostrarDatosComprador(compradores, numCompradores).toString());
+    informacion.add(txt);
   }
 
   public static void relojGui(JFrame frame, JPanel panelInicio, JPanel infoPanel) {
