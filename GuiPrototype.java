@@ -680,7 +680,7 @@ public class GuiPrototype extends JFrame {
   public static void relojGui(JFrame frame, JPanel panelInicio, JPanel infoPanel) {
 
     JPanel panel = new JPanel();
-    JButton button = new JButton("  ≡  ");
+    JButton button = new JButton(" ≡ ");
     JPanel menuPanel = new JPanel();
 
     menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
@@ -722,25 +722,13 @@ public class GuiPrototype extends JFrame {
     panel.add(label, BorderLayout.EAST);
     panel.add(button, BorderLayout.WEST);
 
-    // LocalTime currentTime = LocalTime.now();
-    // String time =
-    //     String.format("%02d:%02d:%02d ", currentTime.getHour(),
-    //                   currentTime.getMinute(), currentTime.getSecond());
-    // label.setText(time);
-
     Timer timer = new Timer(1000, new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // LocalTime currentTime = LocalTime.now();
-        // String time =
-        //     String.format("%02d:%02d:%02d ", currentTime.getHour(),
-        //                   currentTime.getMinute(), currentTime.getSecond());
-        // label.setText(time);
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
         String formattedTime = formatter.format(now);
 
-        // Actualiza el texto del JLabel
         label.setText(formattedTime);
 
       }
