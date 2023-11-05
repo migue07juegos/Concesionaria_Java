@@ -663,9 +663,19 @@ public class GuiPrototype extends JFrame {
     informacion.removeAll();
     informacion.revalidate();
     informacion.repaint();
-    JTextArea txt = new JTextArea(mostrarDatosComprador(compradores, numCompradores).toString());
-    informacion.add(txt);
+    // JTextArea txt = new JTextArea(mostrarDatosComprador(compradores, numCompradores).toString());
+    // txt.setBackground(new Color(0, 0, 0));
+    // txt.setForeground(new Color(255, 255, 255));
+
+    JLabel label =
+    new JLabel("<html><font color='#9B9B9B'>" +
+    mostrarDatosComprador(compradores, numCompradores).toString().replace("\n", "<br>") + "</font></html>");
+    label.setPreferredSize(new Dimension(300, 300));
+    label.setFont(new Font("Arial", Font.PLAIN, 25)); // texto
+
+    informacion.add(label);
   }
+
 
   public static void relojGui(JFrame frame, JPanel panelInicio, JPanel infoPanel) {
 
