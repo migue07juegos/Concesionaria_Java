@@ -11,8 +11,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 public class GuiPrototype extends JFrame {
@@ -97,13 +95,13 @@ public class GuiPrototype extends JFrame {
     return mostrarDatosStr;
   }
 
-  public static String mostrarCarrosVendidos(Carro[] carrosVendidos,
+  public static StringBuilder mostrarCarrosVendidos(Carro[] carrosVendidos,
                                              int numCarrosVendidos) {
-    String CarrosVendidosHastaElMomento = "";
+    StringBuilder CarrosVendidosHastaElMomento = new StringBuilder();
 
     for (int i = 0; i < numCarrosVendidos; i++) {
-      CarrosVendidosHastaElMomento = (String.format(
-          "Carros vendidos hasta el momento:\n\n\t\tVenta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
+      CarrosVendidosHastaElMomento.append(String.format(
+          "\nVenta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
           i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(),
           carrosVendidos[i].getColor(), carrosVendidos[i].getMarca(),
           carrosVendidos[i].getModelo(), carrosVendidos[i].getMonto()));
@@ -142,7 +140,7 @@ public class GuiPrototype extends JFrame {
     StringBuilder InfoDePagoF = new StringBuilder();
     for (int i = 0; i < numCompradores; i++) {
       InfoDePagoF.append(
-          (String.format("\n\nComprador %d: %s", i + 1, nombreComprador[i])));
+          (String.format("Comprador %d: %s", i + 1, nombreComprador[i])));
       InfoDePagoF.append(
           (String.format("\nMétodo de pago: %s", metodoPago[i])));
 
@@ -154,7 +152,7 @@ public class GuiPrototype extends JFrame {
             (String.format("\nMonto de Enganche: %.2f", montoEnganche[i])));
         InfoDePagoF.append((String.format("\nAdeudo: %.2f", adeudo[i])));
         InfoDePagoF.append(
-            (String.format("\nPlazo: %d años \nMensualidad: $%.2f",
+            (String.format("\nPlazo: %d años \nMensualidad: $%.2f\n\n",
                            mesesAdeudo[i], pagoPorMes[i])));
       }
     }
@@ -659,18 +657,32 @@ public class GuiPrototype extends JFrame {
 
 
 
-  public static void informacion_compradores(boolean ventana, JPanel informacion) {
+  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton) {
     informacion.removeAll();
     informacion.revalidate();
     informacion.repaint();
-    // JTextArea txt = new JTextArea(mostrarDatosComprador(compradores, numCompradores).toString());
-    // txt.setBackground(new Color(0, 0, 0));
-    // txt.setForeground(new Color(255, 255, 255));
+    
+    String resStr = "";
 
-    JLabel label =
-    new JLabel("<html><font color='#9B9B9B'>" +
-    mostrarDatosComprador(compradores, numCompradores).toString().replace("\n", "<br>") + "</font></html>");
-    label.setPreferredSize(new Dimension(300, 300));
+    switch (indexButton) {
+      case 2:
+          resStr = mostrarDatosComprador(compradores, numCompradores).toString();
+        break;
+      case 3:
+          resStr = "Carros vendidos hasta el momento: \n" + mostrarCarrosVendidos(carrosVendidos, numCarrosVendidos).toString();
+        break;
+      case 4:
+          resStr = mostrarInfoPago(numCompradores).toString();
+        break;
+      case 5:
+          //resStr = reciboPersonal(compradores, numCompradores).toString();
+          break;
+      case 6:
+          //resStr = recibo(compradores, numCompradores).toString();
+          break;
+    }
+
+    JLabel label = new JLabel("<html><font color='#9B9B9B'>" + resStr.replace("\n", "<br>") + "</font></html>");
     label.setFont(new Font("Arial", Font.PLAIN, 25)); // texto
 
     informacion.add(label);
@@ -690,12 +702,9 @@ public class GuiPrototype extends JFrame {
         new Dimension(60, menuPanel.getHeight())); // Ancho del menú retraído
     //menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
 
-
     frame.setLayout(new BorderLayout());
-    frame.add(menuPanel,
-              BorderLayout.WEST); // Agregar el menú en la parte izquierda
+    frame.add(menuPanel, BorderLayout.WEST); // Agregar el menú en la parte izquierda
     frame.add(panel, BorderLayout.NORTH);
-
     Dimension buttonSize = new Dimension(60, 50);
     button.setPreferredSize(buttonSize);
     button.setMaximumSize(buttonSize);
@@ -711,8 +720,7 @@ public class GuiPrototype extends JFrame {
         toggleMenu(menuPanel, panelInicio, infoPanel);
       }
       
-    });
-    
+    }); 
 
     panel.setLayout(new BorderLayout());
 
@@ -820,32 +828,13 @@ public class GuiPrototype extends JFrame {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      switch (indexButton) {
-      case 1:
+      if (indexButton == 1) {
         panelInicio.setVisible(true);
         infoPanel.setVisible(false);
-        break;
-      case 2:
+      }else{
         panelInicio.setVisible(false);
-        informacion_compradores(menuExpandido, infoPanel);
-        infoPanel.setVisible(true);
-        break;
-      case 3:
-        panelInicio.setVisible(false);
-        infoPanel.setVisible(false);
-        break;
-      case 4:
-        panelInicio.setVisible(false);
-        infoPanel.setVisible(false);
-        break;
-      case 5:
-        panelInicio.setVisible(false);
-        infoPanel.setVisible(false);
-        break;
-      case 6:
-        panelInicio.setVisible(false);
-        infoPanel.setVisible(false);
-        break;
+        informacion_compradores(menuExpandido, infoPanel, indexButton);
+        infoPanel.setVisible(true); 
       }
     }
   }
