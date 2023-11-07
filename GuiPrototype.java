@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import javax.swing.*;
@@ -75,6 +76,12 @@ public class GuiPrototype extends JFrame {
   public static boolean menuExpandido = false;
   public JPanel menuPanel;
 
+  public static JTextField nombreCompradorTXT = new JTextField();
+  public static JTextField edadTXT = new JTextField();
+  public static JTextField engancheTXT = new JTextField();
+  public static JTextField plazoTXT = new JTextField();
+  public static boolean confirm2 = true;
+
   public static void valoresAleatorios() {
     Random rand = new Random();
     for (int i = 0; i < array.length; i++) {
@@ -100,6 +107,9 @@ public class GuiPrototype extends JFrame {
     StringBuilder CarrosVendidosHastaElMomento = new StringBuilder();
 
     for (int i = 0; i < numCarrosVendidos; i++) {
+      if (i<=0) {
+        CarrosVendidosHastaElMomento.append("Carros vendidos hasta el momento: \n");
+      }
       CarrosVendidosHastaElMomento.append(String.format(
           "\nVenta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
           i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(),
@@ -159,7 +169,7 @@ public class GuiPrototype extends JFrame {
     return InfoDePagoF;
   }
 
-  public static boolean buscar(Carro carroSeleccionado, Carro[] carrosVendidos,
+  public static void buscar(Carro carroSeleccionado, Carro[] carrosVendidos,
                                int numCarrosVendidos, Carro[] compradores,
                                int numCompradores, int numBtn) {
     do {
@@ -182,7 +192,7 @@ public class GuiPrototype extends JFrame {
         break;
       }
     } while (true);
-    return false;
+
   }
 
   public static void registroAutos(Carro carro, Carro[] carrosVendidos,
@@ -210,8 +220,7 @@ public class GuiPrototype extends JFrame {
     valores--;
 
     carrosVendidos[numCarrosVendidos] = new GuiPrototype().new Carro();
-    carrosVendidos[numCarrosVendidos].setNumeroControl(
-        carro.getNumeroControl());
+    carrosVendidos[numCarrosVendidos].setNumeroControl(carro.getNumeroControl());
     carrosVendidos[numCarrosVendidos].setColor(carro.getColor());
     carrosVendidos[numCarrosVendidos].setMarca(carro.getMarca());
     carrosVendidos[numCarrosVendidos].setModelo(carro.getModelo());
@@ -224,90 +233,33 @@ public class GuiPrototype extends JFrame {
   public static void datos(int i, Carro carro) {
     double a, b, c;
 
-    nombreComprador[i] =
-        JOptionPane.showInputDialog(null, "Ingresa el nombre del comprador: ");
+    nombreComprador[i] = nombreCompradorTXT.getText();
 
-    while (true) {
-      edad[i] = 0;
-      String str =
-          JOptionPane.showInputDialog(null, "Ingresa la edad del comprador: ");
+    String str = edadTXT.getText();
+    edad[i] = Integer.parseInt(str);
 
-      try {
-        edad[i] = Integer.parseInt(str);
-      } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(
-            null, "Entrada no válida. Ingresa un número válido para la edad.");
-        continue;
-      }
+    metodoPago[i] = JOptionPane.showInputDialog(null, "Ingresa el método de pago: ");
 
-      if (edad[i] < 18 || edad[i] > 100) {
-        JOptionPane.showMessageDialog(
-            null,
-            "El cliente no puede ser menor de edad o tener más de 100 años");
-      } else {
-        break;
-      }
-    }
+    String str2 = engancheTXT.getText();
+    b = Double.parseDouble(str2);
 
-    metodoPago[i] =
-        JOptionPane.showInputDialog(null, "Ingresa el método de pago: ");
-
-    while (true) {
-      b = 0;
-
-      String str2 = JOptionPane.showInputDialog(
-          null,
-          String.format(
-              "Defina el porcentaje de enganche, IVA incluido con el monto del carro: $%d",
-              carro.monto) +
-              "\nSolo puede seleccionar porcentajes entre el 20 y 80 porciento, en caso de pago de contado ingrese 100: ");
-
-      try {
-        b = Double.parseDouble(str2);
-      } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Entrada no válida. Ingresa un número válido para el porcentaje de enganche.");
-        continue;
-      }
-
-      if (b >= 20 && b <= 80) {
-        break;
-      }
-      if (b == 100) {
-        break;
-      }
-    }
     a = b / 100;
     montoEnganche[i] = a * carro.monto;
     adeudo[i] = carro.monto - montoEnganche[i];
     liquidacion[i] = carro.monto;
-
-    if (b >= 20 && b <= 80) {
-      do {
-        mesesAdeudo[i] = 0;
-        String str3 = JOptionPane.showInputDialog(
-            null, "A cuántos años se pagará el adeudo? (max. 10 años): ");
-
-        try {
-          mesesAdeudo[i] = Integer.parseInt(str3);
-        } catch (NumberFormatException e) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Entrada no válida. Ingresa un número válido para el plazo de pago.");
-          continue;
-        }
-
-        if (mesesAdeudo[i] <= 10 && mesesAdeudo[i] > 0) {
-          break;
-        }
-
-      } while (true);
+      
+    if (b > 20 || b < 80) {
+      String str3 = plazoTXT.getText();
+      try{
+        mesesAdeudo[i] = Integer.parseInt(str3);
+      } catch (Exception e) {
+        System.out.println("Error");
+      }
 
       c = mesesAdeudo[i] * 12;
       pagoPorMes[i] = adeudo[i] / c;
-      JOptionPane.showMessageDialog(
-          null, String.format("Mensualidad: %.2f", pagoPorMes[i]));
+      
+      JOptionPane.showMessageDialog(null, String.format("Mensualidad: %.2f", pagoPorMes[i]));
     }
   }
 
@@ -426,7 +378,6 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-
   public static void mostrar_compradores(int num, String x) {
 
     for (i = 0; i < num; i++) {
@@ -521,8 +472,6 @@ public class GuiPrototype extends JFrame {
   public GuiPrototype(boolean Ventana) {
 
     if (Ventana) {
-      JPanel gridMenuContent = new JPanel();
-      gridMenuContent.setLayout(new GridLayout(0, 2));
 
       UIManager.put("OptionPane.background", Color.BLACK);
       UIManager.put("Panel.background", Color.BLACK);
@@ -622,11 +571,8 @@ public class GuiPrototype extends JFrame {
       contentPanel.add(panel);
   }
 
-
     scrollPane.getViewport().setBackground(Color.BLACK);
-    scrollPane.setBorder(
-        BorderFactory.createLineBorder(new Color(0, 85, 119)));
-
+    scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
     scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
 
     scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
@@ -655,8 +601,6 @@ public class GuiPrototype extends JFrame {
     scrollPane.getVerticalScrollBar().setUnitIncrement(40);
   }
 
-
-
   public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton) {
     informacion.removeAll();
     informacion.revalidate();
@@ -669,7 +613,7 @@ public class GuiPrototype extends JFrame {
           resStr = mostrarDatosComprador(compradores, numCompradores).toString();
         break;
       case 3:
-          resStr = "Carros vendidos hasta el momento: \n" + mostrarCarrosVendidos(carrosVendidos, numCarrosVendidos).toString();
+          resStr = mostrarCarrosVendidos(carrosVendidos, numCarrosVendidos).toString();
         break;
       case 4:
           resStr = mostrarInfoPago(numCompradores).toString();
@@ -688,7 +632,6 @@ public class GuiPrototype extends JFrame {
     informacion.add(label);
   }
 
-
   public static void relojGui(JFrame frame, JPanel panelInicio, JPanel infoPanel) {
 
     JPanel panel = new JPanel();
@@ -698,8 +641,7 @@ public class GuiPrototype extends JFrame {
     menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
     menuPanel.setBorder(null);
     menuPanel.setBackground(Color.black); // Color de fondo del menú
-    menuPanel.setPreferredSize(
-        new Dimension(60, menuPanel.getHeight())); // Ancho del menú retraído
+    menuPanel.setPreferredSize(new Dimension(60, menuPanel.getHeight())); // Ancho del menú retraído
     //menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
 
     frame.setLayout(new BorderLayout());
@@ -733,12 +675,9 @@ public class GuiPrototype extends JFrame {
     Timer timer = new Timer(1000, new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
-        String formattedTime = formatter.format(now);
-
-        label.setText(formattedTime);
-
+        LocalTime currentTime = LocalTime.now();
+        String time = String.format("%02d:%02d:%02d ", currentTime.getHour(), currentTime.getMinute(), currentTime.getSecond());
+        label.setText(time);
       }
     });
 
@@ -839,6 +778,145 @@ public class GuiPrototype extends JFrame {
     }
   }
 
+  public static void pedirDatos(int ho) {
+    JFrame frame = new JFrame();
+    frame.setLayout(new GridLayout(1, 2));
+
+    // Etiquetas
+    JLabel nombreLabel = new JLabel("Nombre del Comprador:");
+    JLabel edadLabel = new JLabel("Edad:");
+    JLabel engancheLabel = new JLabel("Enganche:");
+    JLabel plazoLabel = new JLabel("Plazo:");
+
+    Color labelColor = new Color(155, 155, 155);
+    Font labelFont = new Font("Arial", Font.PLAIN, 16);
+
+    nombreLabel.setForeground(labelColor);
+    nombreLabel.setFont(labelFont);
+    edadLabel.setForeground(labelColor);
+    edadLabel.setFont(labelFont);
+    engancheLabel.setForeground(labelColor);
+    engancheLabel.setFont(labelFont);
+    plazoLabel.setForeground(labelColor);
+    plazoLabel.setFont(labelFont);
+
+    JPanel labelsPanel = new JPanel();
+    labelsPanel.setLayout(new GridLayout(4, 1));
+    labelsPanel.setBackground(Color.black);
+    labelsPanel.add(nombreLabel);
+    labelsPanel.add(edadLabel);
+    labelsPanel.add(engancheLabel);
+    labelsPanel.add(plazoLabel);
+
+    // Componentes
+    JPanel componentesPanel = new JPanel();
+    componentesPanel.setLayout(new GridLayout(4, 1));
+    componentesPanel.add(nombreCompradorTXT);
+    componentesPanel.add(edadTXT);
+    componentesPanel.add(engancheTXT);
+    componentesPanel.add(plazoTXT);
+
+    nombreCompradorTXT.setForeground(labelColor);
+    nombreCompradorTXT.setBackground(Color.black);
+    edadTXT.setForeground(labelColor);
+    edadTXT.setBackground(Color.black);
+    engancheTXT.setForeground(labelColor);
+    engancheTXT.setBackground(Color.black);
+    plazoTXT.setForeground(labelColor);
+    plazoTXT.setBackground(Color.black);
+
+    frame.add(labelsPanel);
+    frame.add(componentesPanel);
+
+    // Botón de aceptar
+    JButton aceptarButton = new JButton("Aceptar");
+    aceptarButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+         
+          boolean[] confirmBuscar = new boolean[3];
+          int aC = 0;
+          double bC = 0;
+          int cC = 0;
+          String str = edadTXT.getText();
+          String str2 = engancheTXT.getText();
+          String str3 = plazoTXT.getText();
+
+          confirmBuscar[0] = false;
+          confirmBuscar[1] = false;
+          confirmBuscar[2] = false;
+
+          try {
+            aC = Integer.parseInt(str);
+            if (aC < 18 || aC > 100) {
+              JOptionPane.showMessageDialog(null,  "El cliente no puede ser menor de edad o tener más de 100 años");
+            } 
+            else{
+              confirmBuscar[0] = true;
+            }
+          } catch (NumberFormatException p) {
+            JOptionPane.showMessageDialog(null,  "Entrada no válida. Ingresa un número válido para la edad.");
+          }
+
+          try {
+            bC = Double.parseDouble(str2);
+            
+            if (bC == 100) {
+              confirmBuscar[1] = true;
+              //confirmBuscar[2] = true;
+            }
+            else{
+              if (bC < 20 || bC > 80) {
+                JOptionPane.showMessageDialog(null,  "Entrada no válida. Ingresa un número entre 20 y 80 ó 100.");
+              }
+              else{
+                confirmBuscar[1] = true;
+              }
+            }
+          } catch (NumberFormatException p) {
+            JOptionPane.showMessageDialog(null, "Entrada no válida. Ingresa un número válido para el porcentaje de enganche.");
+          }
+
+          //if (!confirmBuscar[2]) {
+              try {
+                cC = Integer.parseInt(str3);
+                if (cC > 9 || cC <= 0) {
+                  JOptionPane.showMessageDialog(null, "Entrada no válida. Ingresa un número entre 1 y 9.");
+                }
+                else{
+                  confirmBuscar[2] = true;
+                }
+              } catch (NumberFormatException p) {
+                JOptionPane.showMessageDialog(null, "Entrada no válida. Ingresa un número válido para el plazo de pago.");
+              }
+          //}
+
+          if (confirmBuscar[0]&&confirmBuscar[1]&&confirmBuscar[2]) {
+            buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
+                            compradores, numCompradores, array[ho]);
+            datos(w, carroSeleccionado);
+            numCompradores++;
+            numCarrosVendidos++;
+            w++;
+            nombreCompradorTXT.setText("");
+            edadTXT.setText("");
+            engancheTXT.setText("");
+            plazoTXT.setText("");
+            frame.dispose();
+            return;
+          }
+        }
+    });
+
+    frame.add(aceptarButton);
+
+    frame.setVisible(true);
+    frame.setResizable(false);
+    frame.setSize(new Dimension(500, 300));
+    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    return;
+  }
+
   static class BotonListener implements ActionListener {
     private JButton button;
     private JLabel associatedLabel;
@@ -864,12 +942,9 @@ public class GuiPrototype extends JFrame {
 
       switch (seleccion) {            
       case 0:
-        confirm = buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
-                         compradores, numCompradores, array[ho]);
-        datos(w, carroSeleccionado);
-        numCompradores++;
-        numCarrosVendidos++;
-        w++;
+        confirm = false;
+        pedirDatos(ho);
+        
         break;
       case 1:
         JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia",
