@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.JCheckBox;
 
 
 public class GuiPrototype extends JFrame {
@@ -80,6 +81,11 @@ public class GuiPrototype extends JFrame {
   public static JTextField edadTXT = new JTextField();
   public static JTextField engancheTXT = new JTextField();
   public static JTextField plazoTXT = new JTextField();
+
+  public static JTextField archivo_txt = new JTextField();
+  public static JTextField nombre_txt = new JTextField();
+  public static JTextField abrir_txt = new JTextField();
+
   public static boolean confirm2 = true;
 
   public static void valoresAleatorios() {
@@ -204,21 +210,6 @@ public class GuiPrototype extends JFrame {
     carro.setModelo(modelo[inicio]);
     carro.setMonto(monto[inicio]);
 
-    for (int i = inicio; i < valores; i++) {
-      array[i] = array[i + 1];
-      color[i] = color[i + 1];
-      marca[i] = marca[i + 1];
-      modelo[i] = modelo[i + 1];
-      monto[i] = monto[i + 1];
-    }
-
-    array[valores] = 0;
-    color[valores] = null;
-    marca[valores] = null;
-    modelo[valores] = null;
-    monto[valores] = 0;
-    valores--;
-
     carrosVendidos[numCarrosVendidos] = new GuiPrototype().new Carro();
     carrosVendidos[numCarrosVendidos].setNumeroControl(carro.getNumeroControl());
     carrosVendidos[numCarrosVendidos].setColor(carro.getColor());
@@ -263,157 +254,279 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void mensaje(String str, String variable, boolean True) {
-
-    while (True) {
-
-      try {
-        variable = JOptionPane.showInputDialog(str);
-        True = false;
-      } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error");
-        True = true;
-      }
-    }
-    True = true;
-  }
-
-  public static void recibo_personal(Carro[] compradores, int num_compradores)
+  public static void recibo_personal(Carro[] compradores, int num_compradores, JPanel informacion, JCheckBox check)
       throws IOException {
-
-    LocalDateTime date = LocalDateTime.now();
-
-    DateTimeFormatter fecha_formateada =
-        DateTimeFormatter.ofPattern("dd/MMM/yyyy");
-    DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
-
-    String fecha = date.format(fecha_formateada);
-    String hora = date.format(hora_formateada);
-    String file_name = "", nombre = "", abrir = "";
-    String x = "";
-    boolean True = true;
-
-    mensaje("Ingrese el nombre de su recibo", file_name, True);
-
-    mostrar_compradores(num_compradores, x);
-
-    mensaje(x + "\nIngrese el nombre del comprador para imprimir su recibo",
-            nombre, True);
-
-    while (!new File(file_name + ".txt").exists()) {
-
-      try {
-
-        FileWriter fileWriter =
-            new FileWriter(new File(file_name + ".txt"), true);
-
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-        bufferedWriter.write("Fecha de impresion: " + fecha +
-                             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + hora);
-        bufferedWriter.newLine();
-
-        for (i = 0; i < num_compradores; i++) {
-
-          if (nombre.equals(nombreComprador[i])) {
-
-            bufferedWriter.write(String.format(
-                "\n\nComprador %d: %s", i + 1,
-                (nombreComprador[i] == null ? "" : nombreComprador[i])));
-            bufferedWriter.newLine();
-            bufferedWriter.write(String.format("Edad: %d", edad[i]));
-            bufferedWriter.newLine();
-            bufferedWriter.write(
-                String.format("M�todo de pago: %s",
-                              (metodoPago[i] == null ? "" : metodoPago[i])));
-            bufferedWriter.newLine();
-
-            if (montoEnganche[i] == liquidacion[i]) {
-
-              bufferedWriter.write(String.format(
-                  "Se realizar� el pago completo: %.2f", liquidacion[i]));
-            } else {
-              bufferedWriter.write(
-                  String.format("Monto de Enganche: %.2f", montoEnganche[i]));
-              bufferedWriter.newLine();
-              bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
-              bufferedWriter.newLine();
-              bufferedWriter.write(
-                  String.format("Plazo: %d años\nMensualidad %.2f",
-                                mesesAdeudo[i], pagoPorMes[i]));
-              bufferedWriter.newLine();
-              bufferedWriter.write(String.format(
-                  "Si tarda mas de 3 meses en pagar su mensualidad se le embargar�"));
-            }
-            bufferedWriter.newLine();
-            bufferedWriter.write(String.format("Modelo solicitado: %s %s",
-                                               compradores[i].marca,
-                                               compradores[i].modelo));
-          }
-        }
-
-        mensaje(
-            "El recibo se ha creado exitosamente!\nDesea abrir el recibo? (s/n): ",
-            abrir, True);
-
-        if (abrir.equals("S") || abrir.equals("s")) {
+        
+    
           try {
-            File file = new File(file_name + ".txt");
-            if (!Desktop.isDesktopSupported()) {
+    
+            LocalDateTime date = LocalDateTime.now(); 
+            DateTimeFormatter fecha_formateada =
+                DateTimeFormatter.ofPattern("dd/MMM/yyyy");
+            DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
+        
+                String fecha = date.format(fecha_formateada);
+                String hora = date.format(hora_formateada);
+        
+            for (i = 0; i < num_compradores; i++) {
+    
+              if (nombre_txt.getText().equals(nombreComprador[i])) {
+                    
+                FileWriter fileWriter =
+                new FileWriter(new File(archivo_txt.getText() + ".txt"), true);
+    
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-              JOptionPane.showMessageDialog(null, "not supported");
+                bufferedWriter.write("Fecha de impresion: " + fecha +
+                "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + hora);
+                bufferedWriter.newLine();
+
+                bufferedWriter.write(String.format(
+                    "\n\nComprador %d: %s", i + 1,
+                    (nombreComprador[i] == null ? "" : nombreComprador[i])));
+                bufferedWriter.newLine();
+                bufferedWriter.write(String.format("Edad: %d", edad[i]));
+                bufferedWriter.newLine();
+                bufferedWriter.write(
+                    String.format("M�todo de pago: %s",
+                                  (metodoPago[i] == null ? "" : metodoPago[i])));
+                bufferedWriter.newLine();
+    
+                if (montoEnganche[i] == liquidacion[i]) {
+    
+                  bufferedWriter.write(String.format(
+                      "Se realizar� el pago completo: %.2f", liquidacion[i]));
+                } else {
+                  bufferedWriter.write(
+                      String.format("Monto de Enganche: %.2f", montoEnganche[i]));
+                  bufferedWriter.newLine();
+                  bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
+                  bufferedWriter.newLine();
+                  bufferedWriter.write(
+                      String.format("Plazo: %d años\nMensualidad %.2f",
+                                    mesesAdeudo[i], pagoPorMes[i]));
+                  bufferedWriter.newLine();
+                  bufferedWriter.write(String.format(
+                      "Si tarda mas de 3 meses en pagar su mensualidad se le embargar�"));
+                }
+                bufferedWriter.newLine();
+                bufferedWriter.write(String.format("Modelo solicitado: %s %s",
+                                                   compradores[i].marca,
+                                                   compradores[i].modelo));
+                bufferedWriter.close();
+              }
             }
-            Desktop desktop = Desktop.getDesktop();
-            if (file.exists())
-              desktop.open(file);
-          } catch (Exception e) {
+    
+            // if (abrir_txt.getText().equals("S") || abrir_txt.getText().equals("s") || abrir_txt.getText().equals("Si") || abrir_txt.getText().equals("si")) {
+              if(check.isSelected() == true){
+              try {
+                File file = new File(archivo_txt.getText() + ".txt");
+                if (!Desktop.isDesktopSupported()) {
+    
+                  JOptionPane.showMessageDialog(null, "not supported");
+                }
+                Desktop desktop = Desktop.getDesktop();
+                if (file.exists())
+                  desktop.open(file);
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+            }
+    
+          } catch (IOException e) {
             e.printStackTrace();
-          }
-        }
+          }    
 
-        bufferedWriter.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
   }
 
-  public static void mostrar_compradores(int num, String x) {
+  public static void button(JPanel informacion, boolean funcion){
+
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.setBorder(BorderFactory.createEmptyBorder(
+        50, 50, 0, 50)); // Espaciado vertical de 50
+
+    JButton button = new JButton("Realizar recibo");
+    button.setAlignmentX(
+        Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
+    button.setFocusPainted(false);
+    button.setPreferredSize(new Dimension(300, 100));
+    button.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button.setHorizontalTextPosition(SwingConstants.RIGHT);
+    button.getVerifyInputWhenFocusTarget();
+    button.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        button.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        button.setBackground(null);
+      }
+    });
+
+    button.addActionListener(new ActionListener() {
+
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+          pedir_recibo(informacion, funcion);
+          
+      }
+      
+    });
+    panel.add(button, BorderLayout.EAST);
+    informacion.add(panel);
+
+  }
+
+
+  public static void pedir_recibo(JPanel informacion, boolean pregunta){
+
+    JFrame frame = new JFrame();
+    frame.setLayout(new GridLayout(1, 2));
+
+    // Etiquetas
+    JLabel nombre_recibo = new JLabel("Nombre del Recibo:");
+    JLabel nombre_comprador = new JLabel("Nombre comprador:");
+    // JLabel abrir_archivo = new JLabel("Abrir el archivo:");
+    JCheckBox check = new JCheckBox("Abrir archivo");
+
+    Color labelColor = new Color(155, 155, 155);
+    Font labelFont = new Font("Arial", Font.PLAIN, 16);
+
+    nombre_recibo.setForeground(labelColor);
+    nombre_recibo.setFont(labelFont);
+    if (pregunta) {
+      nombre_comprador.setForeground(labelColor);
+      nombre_comprador.setFont(labelFont);  
+    }
+    // abrir_archivo.setForeground(labelColor);
+    // abrir_archivo.setFont(labelFont);
+    check.setForeground(labelColor);
+    check.setFont(labelFont);    
+    check.setFocusPainted(false);
+    check.setSize(new Dimension(1000, 1000));
+    
+    JPanel labelsPanel = new JPanel();
+    labelsPanel.setLayout(new GridLayout(4, 1));
+    labelsPanel.setBackground(Color.black);
+    labelsPanel.add(nombre_recibo);
+    if (pregunta) {
+      labelsPanel.add(nombre_comprador);
+    }
+    // labelsPanel.add(abrir_archivo);
+    labelsPanel.add(check);
+
+    // Componentes
+    JPanel componentesPanel = new JPanel();
+    componentesPanel.setLayout(new GridLayout(4, 1));
+    componentesPanel.add(archivo_txt);
+    if (pregunta) {
+      componentesPanel.add(nombre_txt);      
+    }
+    // componentesPanel.add(abrir_txt);
+    componentesPanel.add(check);
+
+    archivo_txt.setForeground(labelColor);
+    archivo_txt.setBackground(Color.black);
+    if (pregunta) {
+      nombre_txt.setForeground(labelColor);
+      nombre_txt.setBackground(Color.black);
+  
+    }
+    check.setForeground(labelColor);
+    check.setBackground(Color.black);
+
+    frame.add(labelsPanel);
+    frame.add(componentesPanel);
+    frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+    // Botón de aceptar
+    JButton aceptarButton = new JButton("Aceptar");
+    aceptarButton.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        aceptarButton.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        aceptarButton.setBackground(null);
+      }
+    });
+
+    aceptarButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+          try {
+            if (pregunta) {
+              recibo_personal(compradores, numCompradores, informacion, check);
+            }else if(!pregunta){
+              recibo(compradores, numCompradores, check);
+            }
+          } catch (IOException e1) {
+            e1.printStackTrace();
+          }
+
+          archivo_txt.setText("");
+          nombre_txt.setText("");
+          abrir_txt.setText("");
+          frame.dispose();
+          return;
+        }
+    });
+
+    frame.add(aceptarButton);
+
+    frame.setVisible(true);
+    frame.setResizable(false);
+    frame.setSize(new Dimension(500, 300));
+    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    return;
+
+  }
+
+  public static StringBuilder mostrar_compradores(int num) {
+
+    StringBuilder compradores = new StringBuilder();
 
     for (i = 0; i < num; i++) {
-      x += String.format("\nComprador %d: %s\n", i + 1, nombreComprador[i]);
+      if (nombreComprador[i] != null) {
+        compradores.append(String.format("\nComprador %d: %s\n", i + 1, nombreComprador[i]));
+      }
     }
+    return compradores;
   }
 
-  public static void recibo(Carro[] compradores, int num_compradores) {
+  public static void recibo(Carro[] compradores, int num_compradores, JCheckBox check) {
 
-    LocalDateTime date = LocalDateTime.now();
+    try {
 
-    DateTimeFormatter fecha_formateada =
-        DateTimeFormatter.ofPattern("dd/MMM/yyyy");
-    DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
+      LocalDateTime date = LocalDateTime.now(); 
+      DateTimeFormatter fecha_formateada =
+          DateTimeFormatter.ofPattern("dd/MMM/yyyy");
+      DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
+  
+          String fecha = date.format(fecha_formateada);
+          String hora = date.format(hora_formateada);
+      
+    
+      for (i = 0; i < num_compradores; i++) {
 
-    String fecha = date.format(fecha_formateada);
-    String hora = date.format(hora_formateada);
-    String file_name = "", abrir = "";
-    boolean True = true;
+          FileWriter fileWriter =
+          new FileWriter(new File(archivo_txt.getText() + ".txt"), true);
 
-    mensaje("Ingrese el nombre de su recibo", file_name, True);
+          BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-    while (!new File(file_name + ".txt").exists()) {
-
-      try {
-
-        FileWriter fileWriter =
-            new FileWriter(new File(file_name + ".txt"), true);
-
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-        bufferedWriter.write("Fecha de impresion: " + fecha +
-                             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + hora);
-        bufferedWriter.newLine();
-
-        for (i = 0; i < num_compradores; i++) {
+          bufferedWriter.write("Fecha de impresion: " + fecha +
+          "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + hora);
+          bufferedWriter.newLine();
 
           bufferedWriter.write(String.format(
               "\n\nComprador %d: %s", i + 1,
@@ -435,22 +548,27 @@ public class GuiPrototype extends JFrame {
                 String.format("Monto de Enganche: %.2f", montoEnganche[i]));
             bufferedWriter.newLine();
             bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
+            bufferedWriter.newLine();
+            bufferedWriter.write(
+                String.format("Plazo: %d años\nMensualidad %.2f",
+                              mesesAdeudo[i], pagoPorMes[i]));
+            bufferedWriter.newLine();
+            bufferedWriter.write(String.format(
+                "Si tarda mas de 3 meses en pagar su mensualidad se le embargar�"));
           }
           bufferedWriter.newLine();
           bufferedWriter.write(String.format("Modelo solicitado: %s %s",
                                              compradores[i].marca,
                                              compradores[i].modelo));
-          bufferedWriter.newLine();
+          bufferedWriter.close();
         }
 
-        mensaje(
-            "El recibo se ha creado exitosamente!\nDesea abrir el recibo? (s/n): ",
-            abrir, True);
-        if (abrir.equals("S") || abrir.equals("s")) {
+        if(check.isSelected() == true){
           try {
-            File file = new File(file_name + ".txt");
+            File file = new File(archivo_txt.getText() + ".txt");
             if (!Desktop.isDesktopSupported()) {
-              JOptionPane.showMessageDialog(null, "No soportado!");
+
+              JOptionPane.showMessageDialog(null, "not supported");
             }
             Desktop desktop = Desktop.getDesktop();
             if (file.exists())
@@ -460,12 +578,10 @@ public class GuiPrototype extends JFrame {
           }
         }
 
-        bufferedWriter.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-  }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }    
+}
 
   public GuiPrototype() {}
 
@@ -536,8 +652,6 @@ public class GuiPrototype extends JFrame {
       JPanel panel = new JPanel(new BorderLayout());
       panel.setBorder(BorderFactory.createEmptyBorder(
           50, 50, 0, 50)); // Espaciado vertical de 50
-      // panel.setBorder(BorderFactory.createLineBorder(new Color(54, 57,
-      // 63)));
 
       JLabel label =
           new JLabel("<html><font color='#9B9B9B'>" +
@@ -601,7 +715,7 @@ public class GuiPrototype extends JFrame {
     scrollPane.getVerticalScrollBar().setUnitIncrement(40);
   }
 
-  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton) {
+  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton) throws IOException {
     informacion.removeAll();
     informacion.revalidate();
     informacion.repaint();
@@ -611,25 +725,71 @@ public class GuiPrototype extends JFrame {
     switch (indexButton) {
       case 2:
           resStr = mostrarDatosComprador(compradores, numCompradores).toString();
+          labels(informacion, resStr);
         break;
       case 3:
           resStr = mostrarCarrosVendidos(carrosVendidos, numCarrosVendidos).toString();
+          labels(informacion, resStr);
         break;
       case 4:
           resStr = mostrarInfoPago(numCompradores).toString();
-        break;
+          labels(informacion, resStr);
+          break;
       case 5:
-          //resStr = reciboPersonal(compradores, numCompradores).toString();
+          resStr = mostrar_compradores(numCompradores).toString();
+          labels(informacion, resStr);
+          button(informacion, true);
+          // pedir_recibo(informacion);
+          // recibo_personal(compradores, numCompradores, informacion);
           break;
       case 6:
+          button(informacion, false);
           //resStr = recibo(compradores, numCompradores).toString();
           break;
     }
 
+  }
+
+
+  public static void labels(JPanel informacion, String resStr){
+
     JLabel label = new JLabel("<html><font color='#9B9B9B'>" + resStr.replace("\n", "<br>") + "</font></html>");
     label.setFont(new Font("Arial", Font.PLAIN, 25)); // texto
 
+    //     JScrollPane scrollPane = new JScrollPane(label);
+
+    // scrollPane.getViewport().setBackground(Color.BLACK);
+    // scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+    // scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
+
+    // scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+    //   @Override
+    //   protected void configureScrollBarColors() {
+    //     this.thumbColor = new Color(0, 85, 119);
+    //   }
+
+    //   @Override
+    //   protected JButton createDecreaseButton(int orientation) {
+    //     JButton button = super.createDecreaseButton(orientation);
+    //     button.setBackground(Color.BLACK);
+    //     button.setForeground(new Color(0, 85, 119));
+    //     return button;
+    //   }
+
+    //   @Override
+    //   protected JButton createIncreaseButton(int orientation) {
+    //     JButton button = super.createIncreaseButton(orientation);
+    //     button.setBackground(Color.BLACK);
+    //     button.setForeground(new Color(0, 85, 119));
+    //     return button;
+    //   }
+    // });
+
+    // scrollPane.getVerticalScrollBar().setUnitIncrement(40);
+
+
     informacion.add(label);
+
   }
 
   public static void relojGui(JFrame frame, JPanel panelInicio, JPanel infoPanel) {
@@ -772,7 +932,11 @@ public class GuiPrototype extends JFrame {
         infoPanel.setVisible(false);
       }else{
         panelInicio.setVisible(false);
-        informacion_compradores(menuExpandido, infoPanel, indexButton);
+        try {
+          informacion_compradores(menuExpandido, infoPanel, indexButton);
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        }
         infoPanel.setVisible(true); 
       }
     }
@@ -830,6 +994,21 @@ public class GuiPrototype extends JFrame {
 
     // Botón de aceptar
     JButton aceptarButton = new JButton("Aceptar");
+
+    aceptarButton.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        aceptarButton.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        aceptarButton.setBackground(null);
+      }
+  });
+
     aceptarButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
