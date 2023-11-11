@@ -5,7 +5,7 @@ import java.io.IOException;
 public class otro_archivo {
 
     public static void main(String[] args) {
-        String filePath = "musica.wav"; // Reemplaza esto con la ruta de tu archivo MP3
+        String filePath = "musica.wav"; 
         reproducirMP3(filePath);
     }
 
