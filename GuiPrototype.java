@@ -100,20 +100,11 @@ public class GuiPrototype extends JFrame {
     String[] CarrosVendidosHastaElMomento = new String[10];
 
     for (int i = 0; i < numCarrosVendidos; i++) {
-      // if (i<=0) {
-      //   CarrosVendidosHastaElMomento[i] = ("Carros vendidos hasta el momento: \n" + String.format(
-      //     "\nVenta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
-      //     i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(),
-      //     carrosVendidos[i].getColor(), carrosVendidos[i].getMarca(),
-      //     carrosVendidos[i].getModelo(), carrosVendidos[i].getMonto()));
-      // }
-      // else{
-        CarrosVendidosHastaElMomento[i] = (String.format(
-          "Venta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
-          i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(),
-          carrosVendidos[i].getColor(), carrosVendidos[i].getMarca(),
-          carrosVendidos[i].getModelo(), carrosVendidos[i].getMonto()));
-      //}
+      CarrosVendidosHastaElMomento[i] = (String.format(
+        "Venta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
+        i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(),
+        carrosVendidos[i].getColor(), carrosVendidos[i].getMarca(),
+        carrosVendidos[i].getModelo(), carrosVendidos[i].getMonto()));
       
     }
 
@@ -226,87 +217,85 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void recibo_personal(Carro[] compradores, int num_compradores, JPanel informacion, JCheckBox check)
-      throws IOException {
+  public static void recibo_personal(Carro[] compradores, int num_compradores, JPanel informacion, JCheckBox check) throws IOException {
         
-          try {
-    
-            LocalDateTime date = LocalDateTime.now(); 
-            DateTimeFormatter fecha_formateada =
-                DateTimeFormatter.ofPattern("dd/MMM/yyyy");
-            DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
-        
-                String fecha = date.format(fecha_formateada);
-                String hora = date.format(hora_formateada);
-        
-            for (i = 0; i < num_compradores; i++) {
-    
-              if (nombre_txt.getText().equals(nombreComprador[i])) {
-                    
-                FileWriter fileWriter =
-                new FileWriter(new File(archivo_txt.getText() + ".txt"), true);
-    
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+    try {
 
-                bufferedWriter.write("Fecha de impresion: " + fecha + "             " + hora);
-                bufferedWriter.newLine();
+      LocalDateTime date = LocalDateTime.now(); 
+      DateTimeFormatter fecha_formateada =
+      DateTimeFormatter.ofPattern("dd/MMM/yyyy");
+      DateTimeFormatter hora_formateada = DateTimeFormatter.ofPattern("HH:mm:ss");
+  
+      String fecha = date.format(fecha_formateada);
+      String hora = date.format(hora_formateada);
+  
+      for (i = 0; i < num_compradores; i++) {
 
-                bufferedWriter.write(String.format(
-                    "\n\nComprador %d: %s", i + 1,
-                    (nombreComprador[i] == null ? "" : nombreComprador[i])));
-                bufferedWriter.newLine();
-                bufferedWriter.write(String.format("Edad: %d", edad[i]));
-                bufferedWriter.newLine();
-                bufferedWriter.write(
-                    String.format("Método de pago: %s",
-                                  (metodoPago[i] == null ? "" : metodoPago[i])));
-                bufferedWriter.newLine();
-    
-                if (montoEnganche[i] == liquidacion[i]) {
-    
-                  bufferedWriter.write(String.format(
-                      "Se realizará el pago completo: %.2f", liquidacion[i]));
-                } else {
-                  bufferedWriter.write(
-                      String.format("Monto de Enganche: %.2f", montoEnganche[i]));
-                  bufferedWriter.newLine();
-                  bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
-                  bufferedWriter.newLine();
-                  bufferedWriter.write(
-                      String.format("Plazo: %d años\nMensualidad %.2f",
-                                    mesesAdeudo[i], pagoPorMes[i]));
-                  bufferedWriter.newLine();
-                  bufferedWriter.write(String.format(
-                      "Si tarda mas de 3 meses en pagar su mensualidad se le embargará"));
-                }
-                bufferedWriter.newLine();
-                bufferedWriter.write(String.format("Modelo solicitado: %s %s",
-                                                   compradores[i].marca,
-                                                   compradores[i].modelo));
-                bufferedWriter.close();
-              }
-            }
-    
-            // if (abrir_txt.getText().equals("S") || abrir_txt.getText().equals("s") || abrir_txt.getText().equals("Si") || abrir_txt.getText().equals("si")) {
-              if(check.isSelected() == true){
-              try {
-                File file = new File(archivo_txt.getText() + ".txt");
-                if (!Desktop.isDesktopSupported()) {
-    
-                  JOptionPane.showMessageDialog(null, "not supported");
-                }
-                Desktop desktop = Desktop.getDesktop();
-                if (file.exists())
-                  desktop.open(file);
-              } catch (Exception e) {
-                e.printStackTrace();
-              }
-            }
-    
-          } catch (IOException e) {
-            e.printStackTrace();
-          }    
+        if (nombre_txt.getText().equals(nombreComprador[i])) {
+              
+          FileWriter fileWriter =
+          new FileWriter(new File(archivo_txt.getText() + ".txt"), true);
 
+          BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+          bufferedWriter.write("Fecha de impresion: " + fecha + "             " + hora);
+          bufferedWriter.newLine();
+
+          bufferedWriter.write(String.format(
+              "\n\nComprador %d: %s", i + 1,
+              (nombreComprador[i] == null ? "" : nombreComprador[i])));
+          bufferedWriter.newLine();
+          bufferedWriter.write(String.format("Edad: %d", edad[i]));
+          bufferedWriter.newLine();
+          bufferedWriter.write(
+              String.format("Método de pago: %s",
+                            (metodoPago[i] == null ? "" : metodoPago[i])));
+          bufferedWriter.newLine();
+
+          if (montoEnganche[i] == liquidacion[i]) {
+
+            bufferedWriter.write(String.format(
+                "Se realizará el pago completo: %.2f", liquidacion[i]));
+          } else {
+            bufferedWriter.write(
+                String.format("Monto de Enganche: %.2f", montoEnganche[i]));
+            bufferedWriter.newLine();
+            bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
+            bufferedWriter.newLine();
+            bufferedWriter.write(
+                String.format("Plazo: %d años\nMensualidad %.2f",
+                              mesesAdeudo[i], pagoPorMes[i]));
+            bufferedWriter.newLine();
+            bufferedWriter.write(String.format(
+                "Si tarda mas de 3 meses en pagar su mensualidad se le embargará"));
+          }
+
+          bufferedWriter.newLine();
+          bufferedWriter.write(String.format("Modelo solicitado: %s %s",
+                                              compradores[i].marca,
+                                              compradores[i].modelo));
+          bufferedWriter.close();
+        }
+      }
+
+      if(check.isSelected() == true){
+        try {
+          File file = new File(archivo_txt.getText() + ".txt");
+          if (!Desktop.isDesktopSupported()) {
+
+            JOptionPane.showMessageDialog(null, "not supported");
+          }
+          Desktop desktop = Desktop.getDesktop();
+          if (file.exists())
+            desktop.open(file);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }    
   }
 
   public static void button(JPanel informacion, boolean funcion){
@@ -345,9 +334,9 @@ public class GuiPrototype extends JFrame {
       }
       
     });
+
     panel.add(button, BorderLayout.EAST);
     informacion.add(panel);
-
   }
 
   public static void pedir_recibo(JPanel informacion, boolean pregunta){
@@ -355,10 +344,8 @@ public class GuiPrototype extends JFrame {
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
 
-    // Etiquetas
     JLabel nombre_recibo = new JLabel("Nombre del Recibo:");
     JLabel nombre_comprador = new JLabel("Nombre comprador:");
-    // JLabel abrir_archivo = new JLabel("Abrir el archivo:");
     JCheckBox check = new JCheckBox("Abrir archivo");
 
     Color labelColor = new Color(155, 155, 155);
@@ -366,12 +353,12 @@ public class GuiPrototype extends JFrame {
 
     nombre_recibo.setForeground(labelColor);
     nombre_recibo.setFont(labelFont);
+
     if (pregunta) {
       nombre_comprador.setForeground(labelColor);
       nombre_comprador.setFont(labelFont);  
     }
-    // abrir_archivo.setForeground(labelColor);
-    // abrir_archivo.setFont(labelFont);
+
     check.setForeground(labelColor);
     check.setFont(labelFont);    
     check.setFocusPainted(false);
@@ -384,26 +371,25 @@ public class GuiPrototype extends JFrame {
     if (pregunta) {
       labelsPanel.add(nombre_comprador);
     }
-    // labelsPanel.add(abrir_archivo);
     labelsPanel.add(check);
 
-    // Componentes
     JPanel componentesPanel = new JPanel();
     componentesPanel.setLayout(new GridLayout(4, 1));
     componentesPanel.add(archivo_txt);
     if (pregunta) {
       componentesPanel.add(nombre_txt);      
     }
-    // componentesPanel.add(abrir_txt);
     componentesPanel.add(check);
 
     archivo_txt.setForeground(labelColor);
     archivo_txt.setBackground(Color.black);
+
     if (pregunta) {
       nombre_txt.setForeground(labelColor);
       nombre_txt.setBackground(Color.black);
   
     }
+
     check.setForeground(labelColor);
     check.setBackground(Color.black);
 
@@ -411,7 +397,6 @@ public class GuiPrototype extends JFrame {
     frame.add(componentesPanel);
     frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-    // Botón de aceptar
     JButton aceptarButton = new JButton("Aceptar");
     aceptarButton.addMouseListener(new MouseAdapter() {
       @Override
@@ -456,7 +441,6 @@ public class GuiPrototype extends JFrame {
     frame.setSize(new Dimension(500, 300));
     frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     return;
-
   }
 
   public static StringBuilder mostrar_compradores(int num) {
@@ -586,9 +570,7 @@ public class GuiPrototype extends JFrame {
       panelPrincipal.add(infoPanel);
 
       JScrollPane scrollPane = new JScrollPane(panelPrincipal);  
-
       scrollPane.getViewport().setBackground(Color.BLACK);
-      //scrollPane.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
       scrollPane.setBorder(null);
       scrollPane.getVerticalScrollBar().setBackground(Color.BLACK);
       scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -646,7 +628,6 @@ public class GuiPrototype extends JFrame {
 
       JPanel panel = new JPanel(new BorderLayout());
       panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
-      // panel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
       panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, new Color(0,85,119))); 
 
       JLabel label =
@@ -713,7 +694,6 @@ public class GuiPrototype extends JFrame {
           button(informacion, false);
           break;
     }
-
   }
 
   public static void labels(JPanel informacion, String resStr, boolean recibo, String[] resStrArr){
@@ -721,13 +701,10 @@ public class GuiPrototype extends JFrame {
     label.setFont(new Font("Arial", Font.PLAIN, 25));
 
     if (!recibo) {
-        // Utilizamos BoxLayout en el eje X para el panel principal
         informacion.setLayout(new BoxLayout(informacion, BoxLayout.X_AXIS));
 
-        // Número de columnas que deseas
         int numColumnas = 3;
 
-        // Crear listas para cada columna
         ArrayList<JPanel> columnas = new ArrayList<>();
         for (int i = 0; i < numColumnas; i++) {
             JPanel columna = new JPanel();
@@ -751,7 +728,6 @@ public class GuiPrototype extends JFrame {
             columnaActual.add(panel);
         }
 
-        // Agregar las columnas al panel principal
         for (JPanel columna : columnas) {
             informacion.add(columna);
         }
