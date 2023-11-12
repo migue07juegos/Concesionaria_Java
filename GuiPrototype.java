@@ -88,7 +88,7 @@ public class GuiPrototype extends JFrame {
 
     for (int i = 0; i <= valores; i++) {
       mostrarDatosStr[i] = (String.format(
-          "Carro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d",
+          "\t\tCarro no.%d:\n\t\tColor: %s\n\t\tMarca: %s\n\t\tModelo: %s\n\t\tPrecio: %d",
           array[i], color[i], marca[i], modelo[i], monto[i]));
     }
 
@@ -643,12 +643,14 @@ public class GuiPrototype extends JFrame {
     String[] moDaStr = mostrarDatos();
 
     for (int h = 0; h < 10; h++) {
+
       JPanel panel = new JPanel(new BorderLayout());
       panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
-      panel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119))); 
+      // panel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+      panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, new Color(0,85,119))); 
 
       JLabel label =
-          new JLabel("<html><font color='#9B9B9B'>" + moDaStr[h].replace("\n", "<br>") + "</font></html>");
+          new JLabel("<html><font color='#9B9B9B'> " + moDaStr[h].replace("\n", "<br>").replace("\t", "&nbsp;") + "</font></html>");
       label.setPreferredSize(new Dimension(300, 300));
       label.setFont(new Font("Arial", Font.PLAIN, 25));
       panel.add(label, BorderLayout.CENTER);
@@ -659,6 +661,7 @@ public class GuiPrototype extends JFrame {
       button.addActionListener(new BotonListener(button, label, h, panel));
       button.setVerticalTextPosition(SwingConstants.BOTTOM);
       button.setHorizontalTextPosition(SwingConstants.CENTER);
+      button.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0,85,119))); 
       button.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseEntered(MouseEvent e) {
@@ -740,7 +743,7 @@ public class GuiPrototype extends JFrame {
             JPanel panel = new JPanel(new BorderLayout());
             panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
 
-            JLabel label2 = new JLabel("<html><font color='#9B9B9B'>" + resStrArr[h].replace("\n", "<br>") + "</font></html>");
+            JLabel label2 = new JLabel("<html><font color='#9B9B9B'> " + resStrArr[h].replace("\n", "<br>") + "</font></html>");
             label2.setPreferredSize(new Dimension(250, 250));
             label2.setFont(new Font("Arial", Font.PLAIN, 20));
             panel.add(label2, BorderLayout.CENTER);
@@ -770,7 +773,9 @@ public class GuiPrototype extends JFrame {
     menuPanel.setBorder(null);
     menuPanel.setBackground(Color.black); // Color de fondo del menú
     menuPanel.setPreferredSize(new Dimension(60, menuPanel.getHeight())); // Ancho del menú retraído
-    menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+    // menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+    menuPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, new Color(0,85,119))); 
+
 
     frame.setLayout(new BorderLayout());
     frame.add(menuPanel, BorderLayout.WEST); // Agregar el menú en la parte izquierda
@@ -782,6 +787,7 @@ public class GuiPrototype extends JFrame {
     button.setFont(new Font("Arial", Font.PLAIN, 30));
     button.setOpaque(isDefaultLookAndFeelDecorated());
     button.setBackground(Color.gray);
+    button.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(0,85,119))); 
     //button.setBorder(null);
     button.addMouseListener(new MouseAdapter() {
       
@@ -797,8 +803,10 @@ public class GuiPrototype extends JFrame {
     JLabel label = new JLabel();
     label.setForeground(new Color(155, 155, 155));
     label.setFont(new Font("Arial", Font.PLAIN, 50));
+    panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(0,85,119)));
     panel.add(label, BorderLayout.EAST);
     panel.add(button, BorderLayout.WEST);
+    
 
     Timer timer = new Timer(1000, new ActionListener() {
       @Override
@@ -823,6 +831,7 @@ public class GuiPrototype extends JFrame {
     button.addActionListener(new MenuBotonListener(indexButton, panelInicio, infoPanel));
     button.setFocusPainted(false);
     button.getVerifyInputWhenFocusTarget();
+    button.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, new Color(0,85,119))); 
     button.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseEntered(MouseEvent e) {
@@ -857,7 +866,7 @@ public class GuiPrototype extends JFrame {
 
   public static void mostrarMenu(JPanel panel, JPanel panelInicio, JPanel infoPanel) {
     
-    panel.setBorder(null);
+    // panel.setBorder(null);
     panel.setPreferredSize(new Dimension(200, panel.getHeight()));
     panel.removeAll();
 
@@ -868,6 +877,7 @@ public class GuiPrototype extends JFrame {
     agregarElementoMenu(panel, "Recibo personal", 5, panelInicio, infoPanel);
     agregarElementoMenu(panel, "Recibo General", 6, panelInicio, infoPanel);
 
+    panel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, new Color(0,0,0))); 
 
     panel.revalidate();
     panel.repaint();
@@ -876,7 +886,9 @@ public class GuiPrototype extends JFrame {
 
   public static void ocultarMenu(JPanel panel) {
 
-    panel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+    // panel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+      panel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0,85,119))); 
+
     panel.setPreferredSize(new Dimension(60, panel.getHeight()));
     menuExpandido = false;
     panel.removeAll();
@@ -918,7 +930,7 @@ public class GuiPrototype extends JFrame {
 
     JLabel nombreLabel = new JLabel("Nombre del Comprador:");
     JLabel edadLabel = new JLabel("Edad:");
-    JLabel engancheLabel = new JLabel("Enganche:");
+    JLabel engancheLabel = new JLabel("Enganche: %");
     JLabel plazoLabel = new JLabel("Plazo:");
 
     Color labelColor = new Color(155, 155, 155);
@@ -979,7 +991,7 @@ public class GuiPrototype extends JFrame {
     aceptarButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-         
+        
           boolean[] confirmBuscar = new boolean[3];
           int aC = 0;
           double bC = 0;
@@ -1059,7 +1071,7 @@ public class GuiPrototype extends JFrame {
     frame.setVisible(true);
     frame.setResizable(false);
     frame.setSize(new Dimension(500, 300));
-    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     return;
   }
 
