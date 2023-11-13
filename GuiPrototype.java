@@ -232,49 +232,48 @@ public class GuiPrototype extends JFrame {
       for (i = 0; i < num_compradores; i++) {
 
         if (nombre_txt.getText().equals(nombreComprador[i])) {
-              
-          FileWriter fileWriter =
-          new FileWriter(new File(archivo_txt.getText() + ".txt"), true);
+            FileWriter fileWriter =
+            new FileWriter(new File(archivo_txt.getText() + ".txt"), true);
 
-          BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-          bufferedWriter.write("Fecha de impresion: " + fecha + "             " + hora);
-          bufferedWriter.newLine();
+            bufferedWriter.write("Fecha de impresion: " + fecha + "             " + hora);
+            bufferedWriter.newLine();
 
-          bufferedWriter.write(String.format(
-              "\n\nComprador %d: %s", i + 1,
-              (nombreComprador[i] == null ? "" : nombreComprador[i])));
-          bufferedWriter.newLine();
-          bufferedWriter.write(String.format("Edad: %d", edad[i]));
-          bufferedWriter.newLine();
-          bufferedWriter.write(
-              String.format("Método de pago: %s",
+            bufferedWriter.write(String.format(
+                "\n\nComprador %d: %s", i + 1,
+                (nombreComprador[i] == null ? "" : nombreComprador[i])));
+            bufferedWriter.newLine();
+            bufferedWriter.write(String.format("Edad: %d", edad[i]));
+            bufferedWriter.newLine();
+            bufferedWriter.write(
+            String.format("Método de pago: %s",
                             (metodoPago[i] == null ? "" : metodoPago[i])));
-          bufferedWriter.newLine();
-
-          if (montoEnganche[i] == liquidacion[i]) {
-
-            bufferedWriter.write(String.format(
-                "Se realizará el pago completo: %.2f", liquidacion[i]));
-          } else {
-            bufferedWriter.write(
-                String.format("Monto de Enganche: %.2f", montoEnganche[i]));
             bufferedWriter.newLine();
-            bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
-            bufferedWriter.newLine();
-            bufferedWriter.write(
-                String.format("Plazo: %d años\nMensualidad %.2f",
-                              mesesAdeudo[i], pagoPorMes[i]));
-            bufferedWriter.newLine();
-            bufferedWriter.write(String.format(
-                "Si tarda mas de 3 meses en pagar su mensualidad se le embargará"));
-          }
 
-          bufferedWriter.newLine();
-          bufferedWriter.write(String.format("Modelo solicitado: %s %s",
-                                              compradores[i].marca,
-                                              compradores[i].modelo));
-          bufferedWriter.close();
+            if (montoEnganche[i] == liquidacion[i]) {
+
+                bufferedWriter.write(String.format(
+                    "Se realizará el pago completo: %.2f", liquidacion[i]));
+            } else {
+                bufferedWriter.write(
+                    String.format("Monto de Enganche: %.2f", montoEnganche[i]));
+                bufferedWriter.newLine();
+                bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
+                bufferedWriter.newLine();
+                bufferedWriter.write(
+                    String.format("Plazo: %d años\nMensualidad %.2f",
+                                mesesAdeudo[i], pagoPorMes[i]));
+                bufferedWriter.newLine();
+                bufferedWriter.write(String.format(
+                    "Si tarda mas de 3 meses en pagar su mensualidad se le embargará"));
+            }
+
+            bufferedWriter.newLine();
+            bufferedWriter.write(String.format("Modelo solicitado: %s %s",
+                                                compradores[i].marca,
+                                                compradores[i].modelo));
+            bufferedWriter.close();
         }
       }
 
@@ -330,9 +329,7 @@ public class GuiPrototype extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
 
           pedir_recibo(informacion, funcion);
-          
       }
-      
     });
 
     panel.add(button, BorderLayout.EAST);
@@ -713,10 +710,8 @@ public class GuiPrototype extends JFrame {
         }
 
         for (int h = 0; h < numCompradores; h++) {
-            // Obtener la columna actual
             JPanel columnaActual = columnas.get(h % numColumnas);
 
-            // Crear el panel con el JLabel y agregarlo a la columna
             JPanel panel = new JPanel(new BorderLayout());
             panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
 
@@ -747,14 +742,12 @@ public class GuiPrototype extends JFrame {
 
     menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
     menuPanel.setBorder(null);
-    menuPanel.setBackground(Color.black); // Color de fondo del menú
-    menuPanel.setPreferredSize(new Dimension(60, menuPanel.getHeight())); // Ancho del menú retraído
-    // menuPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
+    menuPanel.setBackground(Color.black); 
+    menuPanel.setPreferredSize(new Dimension(60, menuPanel.getHeight()));
     menuPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, new Color(0,85,119))); 
 
-
     frame.setLayout(new BorderLayout());
-    frame.add(menuPanel, BorderLayout.WEST); // Agregar el menú en la parte izquierda
+    frame.add(menuPanel, BorderLayout.WEST); 
     frame.add(panel, BorderLayout.NORTH);
     Dimension buttonSize = new Dimension(60, 50);
     button.setPreferredSize(buttonSize);
@@ -763,8 +756,7 @@ public class GuiPrototype extends JFrame {
     button.setFont(new Font("Arial", Font.PLAIN, 30));
     button.setOpaque(isDefaultLookAndFeelDecorated());
     button.setBackground(Color.gray);
-    button.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(0,85,119))); 
-    //button.setBorder(null);
+    button.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0,85,119))); 
     button.addMouseListener(new MouseAdapter() {
       
       @Override
@@ -779,7 +771,7 @@ public class GuiPrototype extends JFrame {
     JLabel label = new JLabel();
     label.setForeground(new Color(155, 155, 155));
     label.setFont(new Font("Arial", Font.PLAIN, 50));
-    panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(0,85,119)));
+    panel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 1, new Color(0,85,119)));
     panel.add(label, BorderLayout.EAST);
     panel.add(button, BorderLayout.WEST);
     
@@ -802,7 +794,7 @@ public class GuiPrototype extends JFrame {
 
     JButton button = new JButton(funcion);
     button.setAlignmentX(
-        Component.CENTER_ALIGNMENT); // Centrar los iconos verticalmente
+        Component.CENTER_ALIGNMENT);
     button.setText(funcion);
     button.addActionListener(new MenuBotonListener(indexButton, panelInicio, infoPanel));
     button.setFocusPainted(false);
@@ -842,7 +834,6 @@ public class GuiPrototype extends JFrame {
 
   public static void mostrarMenu(JPanel panel, JPanel panelInicio, JPanel infoPanel) {
     
-    // panel.setBorder(null);
     panel.setPreferredSize(new Dimension(200, panel.getHeight()));
     panel.removeAll();
 
@@ -862,8 +853,7 @@ public class GuiPrototype extends JFrame {
 
   public static void ocultarMenu(JPanel panel) {
 
-    // panel.setBorder(BorderFactory.createLineBorder(new Color(0, 85, 119)));
-      panel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0,85,119))); 
+    panel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0,85,119))); 
 
     panel.setPreferredSize(new Dimension(60, panel.getHeight()));
     menuExpandido = false;
