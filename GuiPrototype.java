@@ -9,6 +9,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.ChangeEvent;
@@ -44,32 +46,74 @@ public class GuiPrototype extends JFrame {
     public void setMonto(int monto) { this.monto = monto; }
   }
 
-  public static int[] array = new int[10];
-  public static int[] mesesAdeudo = new int[10];
+  public static Vector<Integer> array = new Vector<>(10);
+  public static Vector<Integer> mesesAdeudo = new Vector<>(10);
   public static int i, l, valores = 9, a = 0, inicio, nuevoValor, valorEliminar,
                           posicion;
   public static char eliminar;
-  public static String[] color = {"Blanco", "Azul",  "Blanco",   "Naranja",
-                                  "Gris",   "Plata", "Amarillo", "Naranja",
-                                  "Plata",  "Cobre"};
-  public static String[] marca = {
-      "Audi",   "BMW",       "Mercedes-Benz", "McLaren", "Lamborghini",
-      "Toyota", "Chevrolet", "Nissan",        "Mazda",   "Renault"};
-  public static String[] modelo = {
-      "A1",         "325i",   "Clase A", "650S",    "Aventador",
-      "Highlander", "Camaro", "Altima",  "Mazda 3", "Kwid"};
-  public static int[] monto = {599900, 975000,  831900, 2123472, 25243345,
-                               865900, 1342000, 737900, 388900,  230100};
-  public static String[] nombreComprador = new String[10];
-  public static int[] edad = new int[10];
-  public static String[] metodoPago = new String[10];
-  public static double[] montoEnganche = new double[10];
-  public static double[] liquidacion = new double[10];
-  public static double[] adeudo = new double[10];
-  public static double[] pagoPorMes = new double[10];
+  public static Vector<String> color = new Vector<>();
+  public static Vector<String> marca = new Vector<>();
+  public static Vector<String> modelo = new Vector<>();
+  public static Vector<Integer> monto = new Vector<>();
+  static {
+    color.add("Blanco");
+    color.add("Azul");
+    color.add("Blanco");
+    color.add("Naranja");
+    color.add("Gris");
+    color.add("Plata");
+    color.add("Amarillo");
+    color.add("Naranja");
+    color.add("Plata");
+    color.add("Cobre");
+
+    marca.add("Audi");
+    marca.add("BMW");
+    marca.add("Mercedes-Benz");
+    marca.add("McLaren");
+    marca.add("Lamborghini");
+    marca.add("Toyota");
+    marca.add("Chevrolet");
+    marca.add("Nissan");
+    marca.add("Mazda");
+    marca.add("Renault");
+
+    modelo.add("A1");
+    modelo.add("325i");
+    modelo.add("Clase A");
+    modelo.add("650S");
+    modelo.add("Aventador");
+    modelo.add("Highlander");
+    modelo.add("Camaro");
+    modelo.add("Altima");
+    modelo.add("Mazda 3");
+    modelo.add("Kwid");
+
+    monto.add(599900);
+    monto.add(975000);
+    monto.add(831900);
+    monto.add(2123472);
+    monto.add(25243345);
+    monto.add(865900);
+    monto.add(1342000);
+    monto.add(737900);
+    monto.add(388900);
+    monto.add(230100);
+  }
+
+  public static Vector<String> nombreComprador = new Vector<>(10);
+  public static Vector<Integer> edad = new Vector<>(10);
+  public static Vector<String> metodoPago = new Vector<>(10);
+  public static Vector<Double> montoEnganche = new Vector<>(10);
+  public static Vector<Double> liquidacion = new Vector<>(10);
+  public static Vector<Double> adeudo = new Vector<>(10);
+  public static Vector<Double> pagoPorMes = new Vector<>(10);
+
   public static Carro carroSeleccionado = new GuiPrototype().new Carro();
-  public static Carro[] carrosVendidos = new Carro[10];
-  public static Carro[] compradores = new Carro[10];
+
+  public static Vector<Carro> carrosVendidos = new Vector<>(10);
+  public static Vector<Carro> compradores = new Vector<>(10);
+
   public static int numCompradores = 0;
   public static int numCarrosVendidos = 0;
   public static int w = 0;
@@ -91,8 +135,9 @@ public class GuiPrototype extends JFrame {
 
   public static void valoresAleatorios() {
     Random rand = new Random();
-    for (int i = 0; i < array.length; i++) {
-      array[i] = rand.nextInt(9000) + 1000;
+    for (int i = 0; i < 10; i++) {
+      array.add(rand.nextInt(9000) + 1000);
+      System.err.println(array.get(i));
     }
   }
 
@@ -103,82 +148,78 @@ public class GuiPrototype extends JFrame {
     for (int i = 0; i <= valores; i++) {
       mostrarDatosStr[i] = (String.format(
           "\t\tCarro no.%d:\n\t\tColor: %s\n\t\tMarca: %s\n\t\tModelo: %s\n\t\tPrecio: %d",
-          array[i], color[i], marca[i], modelo[i], monto[i]));
+          array.get(i), color.get(i), marca.get(i), modelo.get(i), monto.get(i)));
     }
 
     return mostrarDatosStr;
   }
 
-  public static String[] mostrarCarrosVendidos(Carro[] carrosVendidos,
+  public static Vector<String> mostrarCarrosVendidos(Vector<Carro> carrosVendidos,
                                                int numCarrosVendidos) {
-    String[] CarrosVendidosHastaElMomento = new String[10];
+    Vector<String> CarrosVendidosHastaElMomento = new Vector<>(10);
 
     for (int i = 0; i < numCarrosVendidos; i++) {
-      CarrosVendidosHastaElMomento[i] = (String.format(
+      CarrosVendidosHastaElMomento.set(i, String.format(
           "Venta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
-          i + 1, nombreComprador[i], carrosVendidos[i].getNumeroControl(),
-          carrosVendidos[i].getColor(), carrosVendidos[i].getMarca(),
-          carrosVendidos[i].getModelo(), carrosVendidos[i].getMonto()));
+          i + 1, nombreComprador.get(i), carrosVendidos.get(i).getNumeroControl(),
+          carrosVendidos.get(i).getColor(), carrosVendidos.get(i).getMarca(),
+          carrosVendidos.get(i).getModelo(), carrosVendidos.get(i).getMonto()));
     }
 
     return CarrosVendidosHastaElMomento;
   }
 
-  public static String[] mostrarDatosComprador(Carro[] compradores,
+  public static Vector<String> mostrarDatosComprador(Vector<Carro> compradores,
                                                int numCompradores) {
-    String[] datosCompradorF = new String[10];
+    Vector<String> datosCompradorF = new Vector<>(10);
     for (int i = 0; i < numCompradores; i++) {
 
-      if (montoEnganche[i] == liquidacion[i]) {
-        datosCompradorF[i] =
-            ((String.format("Comprador %d: %s", i + 1, nombreComprador[i])) +
-             (String.format("\nEdad: %d", edad[i])) +
-             (String.format("\nMétodo de pago: %s", metodoPago[i])) +
+      if (montoEnganche.get(i) == liquidacion.get(i)) {
+        datosCompradorF.set(i, ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i))) +
+             (String.format("\nEdad: %d", edad.get(i))) +
+             (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
              (String.format("\nSe realizará el pago completo: %.2f",
-                            liquidacion[i])) +
+                            liquidacion.get(i))) +
              (String.format("\nModelo solicitado: %s %s\n\n",
-                            compradores[i].getMarca(),
-                            compradores[i].getModelo())));
+                            compradores.get(i).getMarca(),
+                            compradores.get(i).getModelo()))));
       } else {
-        datosCompradorF[i] =
-            ((String.format("Comprador %d: %s", i + 1, nombreComprador[i])) +
-             (String.format("\nEdad: %d", edad[i])) +
-             (String.format("\nMétodo de pago: %s", metodoPago[i])) +
-             (String.format("\nMonto de Enganche: %.2f", montoEnganche[i])) +
-             (String.format("\nAdeudo: %.2f", adeudo[i])) +
+        datosCompradorF.set(i, ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i))) +
+             (String.format("\nEdad: %d", edad.get(i))) +
+             (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
+             (String.format("\nMonto de Enganche: %.2f", montoEnganche.get(i))) +
+             (String.format("\nAdeudo: %.2f", adeudo.get(i))) +
              (String.format("\nModelo solicitado: %s %s\n\n",
-                            compradores[i].getMarca(),
-                            compradores[i].getModelo())));
+                            compradores.get(i).getMarca(),
+                            compradores.get(i).getModelo()))));
       }
     }
     return datosCompradorF;
   }
 
-  public static String[] mostrarInfoPago(int numCompradores) {
-    String[] InfoDePagoF = new String[10];
+  public static Vector<String> mostrarInfoPago(int numCompradores) {
+    Vector<String> InfoDePagoF = new Vector<>(10);
     for (int i = 0; i < numCompradores; i++) {
 
-      if (montoEnganche[i] == liquidacion[i]) {
-        InfoDePagoF[i] =
-            ((String.format("Comprador %d: %s", i + 1, nombreComprador[i]) +
-              String.format("\nMétodo de pago: %s", metodoPago[i]) +
+      if (montoEnganche.get(i) == liquidacion.get(i)) {
+        InfoDePagoF.set(i, ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
+              String.format("\nMétodo de pago: %s", metodoPago.get(i)) +
               String.format("\nSe realizará el pago completo: %.2f\n\n",
-                            liquidacion[i])));
+                            liquidacion.get(i)))));
       } else {
-        InfoDePagoF[i] =
-            ((String.format("Comprador %d: %s", i + 1, nombreComprador[i]) +
-              String.format("\nMétodo de pago: %s", metodoPago[i]) +
-              String.format("\nMonto de Enganche: %.2f", montoEnganche[i]) +
-              String.format("\nAdeudo: %.2f", adeudo[i]) +
+        InfoDePagoF.set(i, ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
+              String.format("\nMétodo de pago: %s", metodoPago.get(i)) +
+              String.format("\nMonto de Enganche: %.2f", montoEnganche.get(i)) +
+              String.format("\nAdeudo: %.2f", adeudo.get(i)) +
               String.format("\nPlazo: %d años \nMensualidad: $%.2f\n\n",
-                            mesesAdeudo[i], pagoPorMes[i])));
+                            mesesAdeudo.get(i), pagoPorMes.get(i)))));
       }
     }
     return InfoDePagoF;
   }
 
-  public static void buscar(Carro carroSeleccionado, Carro[] carrosVendidos,
-                            int numCarrosVendidos, Carro[] compradores,
+  public static void buscar(Carro carroSeleccionado, Vector<Carro> carrosVendidos,
+                            int numCarrosVendidos, Vector<Carro> compradores,
                             int numCompradores, int numBtn) {
     do {
       int valorEliminar = 0;
@@ -187,7 +228,7 @@ public class GuiPrototype extends JFrame {
       valorEliminar = numBtn;
 
       for (int i = 0; i <= valores; i++) {
-        if (array[i] == valorEliminar) {
+        if (array.get(i) == valorEliminar) {
           truE = 1;
           a = 1;
           inicio = i;
@@ -202,62 +243,62 @@ public class GuiPrototype extends JFrame {
     } while (true);
   }
 
-  public static void registroAutos(Carro carro, Carro[] carrosVendidos,
-                                   int numCarrosVendidos, Carro[] compradores,
+  public static void registroAutos(Carro carro, Vector<Carro> carrosVendidos,
+                                   int numCarrosVendidos, Vector<Carro> compradores,
                                    int numCompradores) {
-    carro.setNumeroControl(array[inicio]);
-    carro.setColor(color[inicio]);
-    carro.setMarca(marca[inicio]);
-    carro.setModelo(modelo[inicio]);
-    carro.setMonto(monto[inicio]);
+    carro.setNumeroControl(array.get(inicio));
+    carro.setColor(color.get(inicio));
+    carro.setMarca(marca.get(inicio));
+    carro.setModelo(modelo.get(inicio));
+    carro.setMonto(monto.get(inicio));
 
-    carrosVendidos[numCarrosVendidos] = new GuiPrototype().new Carro();
-    carrosVendidos[numCarrosVendidos].setNumeroControl(
+    carrosVendidos.set(numCarrosVendidos, new GuiPrototype().new Carro());
+    carrosVendidos.get(numCarrosVendidos).setNumeroControl(
         carro.getNumeroControl());
-    carrosVendidos[numCarrosVendidos].setColor(carro.getColor());
-    carrosVendidos[numCarrosVendidos].setMarca(carro.getMarca());
-    carrosVendidos[numCarrosVendidos].setModelo(carro.getModelo());
-    carrosVendidos[numCarrosVendidos].setMonto(carro.getMonto());
-    compradores[numCompradores] = new GuiPrototype().new Carro();
-    compradores[numCompradores].setMarca(carro.getMarca());
-    compradores[numCompradores].setModelo(carro.getModelo());
+    carrosVendidos.get(numCarrosVendidos).setColor(carro.getColor());
+    carrosVendidos.get(numCarrosVendidos).setMarca(carro.getMarca());
+    carrosVendidos.get(numCarrosVendidos).setModelo(carro.getModelo());
+    carrosVendidos.get(numCarrosVendidos).setMonto(carro.getMonto());
+    compradores.set(numCompradores, new GuiPrototype().new Carro());
+    compradores.get(numCompradores).setMarca(carro.getMarca());
+    compradores.get(numCompradores).setModelo(carro.getModelo());
   }
 
   public static void datos(int i, Carro carro) {
     double a, b, c;
 
-    nombreComprador[i] = nombreCompradorTXT.getText();
+    nombreComprador.set(i, nombreCompradorTXT.getText());
 
     String str = edadTXT.getText();
-    edad[i] = Integer.parseInt(str);
+    edad.set(i, Integer.parseInt(str));
 
-    metodoPago[i] = switchStr;
+    metodoPago.set(i, switchStr);
 
     String str2 = engancheTXT.getText();
     b = Double.parseDouble(str2);
 
     a = b / 100;
-    montoEnganche[i] = a * carro.monto;
-    adeudo[i] = carro.monto - montoEnganche[i];
-    liquidacion[i] = carro.monto;
+    montoEnganche.set(i, a * carro.monto);
+    adeudo.set(i, carro.monto - montoEnganche.get(i));
+    liquidacion.set(i, (double) carro.monto);
 
     if (b > 19 && b < 81) {
       String str3 = plazoTXT.getText();
       try {
-        mesesAdeudo[i] = Integer.parseInt(str3);
+        mesesAdeudo.set(i, Integer.parseInt(str3));
       } catch (Exception e) {
         System.out.println("Error");
       }
 
-      c = mesesAdeudo[i] * 12;
-      pagoPorMes[i] = adeudo[i] / c;
+      c = mesesAdeudo.get(i) * 12;
+      pagoPorMes.set(i, adeudo.get(i) / c);
 
       JOptionPane.showMessageDialog(
-          null, String.format("Mensualidad: %.2f", pagoPorMes[i]));
+          null, String.format("Mensualidad: %.2f", pagoPorMes.get(i)));
     }
   }
 
-  public static void recibo_personal(Carro[] compradores, int num_compradores,
+  public static void recibo_personal(Vector<Carro> compradores, int num_compradores,
                                      JPanel informacion, JCheckBox check)
       throws IOException {
 
@@ -274,7 +315,7 @@ public class GuiPrototype extends JFrame {
 
       for (i = 0; i < num_compradores; i++) {
 
-        if (nombre_txt.getText().equals(nombreComprador[i])) {
+        if (nombre_txt.getText().equals(nombreComprador.get(i))) {
           FileWriter fileWriter =
               new FileWriter(new File(archivo_txt.getText() + ".txt"), true);
 
@@ -286,28 +327,28 @@ public class GuiPrototype extends JFrame {
 
           bufferedWriter.write(String.format(
               "\n\nComprador %d: %s", i + 1,
-              (nombreComprador[i] == null ? "" : nombreComprador[i])));
+              (nombreComprador.get(i) == null ? "" : nombreComprador.get(i))));
           bufferedWriter.newLine();
-          bufferedWriter.write(String.format("Edad: %d", edad[i]));
+          bufferedWriter.write(String.format("Edad: %d", edad.get(i)));
           bufferedWriter.newLine();
           bufferedWriter.write(
               String.format("Método de pago: %s",
-                            (metodoPago[i] == null ? "" : metodoPago[i])));
+                            (metodoPago.get(i) == null ? "" : metodoPago.get(i))));
           bufferedWriter.newLine();
 
-          if (montoEnganche[i] == liquidacion[i]) {
+          if (montoEnganche.get(i) == liquidacion.get(i)) {
 
             bufferedWriter.write(String.format(
-                "Se realizará el pago completo: %.2f", liquidacion[i]));
+                "Se realizará el pago completo: %.2f", liquidacion.get(i)));
           } else {
             bufferedWriter.write(
-                String.format("Monto de Enganche: %.2f", montoEnganche[i]));
+                String.format("Monto de Enganche: %.2f", montoEnganche.get(i)));
             bufferedWriter.newLine();
-            bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
+            bufferedWriter.write(String.format("Adeudo: %.2f", adeudo.get(i)));
             bufferedWriter.newLine();
             bufferedWriter.write(
                 String.format("Plazo: %d años\nMensualidad %.2f",
-                              mesesAdeudo[i], pagoPorMes[i]));
+                              mesesAdeudo.get(i), pagoPorMes.get(i)));
             bufferedWriter.newLine();
             bufferedWriter.write(String.format(
                 "Si tarda mas de 3 meses en pagar su mensualidad se le embargará"));
@@ -315,8 +356,8 @@ public class GuiPrototype extends JFrame {
 
           bufferedWriter.newLine();
           bufferedWriter.write(String.format("Modelo solicitado: %s %s",
-                                             compradores[i].marca,
-                                             compradores[i].modelo));
+                                             compradores.get(i).marca,
+                                             compradores.get(i).modelo));
           bufferedWriter.close();
         }
       }
@@ -487,15 +528,15 @@ public class GuiPrototype extends JFrame {
     StringBuilder compradores = new StringBuilder();
 
     for (i = 0; i < num; i++) {
-      if (nombreComprador[i] != null) {
+      if (nombreComprador.get(i) != null) {
         compradores.append(
-            String.format("\nComprador %d: %s\n", i + 1, nombreComprador[i]));
+            String.format("\nComprador %d: %s\n", i + 1, nombreComprador.get(i)));
       }
     }
     return compradores;
   }
 
-  public static void recibo(Carro[] compradores, int num_compradores,
+  public static void recibo(Vector<GuiPrototype.Carro> compradores2, int num_compradores,
                             JCheckBox check) {
 
     try {
@@ -522,35 +563,35 @@ public class GuiPrototype extends JFrame {
         }
         bufferedWriter.write(String.format(
             "\n\nComprador %d: %s", i + 1,
-            (nombreComprador[i] == null ? "" : nombreComprador[i])));
+            (nombreComprador.get(i) == null ? "" : nombreComprador.get(i))));
         bufferedWriter.newLine();
-        bufferedWriter.write(String.format("Edad: %d", edad[i]));
+        bufferedWriter.write(String.format("Edad: %d", edad.get(i)));
         bufferedWriter.newLine();
         bufferedWriter.write(
             String.format("Método de pago: %s",
-                          (metodoPago[i] == null ? "" : metodoPago[i])));
+                          (metodoPago.get(i) == null ? "" : metodoPago.get(i))));
         bufferedWriter.newLine();
 
-        if (montoEnganche[i] == liquidacion[i]) {
+        if (montoEnganche.get(i) == liquidacion.get(i)) {
 
           bufferedWriter.write(String.format(
-              "Se realizará el pago completo: %.2f", liquidacion[i]));
+              "Se realizará el pago completo: %.2f", liquidacion.get(i)));
         } else {
           bufferedWriter.write(
-              String.format("Monto de Enganche: %.2f", montoEnganche[i]));
+              String.format("Monto de Enganche: %.2f", montoEnganche.get(i)));
           bufferedWriter.newLine();
-          bufferedWriter.write(String.format("Adeudo: %.2f", adeudo[i]));
+          bufferedWriter.write(String.format("Adeudo: %.2f", adeudo.get(i)));
           bufferedWriter.newLine();
           bufferedWriter.write(String.format("Plazo: %d años\nMensualidad %.2f",
-                                             mesesAdeudo[i], pagoPorMes[i]));
+                                             mesesAdeudo.get(i), pagoPorMes.get(i)));
           bufferedWriter.newLine();
           bufferedWriter.write(String.format(
               "Si tarda mas de 3 meses en pagar su mensualidad se le embargará"));
         }
         bufferedWriter.newLine();
         bufferedWriter.write(String.format("Modelo solicitado: %s %s",
-                                           compradores[i].marca,
-                                           compradores[i].modelo));
+                                           compradores2.get(i).marca,
+                                           compradores2.get(i).modelo));
         bufferedWriter.close();
       }
 
@@ -717,7 +758,7 @@ public class GuiPrototype extends JFrame {
     informacion.repaint();
 
     String resStr = "";
-    String[] resStrArr = new String[10];
+    Vector<String> resStrArr = new Vector<>(10);
 
     switch (indexButton) {
     case 2:
@@ -745,7 +786,7 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void labels(JPanel informacion, String resStr, boolean recibo,
-                            String[] resStrArr) {
+                            Vector<String> resStrArr) {
     JLabel label = new JLabel("<html><font color='#9B9B9B'>" +
                               resStr.replace("\n", "<br>") + "</font></html>");
     label.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -770,7 +811,7 @@ public class GuiPrototype extends JFrame {
 
         JLabel label2 =
             new JLabel("<html><font color='#9B9B9B'> " +
-                       resStrArr[h].replace("\n", "<br>") + "</font></html>");
+                       resStrArr.get(h).replace("\n", "<br>") + "</font></html>");
         label2.setPreferredSize(new Dimension(250, 250));
         label2.setFont(new Font("Arial", Font.PLAIN, 20));
         panel.add(label2, BorderLayout.CENTER);
@@ -1150,7 +1191,7 @@ public class GuiPrototype extends JFrame {
 
         if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2] && confirmBuscar[3]) {
           buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
-                 compradores, numCompradores, array[ho]);
+                 compradores, numCompradores, array.get(ho));
           datos(w, carroSeleccionado);
           numCompradores++;
           numCarrosVendidos++;
