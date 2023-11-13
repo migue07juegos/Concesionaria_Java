@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
@@ -81,6 +83,7 @@ public class GuiPrototype extends JFrame {
   public static JTextField archivo_txt = new JTextField();
   public static JTextField nombre_txt = new JTextField();
   public static JTextField abrir_txt = new JTextField();
+  public static int switchBtn = 0;
   public static boolean confirm2 = true;
 
   public GuiPrototype() {}
@@ -574,7 +577,7 @@ public class GuiPrototype extends JFrame {
   public GuiPrototype(boolean Ventana) {
 
     if (Ventana) {
-
+    
       UIManager.put("OptionPane.background", Color.BLACK);
       UIManager.put("Panel.background", Color.BLACK);
       UIManager.put("OptionPane.messageForeground", new Color(155, 155, 155));
@@ -707,8 +710,7 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void
-  informacion_compradores(boolean ventana, JPanel informacion, int indexButton)
+  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton)
       throws IOException {
     informacion.removeAll();
     informacion.revalidate();
@@ -964,6 +966,37 @@ public class GuiPrototype extends JFrame {
     JLabel edadLabel = new JLabel("Edad:");
     JLabel engancheLabel = new JLabel("Enganche: %");
     JLabel plazoLabel = new JLabel("Plazo:");
+    JRadioButton radio1 = new JRadioButton("Tarjeta");
+    JRadioButton radio2 = new JRadioButton("Cheque");
+    JRadioButton radio3 = new JRadioButton("Efectivo");
+    ButtonGroup bg = new ButtonGroup();
+
+    radio1.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (radio1.isSelected()) {
+                    switchBtn = 1;
+                }
+            }
+        });
+
+    radio2.addChangeListener(new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            if (radio2.isSelected()) {
+                switchBtn = 2;
+            }
+        }
+    });
+
+    radio3.addChangeListener(new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            if (radio3.isSelected()) {
+                switchBtn = 3;
+            }
+        }
+    });
 
     Color labelColor = new Color(155, 155, 155);
     Font labelFont = new Font("Arial", Font.PLAIN, 16);
@@ -976,17 +1009,35 @@ public class GuiPrototype extends JFrame {
     engancheLabel.setFont(labelFont);
     plazoLabel.setForeground(labelColor);
     plazoLabel.setFont(labelFont);
+    radio1.setForeground(labelColor);
+    radio1.setFont(labelFont);
+    radio2.setForeground(labelColor);
+    radio2.setFont(labelFont);
+    radio3.setForeground(labelColor);
+    radio3.setFont(labelFont);
+    radio1.setBackground(Color.black);
+    radio2.setBackground(Color.black);
+    radio3.setBackground(Color.black);
+    radio1.setFocusPainted(false);
+    radio2.setFocusPainted(false);
+    radio3.setFocusPainted(false);
 
     JPanel labelsPanel = new JPanel();
-    labelsPanel.setLayout(new GridLayout(4, 1));
+    labelsPanel.setLayout(new GridLayout(7, 1));
     labelsPanel.setBackground(Color.black);
     labelsPanel.add(nombreLabel);
     labelsPanel.add(edadLabel);
     labelsPanel.add(engancheLabel);
     labelsPanel.add(plazoLabel);
+    labelsPanel.add(radio1);
+    bg.add(radio1);
+    labelsPanel.add(radio2);
+    bg.add(radio2);
+    labelsPanel.add(radio3);
+    bg.add(radio3);
 
     JPanel componentesPanel = new JPanel();
-    componentesPanel.setLayout(new GridLayout(4, 1));
+    componentesPanel.setLayout(new GridLayout(7, 1));
     componentesPanel.add(nombreCompradorTXT);
     componentesPanel.add(edadTXT);
     componentesPanel.add(engancheTXT);
@@ -1005,20 +1056,6 @@ public class GuiPrototype extends JFrame {
     frame.add(componentesPanel);
 
     JButton aceptarButton = new JButton("Aceptar");
-
-    aceptarButton.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseEntered(MouseEvent e) {
-
-        aceptarButton.setBackground(Color.DARK_GRAY);
-      }
-
-      @Override
-      public void mouseExited(MouseEvent e) {
-
-        aceptarButton.setBackground(null);
-      }
-    });
 
     aceptarButton.addActionListener(new ActionListener() {
       @Override
@@ -1072,6 +1109,14 @@ public class GuiPrototype extends JFrame {
               "Entrada no válida. Ingresa un número válido para el porcentaje de enganche.");
         }
 
+        try {
+            
+        } catch (Exception p) {
+            JOptionPane.showMessageDialog(
+              null,
+              "Elija un método de pago.");
+        }
+
         if (!confirmBuscar[2]) {
           try {
             cC = Integer.parseInt(str3);
@@ -1087,6 +1132,7 @@ public class GuiPrototype extends JFrame {
                 "Entrada no válida. Ingresa un número válido para el plazo de pago.");
           }
         }
+        
 
         if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2]) {
           buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
@@ -1105,11 +1151,13 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    frame.add(aceptarButton);
+    aceptarButton.setBorder(null);
+    componentesPanel.add(new Label(""));
+    componentesPanel.add(aceptarButton);
 
     frame.setVisible(true);
     frame.setResizable(false);
-    frame.setSize(new Dimension(500, 300));
+    frame.setSize(new Dimension(450, 320));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     return;
   }
