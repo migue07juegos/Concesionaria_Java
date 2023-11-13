@@ -84,6 +84,7 @@ public class GuiPrototype extends JFrame {
   public static JTextField nombre_txt = new JTextField();
   public static JTextField abrir_txt = new JTextField();
   public static int switchBtn = 0;
+  public static String switchStr = "";
   public static boolean confirm2 = true;
 
   public GuiPrototype() {}
@@ -230,8 +231,7 @@ public class GuiPrototype extends JFrame {
     String str = edadTXT.getText();
     edad[i] = Integer.parseInt(str);
 
-    metodoPago[i] =
-        JOptionPane.showInputDialog(null, "Ingresa el método de pago: ");
+    metodoPago[i] = switchStr;
 
     String str2 = engancheTXT.getText();
     b = Double.parseDouble(str2);
@@ -959,6 +959,7 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void pedirDatos(int ho) {
+    switchBtn = 0;
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
 
@@ -1061,7 +1062,7 @@ public class GuiPrototype extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
 
-        boolean[] confirmBuscar = new boolean[3];
+        boolean[] confirmBuscar = new boolean[4];
         int aC = 0;
         double bC = 0;
         int cC = 0;
@@ -1072,6 +1073,7 @@ public class GuiPrototype extends JFrame {
         confirmBuscar[0] = false;
         confirmBuscar[1] = false;
         confirmBuscar[2] = false;
+        confirmBuscar[3] = false;
 
         try {
           aC = Integer.parseInt(str);
@@ -1109,14 +1111,26 @@ public class GuiPrototype extends JFrame {
               "Entrada no válida. Ingresa un número válido para el porcentaje de enganche.");
         }
 
-        try {
-            
-        } catch (Exception p) {
+        switch (switchBtn) {
+          case 0:
             JOptionPane.showMessageDialog(
-              null,
-              "Elija un método de pago.");
+            null,
+            "Elija un método de pago.");
+            break;
+          case 1:
+            switchStr = "Tarjeta";
+            confirmBuscar[3] = true;
+            break;
+          case 2:
+            switchStr = "Cheque";
+            confirmBuscar[3] = true;
+            break;
+          case 3:
+            switchStr = "Efectivo";
+            confirmBuscar[3] = true;
+            break;
         }
-
+            
         if (!confirmBuscar[2]) {
           try {
             cC = Integer.parseInt(str3);
@@ -1134,7 +1148,7 @@ public class GuiPrototype extends JFrame {
         }
         
 
-        if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2]) {
+        if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2] && confirmBuscar[3]) {
           buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
                  compradores, numCompradores, array[ho]);
           datos(w, carroSeleccionado);
