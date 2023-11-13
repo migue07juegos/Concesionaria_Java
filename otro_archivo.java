@@ -1,38 +1,23 @@
-import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
-
 public class otro_archivo {
 
     public static void main(String[] args) {
-        String filePath = "musica.wav"; 
-        reproducirMP3(filePath);
+        String url = "https://youtu.be/dQw4w9WgXcQ"; 
+        reproducirMP3(url);
     }
 
-    public static void reproducirMP3(String filePath) {
+    public static void reproducirMP3(String url) {
+        String os = System.getProperty("os.name").toLowerCase();
+        ProcessBuilder processBuilder;
+        if (os.contains("win")) {
+            processBuilder = new ProcessBuilder("cmd.exe", "/c", "mpv", "--no-video", url);
+        } else {
+            processBuilder = new ProcessBuilder("mpv", "--no-video", url);
+        }
         try {
-            File file = new File(filePath);
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-            AudioFormat audioFormat = audioInputStream.getFormat();
-
-            DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-            SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
-            sourceDataLine.open(audioFormat);
-            sourceDataLine.start();
-
-            int bufferSize = (int) audioFormat.getSampleRate() * audioFormat.getFrameSize();
-            byte[] buffer = new byte[bufferSize];
-
-            int bytesRead = 0;
-            while ((bytesRead = audioInputStream.read(buffer, 0, buffer.length)) != -1) {
-                sourceDataLine.write(buffer, 0, bytesRead);
-            }
-
-            sourceDataLine.drain();
-            sourceDataLine.close();
-            audioInputStream.close();
-        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-            e.printStackTrace();
+            Process proceso = processBuilder.start();
+            proceso.waitFor();
+        } catch (Exception e) {
+            System.err.println("Error al reproducir musica");
         }
     }
 }
