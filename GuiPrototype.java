@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
-
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.ChangeEvent;
@@ -148,50 +147,61 @@ public class GuiPrototype extends JFrame {
     for (int i = 0; i <= valores; i++) {
       mostrarDatosStr[i] = (String.format(
           "\t\tCarro no.%d:\n\t\tColor: %s\n\t\tMarca: %s\n\t\tModelo: %s\n\t\tPrecio: %d",
-          array.get(i), color.get(i), marca.get(i), modelo.get(i), monto.get(i)));
+          array.get(i), color.get(i), marca.get(i), modelo.get(i),
+          monto.get(i)));
     }
 
     return mostrarDatosStr;
   }
 
-  public static Vector<String> mostrarCarrosVendidos(Vector<Carro> carrosVendidos,
-                                               int numCarrosVendidos) {
+  public static Vector<String>
+  mostrarCarrosVendidos(Vector<Carro> carrosVendidos, int numCarrosVendidos) {
     Vector<String> CarrosVendidosHastaElMomento = new Vector<>(10);
 
     for (int i = 0; i < numCarrosVendidos; i++) {
-      CarrosVendidosHastaElMomento.set(i, String.format(
-          "Venta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
-          i + 1, nombreComprador.get(i), carrosVendidos.get(i).getNumeroControl(),
-          carrosVendidos.get(i).getColor(), carrosVendidos.get(i).getMarca(),
-          carrosVendidos.get(i).getModelo(), carrosVendidos.get(i).getMonto()));
+      CarrosVendidosHastaElMomento.set(
+          i,
+          String.format(
+              "Venta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
+              i + 1, nombreComprador.get(i),
+              carrosVendidos.get(i).getNumeroControl(),
+              carrosVendidos.get(i).getColor(),
+              carrosVendidos.get(i).getMarca(),
+              carrosVendidos.get(i).getModelo(),
+              carrosVendidos.get(i).getMonto()));
     }
 
     return CarrosVendidosHastaElMomento;
   }
 
   public static Vector<String> mostrarDatosComprador(Vector<Carro> compradores,
-                                               int numCompradores) {
+                                                     int numCompradores) {
     Vector<String> datosCompradorF = new Vector<>(10);
     for (int i = 0; i < numCompradores; i++) {
 
       if (montoEnganche.get(i) == liquidacion.get(i)) {
-        datosCompradorF.set(i, ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i))) +
-             (String.format("\nEdad: %d", edad.get(i))) +
-             (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
-             (String.format("\nSe realizará el pago completo: %.2f",
-                            liquidacion.get(i))) +
-             (String.format("\nModelo solicitado: %s %s\n\n",
-                            compradores.get(i).getMarca(),
-                            compradores.get(i).getModelo()))));
+        datosCompradorF.set(
+            i, ((String.format("Comprador %d: %s", i + 1,
+                               nombreComprador.get(i))) +
+                (String.format("\nEdad: %d", edad.get(i))) +
+                (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
+                (String.format("\nSe realizará el pago completo: %.2f",
+                               liquidacion.get(i))) +
+                (String.format("\nModelo solicitado: %s %s\n\n",
+                               compradores.get(i).getMarca(),
+                               compradores.get(i).getModelo()))));
       } else {
-        datosCompradorF.set(i, ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i))) +
-             (String.format("\nEdad: %d", edad.get(i))) +
-             (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
-             (String.format("\nMonto de Enganche: %.2f", montoEnganche.get(i))) +
-             (String.format("\nAdeudo: %.2f", adeudo.get(i))) +
-             (String.format("\nModelo solicitado: %s %s\n\n",
-                            compradores.get(i).getMarca(),
-                            compradores.get(i).getModelo()))));
+        datosCompradorF.set(
+            i, ((String.format("Comprador %d: %s", i + 1,
+                               nombreComprador.get(i))) +
+                (String.format("\nEdad: %d", edad.get(i))) +
+                (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
+                (String.format("\nMonto de Enganche: %.2f",
+                               montoEnganche.get(i))) +
+                (String.format("\nAdeudo: %.2f", adeudo.get(i))) +
+                (String.format("\nModelo solicitado: %s %s\n\n",
+                               compradores.get(i).getMarca(),
+                               compradores.get(i).getModelo()))));
       }
     }
     return datosCompradorF;
@@ -202,12 +212,16 @@ public class GuiPrototype extends JFrame {
     for (int i = 0; i < numCompradores; i++) {
 
       if (montoEnganche.get(i) == liquidacion.get(i)) {
-        InfoDePagoF.set(i, ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
+        InfoDePagoF.set(
+            i,
+            ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
               String.format("\nMétodo de pago: %s", metodoPago.get(i)) +
               String.format("\nSe realizará el pago completo: %.2f\n\n",
                             liquidacion.get(i)))));
       } else {
-        InfoDePagoF.set(i, ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
+        InfoDePagoF.set(
+            i,
+            ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
               String.format("\nMétodo de pago: %s", metodoPago.get(i)) +
               String.format("\nMonto de Enganche: %.2f", montoEnganche.get(i)) +
               String.format("\nAdeudo: %.2f", adeudo.get(i)) +
@@ -218,9 +232,10 @@ public class GuiPrototype extends JFrame {
     return InfoDePagoF;
   }
 
-  public static void buscar(Carro carroSeleccionado, Vector<Carro> carrosVendidos,
-                            int numCarrosVendidos, Vector<Carro> compradores,
-                            int numCompradores, int numBtn) {
+  public static void buscar(Carro carroSeleccionado,
+                            Vector<Carro> carrosVendidos, int numCarrosVendidos,
+                            Vector<Carro> compradores, int numCompradores,
+                            int numBtn) {
     do {
       int valorEliminar = 0;
       int truE = 0;
@@ -244,7 +259,8 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void registroAutos(Carro carro, Vector<Carro> carrosVendidos,
-                                   int numCarrosVendidos, Vector<Carro> compradores,
+                                   int numCarrosVendidos,
+                                   Vector<Carro> compradores,
                                    int numCompradores) {
     carro.setNumeroControl(array.get(inicio));
     carro.setColor(color.get(inicio));
@@ -253,8 +269,8 @@ public class GuiPrototype extends JFrame {
     carro.setMonto(monto.get(inicio));
 
     carrosVendidos.set(numCarrosVendidos, new GuiPrototype().new Carro());
-    carrosVendidos.get(numCarrosVendidos).setNumeroControl(
-        carro.getNumeroControl());
+    carrosVendidos.get(numCarrosVendidos)
+        .setNumeroControl(carro.getNumeroControl());
     carrosVendidos.get(numCarrosVendidos).setColor(carro.getColor());
     carrosVendidos.get(numCarrosVendidos).setMarca(carro.getMarca());
     carrosVendidos.get(numCarrosVendidos).setModelo(carro.getModelo());
@@ -280,7 +296,7 @@ public class GuiPrototype extends JFrame {
     a = b / 100;
     montoEnganche.set(i, a * carro.monto);
     adeudo.set(i, carro.monto - montoEnganche.get(i));
-    liquidacion.set(i, (double) carro.monto);
+    liquidacion.set(i, (double)carro.monto);
 
     if (b > 19 && b < 81) {
       String str3 = plazoTXT.getText();
@@ -298,9 +314,9 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void recibo_personal(Vector<Carro> compradores, int num_compradores,
-                                     JPanel informacion, JCheckBox check)
-      throws IOException {
+  public static void recibo_personal(Vector<Carro> compradores,
+                                     int num_compradores, JPanel informacion,
+                                     JCheckBox check) throws IOException {
 
     try {
 
@@ -331,9 +347,9 @@ public class GuiPrototype extends JFrame {
           bufferedWriter.newLine();
           bufferedWriter.write(String.format("Edad: %d", edad.get(i)));
           bufferedWriter.newLine();
-          bufferedWriter.write(
-              String.format("Método de pago: %s",
-                            (metodoPago.get(i) == null ? "" : metodoPago.get(i))));
+          bufferedWriter.write(String.format(
+              "Método de pago: %s",
+              (metodoPago.get(i) == null ? "" : metodoPago.get(i))));
           bufferedWriter.newLine();
 
           if (montoEnganche.get(i) == liquidacion.get(i)) {
@@ -529,15 +545,15 @@ public class GuiPrototype extends JFrame {
 
     for (i = 0; i < num; i++) {
       if (nombreComprador.get(i) != null) {
-        compradores.append(
-            String.format("\nComprador %d: %s\n", i + 1, nombreComprador.get(i)));
+        compradores.append(String.format("\nComprador %d: %s\n", i + 1,
+                                         nombreComprador.get(i)));
       }
     }
     return compradores;
   }
 
-  public static void recibo(Vector<GuiPrototype.Carro> compradores2, int num_compradores,
-                            JCheckBox check) {
+  public static void recibo(Vector<GuiPrototype.Carro> compradores2,
+                            int num_compradores, JCheckBox check) {
 
     try {
 
@@ -567,9 +583,9 @@ public class GuiPrototype extends JFrame {
         bufferedWriter.newLine();
         bufferedWriter.write(String.format("Edad: %d", edad.get(i)));
         bufferedWriter.newLine();
-        bufferedWriter.write(
-            String.format("Método de pago: %s",
-                          (metodoPago.get(i) == null ? "" : metodoPago.get(i))));
+        bufferedWriter.write(String.format(
+            "Método de pago: %s",
+            (metodoPago.get(i) == null ? "" : metodoPago.get(i))));
         bufferedWriter.newLine();
 
         if (montoEnganche.get(i) == liquidacion.get(i)) {
@@ -583,7 +599,8 @@ public class GuiPrototype extends JFrame {
           bufferedWriter.write(String.format("Adeudo: %.2f", adeudo.get(i)));
           bufferedWriter.newLine();
           bufferedWriter.write(String.format("Plazo: %d años\nMensualidad %.2f",
-                                             mesesAdeudo.get(i), pagoPorMes.get(i)));
+                                             mesesAdeudo.get(i),
+                                             pagoPorMes.get(i)));
           bufferedWriter.newLine();
           bufferedWriter.write(String.format(
               "Si tarda mas de 3 meses en pagar su mensualidad se le embargará"));
@@ -618,7 +635,7 @@ public class GuiPrototype extends JFrame {
   public GuiPrototype(boolean Ventana) {
 
     if (Ventana) {
-    
+
       UIManager.put("OptionPane.background", Color.BLACK);
       UIManager.put("Panel.background", Color.BLACK);
       UIManager.put("OptionPane.messageForeground", new Color(155, 155, 155));
@@ -751,7 +768,8 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton)
+  public static void
+  informacion_compradores(boolean ventana, JPanel informacion, int indexButton)
       throws IOException {
     informacion.removeAll();
     informacion.revalidate();
@@ -809,9 +827,9 @@ public class GuiPrototype extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
 
-        JLabel label2 =
-            new JLabel("<html><font color='#9B9B9B'> " +
-                       resStrArr.get(h).replace("\n", "<br>") + "</font></html>");
+        JLabel label2 = new JLabel("<html><font color='#9B9B9B'> " +
+                                   resStrArr.get(h).replace("\n", "<br>") +
+                                   "</font></html>");
         label2.setPreferredSize(new Dimension(250, 250));
         label2.setFont(new Font("Arial", Font.PLAIN, 20));
         panel.add(label2, BorderLayout.CENTER);
@@ -1014,30 +1032,30 @@ public class GuiPrototype extends JFrame {
     ButtonGroup bg = new ButtonGroup();
 
     radio1.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (radio1.isSelected()) {
-                    switchBtn = 1;
-                }
-            }
-        });
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        if (radio1.isSelected()) {
+          switchBtn = 1;
+        }
+      }
+    });
 
     radio2.addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-            if (radio2.isSelected()) {
-                switchBtn = 2;
-            }
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        if (radio2.isSelected()) {
+          switchBtn = 2;
         }
+      }
     });
 
     radio3.addChangeListener(new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-            if (radio3.isSelected()) {
-                switchBtn = 3;
-            }
+      @Override
+      public void stateChanged(ChangeEvent e) {
+        if (radio3.isSelected()) {
+          switchBtn = 3;
         }
+      }
     });
 
     Color labelColor = new Color(155, 155, 155);
@@ -1153,25 +1171,23 @@ public class GuiPrototype extends JFrame {
         }
 
         switch (switchBtn) {
-          case 0:
-            JOptionPane.showMessageDialog(
-            null,
-            "Elija un método de pago.");
-            break;
-          case 1:
-            switchStr = "Tarjeta";
-            confirmBuscar[3] = true;
-            break;
-          case 2:
-            switchStr = "Cheque";
-            confirmBuscar[3] = true;
-            break;
-          case 3:
-            switchStr = "Efectivo";
-            confirmBuscar[3] = true;
-            break;
+        case 0:
+          JOptionPane.showMessageDialog(null, "Elija un método de pago.");
+          break;
+        case 1:
+          switchStr = "Tarjeta";
+          confirmBuscar[3] = true;
+          break;
+        case 2:
+          switchStr = "Cheque";
+          confirmBuscar[3] = true;
+          break;
+        case 3:
+          switchStr = "Efectivo";
+          confirmBuscar[3] = true;
+          break;
         }
-            
+
         if (!confirmBuscar[2]) {
           try {
             cC = Integer.parseInt(str3);
@@ -1187,9 +1203,9 @@ public class GuiPrototype extends JFrame {
                 "Entrada no válida. Ingresa un número válido para el plazo de pago.");
           }
         }
-        
 
-        if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2] && confirmBuscar[3]) {
+        if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2] &&
+            confirmBuscar[3]) {
           buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
                  compradores, numCompradores, array.get(ho));
           datos(w, carroSeleccionado);
