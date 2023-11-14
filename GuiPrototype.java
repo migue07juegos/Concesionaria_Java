@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 import javax.swing.*;
@@ -155,8 +154,7 @@ public class GuiPrototype extends JFrame {
     return mostrarDatosStr;
   }
 
-  public static Vector<String>
-  mostrarCarrosVendidos(Vector<Carro> carrosVendidos, int numCarrosVendidos) {
+  public static Vector<String> mostrarCarrosVendidos(Vector<Carro> carrosVendidos, int numCarrosVendidos) {
     Vector<String> CarrosVendidosHastaElMomento = new Vector<>(10);
 
     for (int i = 0; i < numCarrosVendidos; i++) {
@@ -808,36 +806,36 @@ public class GuiPrototype extends JFrame {
     label.setFont(new Font("Arial", Font.PLAIN, 25));
 
     if (!recibo) {
-      informacion.setLayout(new BoxLayout(informacion, BoxLayout.X_AXIS));
+      informacion.setLayout(new BoxLayout(informacion, BoxLayout.Y_AXIS));
 
-      int numColumnas = 3;
+      /*int numColumnas = 3;
 
       ArrayList<JPanel> columnas = new ArrayList<>();
       for (int i = 0; i < numColumnas; i++) {
         JPanel columna = new JPanel();
         columna.setLayout(new BoxLayout(columna, BoxLayout.Y_AXIS));
         columnas.add(columna);
-      }
+      }*/
 
-      for (int h = 0; h < numCompradores; h++) {
-        JPanel columnaActual = columnas.get(h % numColumnas);
+      for (int j = 0; j < numCompradores; j++) {
+        //JPanel columnaActual = columnas.get(h % numColumnas);
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
 
         JLabel label2 = new JLabel("<html><font color='#9B9B9B'> " +
-                                   resStrArr.get(h).replace("\n", "<br>") +
+                                   resStrArr.get(j).replace("\n", "<br>") +
                                    "</font></html>");
         label2.setPreferredSize(new Dimension(250, 250));
         label2.setFont(new Font("Arial", Font.PLAIN, 20));
         panel.add(label2, BorderLayout.CENTER);
 
-        columnaActual.add(panel);
+        informacion.add(panel);
       }
 
-      for (JPanel columna : columnas) {
+      /*for (JPanel columna : columnas) {
         informacion.add(columna);
-      }
+      }*/
     }
 
     else {
@@ -847,6 +845,7 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void reproductor(JPanel panel){
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
     JButton button1 = new JButton("Salir");
     JButton button2 = new JButton("Pausar");
@@ -986,7 +985,6 @@ public class GuiPrototype extends JFrame {
     panel.add(uno);
     panel.add(dos);
   }
-
 
   public static void agregar_elemento(JPanel panel){
     
