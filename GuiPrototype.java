@@ -126,12 +126,9 @@ public class GuiPrototype extends JFrame {
   public static JTextField archivo_txt = new JTextField();
   public static JTextField nombre_txt = new JTextField();
   public static JTextField abrir_txt = new JTextField();
-<<<<<<< HEAD
   public static int switchBtn = 0;
   public static String switchStr = "";
-=======
   public static JTextField reprodutcor_txt = new JTextField();
->>>>>>> 46d41bf (Se agregaron botones)
   public static boolean confirm2 = true;
 
   public GuiPrototype() {}
@@ -658,11 +655,6 @@ public class GuiPrototype extends JFrame {
 
       panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
 
-      if (infoPanel.getComponentCount() == 0) {
-        Dimension emptyPanelSize = new Dimension(0, 0);
-        infoPanel.setPreferredSize(emptyPanelSize);
-        infoPanel.setMinimumSize(emptyPanelSize);
-      }
 
       panelPrincipal.add(inicioPanel);
       panelPrincipal.add(infoPanel);
@@ -732,13 +724,8 @@ public class GuiPrototype extends JFrame {
           BorderFactory.createMatteBorder(0, 0, 1, 1, new Color(0, 85, 119)));
 
       JLabel label =
-<<<<<<< HEAD
           new JLabel("<html><font color='#9B9B9B'> " +
                      moDaStr.get(h).replace("\n", "<br>").replace("\t", "&nbsp;") +
-=======
-          new JLabel("<html><font color='#9B9B9B'>  " +
-                     moDaStr[h].replace("\n", "<br>").replace("\t", "&nbsp;") +
->>>>>>> 46d41bf (Se agregaron botones)
                      "</font></html>");
       label.setPreferredSize(new Dimension(300, 300));
       label.setFont(new Font("Arial", Font.PLAIN, 25));
