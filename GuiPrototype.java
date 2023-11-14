@@ -126,8 +126,12 @@ public class GuiPrototype extends JFrame {
   public static JTextField archivo_txt = new JTextField();
   public static JTextField nombre_txt = new JTextField();
   public static JTextField abrir_txt = new JTextField();
+<<<<<<< HEAD
   public static int switchBtn = 0;
   public static String switchStr = "";
+=======
+  public static JTextField reprodutcor_txt = new JTextField();
+>>>>>>> 46d41bf (Se agregaron botones)
   public static boolean confirm2 = true;
 
   public GuiPrototype() {}
@@ -393,7 +397,7 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void button(JPanel informacion, boolean funcion) {
+  public static void button(JPanel informacion, int funcion) {
 
     JPanel panel = new JPanel(new BorderLayout());
     panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
@@ -431,7 +435,7 @@ public class GuiPrototype extends JFrame {
     informacion.add(panel);
   }
 
-  public static void pedir_recibo(JPanel informacion, boolean pregunta) {
+  public static void pedir_recibo(JPanel informacion, int pregunta) {
 
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
@@ -446,7 +450,7 @@ public class GuiPrototype extends JFrame {
     nombre_recibo.setForeground(labelColor);
     nombre_recibo.setFont(labelFont);
 
-    if (pregunta) {
+    if (pregunta == 1) {
       nombre_comprador.setForeground(labelColor);
       nombre_comprador.setFont(labelFont);
     }
@@ -460,7 +464,7 @@ public class GuiPrototype extends JFrame {
     labelsPanel.setLayout(new GridLayout(4, 1));
     labelsPanel.setBackground(Color.black);
     labelsPanel.add(nombre_recibo);
-    if (pregunta) {
+    if (pregunta == 1) {
       labelsPanel.add(nombre_comprador);
     }
     labelsPanel.add(check);
@@ -468,7 +472,7 @@ public class GuiPrototype extends JFrame {
     JPanel componentesPanel = new JPanel();
     componentesPanel.setLayout(new GridLayout(4, 1));
     componentesPanel.add(archivo_txt);
-    if (pregunta) {
+    if (pregunta == 1) {
       componentesPanel.add(nombre_txt);
     }
     componentesPanel.add(check);
@@ -476,7 +480,7 @@ public class GuiPrototype extends JFrame {
     archivo_txt.setForeground(labelColor);
     archivo_txt.setBackground(Color.black);
 
-    if (pregunta) {
+    if (pregunta == 1) {
       nombre_txt.setForeground(labelColor);
       nombre_txt.setBackground(Color.black);
     }
@@ -508,9 +512,9 @@ public class GuiPrototype extends JFrame {
       public void actionPerformed(ActionEvent e) {
 
         try {
-          if (pregunta) {
+          if (pregunta == 1) {
             recibo_personal(compradores, numCompradores, informacion, check);
-          } else if (!pregunta) {
+          } else if (pregunta == 2) {
             recibo(compradores, numCompradores, check);
           }
         } catch (IOException e1) {
@@ -728,8 +732,13 @@ public class GuiPrototype extends JFrame {
           BorderFactory.createMatteBorder(0, 0, 1, 1, new Color(0, 85, 119)));
 
       JLabel label =
+<<<<<<< HEAD
           new JLabel("<html><font color='#9B9B9B'> " +
                      moDaStr.get(h).replace("\n", "<br>").replace("\t", "&nbsp;") +
+=======
+          new JLabel("<html><font color='#9B9B9B'>  " +
+                     moDaStr[h].replace("\n", "<br>").replace("\t", "&nbsp;") +
+>>>>>>> 46d41bf (Se agregaron botones)
                      "</font></html>");
       label.setPreferredSize(new Dimension(300, 300));
       label.setFont(new Font("Arial", Font.PLAIN, 25));
@@ -789,11 +798,18 @@ public class GuiPrototype extends JFrame {
     case 5:
       resStr = mostrar_compradores(numCompradores).toString();
       labels(informacion, resStr, true, resStrArr);
-      button(informacion, true);
+      button(informacion, 1);
       break;
     case 6:
       labels(informacion, resStr, true, resStrArr);
-      button(informacion, false);
+      button(informacion, 2);
+      break;
+    case 7:
+      reproductor(informacion);
+      // button(informacion, 3);
+      break;
+    case 8:
+      agregar_elemento(informacion);
       break;
     }
   }
@@ -843,6 +859,220 @@ public class GuiPrototype extends JFrame {
     }
   }
 
+  public static void reproductor(JPanel panel){
+
+    JButton button1 = new JButton("Agregar");
+    JButton button2 = new JButton("Salir");
+    JButton button3 = new JButton("Pausar");
+    JButton button4 = new JButton("Siguiente");
+
+    JPanel uno = new JPanel();
+
+    button1.setAlignmentX(Component.CENTER_ALIGNMENT);
+    button1.setFocusPainted(false);
+    button1.setPreferredSize(new Dimension(300, 100));
+    button1.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button1.setHorizontalTextPosition(SwingConstants.RIGHT);
+    button1.getVerifyInputWhenFocusTarget();
+    button1.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        button1.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        button1.setBackground(null);
+      }
+    });
+
+    button1.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+        // pedir_recibo(informacion, funcion);
+      }
+    });
+    // button1.setLocation(3000, 3000);
+    uno.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
+    uno.setBorder(BorderFactory.createLineBorder(new Color(0,85,119)));
+    uno.add(button1, BorderLayout.WEST);
+
+
+    JPanel dos = new JPanel();
+
+    button2.setAlignmentX(Component.CENTER_ALIGNMENT);
+    button2.setFocusPainted(false);
+    button2.setPreferredSize(new Dimension(300, 100));
+    button2.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button2.setHorizontalTextPosition(SwingConstants.RIGHT);
+    button2.getVerifyInputWhenFocusTarget();
+    button2.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        button2.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        button2.setBackground(null);
+      }
+    });
+
+    button2.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+        // pedir_recibo(informacion, funcion);
+      }
+    });
+
+    dos.add(button2);
+
+    JPanel tres = new JPanel();
+
+    button3.setAlignmentX(Component.CENTER_ALIGNMENT);
+    button3.setFocusPainted(false);
+    button3.setPreferredSize(new Dimension(300, 100));
+    button3.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button3.setHorizontalTextPosition(SwingConstants.RIGHT);
+    button3.getVerifyInputWhenFocusTarget();
+    button3.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        button3.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        button3.setBackground(null);
+      }
+    });
+
+    button3.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+        // pedir_recibo(informacion, funcion);
+      }
+    });
+
+    tres.add(button3);
+
+    JPanel cuatro = new JPanel();
+
+    button4.setAlignmentX(Component.CENTER_ALIGNMENT);
+    button4.setFocusPainted(false);
+    button4.setPreferredSize(new Dimension(300, 100));
+    button4.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button4.setHorizontalTextPosition(SwingConstants.RIGHT);
+    button4.getVerifyInputWhenFocusTarget();
+    button4.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        button4.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        button4.setBackground(null);
+      }
+    });
+
+    button4.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+        // pedir_recibo(informacion, funcion);
+      }
+    });
+
+    cuatro.add(button4);
+
+    // panel2.setLayout(new BorderLayout());
+
+    panel.add(uno);
+    panel.add(button2);
+    panel.add(button3);
+    panel.add(button4);
+  }
+
+
+  public static void agregar_elemento(JPanel panel){
+    
+    JPanel panel2 = new JPanel();
+    JButton button = new JButton();
+    button.setAlignmentX(Component.CENTER_ALIGNMENT);
+    button.setFocusPainted(false);
+    button.setPreferredSize(new Dimension(300, 100));
+    button.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button.setHorizontalTextPosition(SwingConstants.RIGHT);
+    button.getVerifyInputWhenFocusTarget();
+    button.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        button.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        button.setBackground(null);
+      }
+    });
+
+    button.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+        // pedir_recibo(informacion, funcion);
+      }
+    });
+
+    JButton button2 = new JButton();
+    button2.setAlignmentX(Component.CENTER_ALIGNMENT);
+    button2.setFocusPainted(false);
+    button2.setPreferredSize(new Dimension(300, 100));
+    button2.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button2.setHorizontalTextPosition(SwingConstants.RIGHT);
+    button2.getVerifyInputWhenFocusTarget();
+    button2.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        button2.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        button2.setBackground(null);
+      }
+    });
+
+    button2.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+        // pedir_recibo(informacion, funcion);
+      }
+    });
+
+
+    panel2.add(button);
+    panel2.add(button2);
+
+    panel.add(panel2);
+  }
   public static void relojGui(JFrame frame, JPanel panelInicio,
                               JPanel infoPanel) {
 
@@ -963,6 +1193,9 @@ public class GuiPrototype extends JFrame {
                         infoPanel);
     agregarElementoMenu(panel, "Recibo personal", 5, panelInicio, infoPanel);
     agregarElementoMenu(panel, "Recibo General", 6, panelInicio, infoPanel);
+    agregarElementoMenu(panel, "Reproductor", 7, panelInicio, infoPanel);
+    agregarElementoMenu(panel, "Agregar producto", 8, panelInicio, infoPanel);
+
 
     panel.setBorder(
         BorderFactory.createMatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
