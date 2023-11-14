@@ -848,12 +848,13 @@ public class GuiPrototype extends JFrame {
 
   public static void reproductor(JPanel panel){
 
-    JButton button1 = new JButton("Agregar");
-    JButton button2 = new JButton("Salir");
-    JButton button3 = new JButton("Pausar");
-    JButton button4 = new JButton("Siguiente");
+    JButton button1 = new JButton("Salir");
+    JButton button2 = new JButton("Pausar");
+    JButton button3 = new JButton("Siguiente");
+    JButton button4 = new JButton("Agregar");
 
     JPanel uno = new JPanel();
+    JPanel dos = new JPanel();
 
     button1.setAlignmentX(Component.CENTER_ALIGNMENT);
     button1.setFocusPainted(false);
@@ -874,7 +875,6 @@ public class GuiPrototype extends JFrame {
         button1.setBackground(null);
       }
     });
-
     button1.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
@@ -882,13 +882,12 @@ public class GuiPrototype extends JFrame {
         // pedir_recibo(informacion, funcion);
       }
     });
-    // button1.setLocation(3000, 3000);
-    uno.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
-    uno.setBorder(BorderFactory.createLineBorder(new Color(0,85,119)));
-    uno.add(button1, BorderLayout.WEST);
+        
 
+    reprodutcor_txt.setForeground(new Color(155,155,155));
+    reprodutcor_txt.setBackground(Color.black);
+    reprodutcor_txt.setPreferredSize(new Dimension(600, 100));
 
-    JPanel dos = new JPanel();
 
     button2.setAlignmentX(Component.CENTER_ALIGNMENT);
     button2.setFocusPainted(false);
@@ -909,7 +908,6 @@ public class GuiPrototype extends JFrame {
         button2.setBackground(null);
       }
     });
-
     button2.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
@@ -918,9 +916,6 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    dos.add(button2);
-
-    JPanel tres = new JPanel();
 
     button3.setAlignmentX(Component.CENTER_ALIGNMENT);
     button3.setFocusPainted(false);
@@ -941,7 +936,6 @@ public class GuiPrototype extends JFrame {
         button3.setBackground(null);
       }
     });
-
     button3.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
@@ -950,9 +944,6 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    tres.add(button3);
-
-    JPanel cuatro = new JPanel();
 
     button4.setAlignmentX(Component.CENTER_ALIGNMENT);
     button4.setFocusPainted(false);
@@ -973,7 +964,6 @@ public class GuiPrototype extends JFrame {
         button4.setBackground(null);
       }
     });
-
     button4.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
@@ -982,14 +972,19 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    cuatro.add(button4);
 
-    // panel2.setLayout(new BorderLayout());
+    uno.add(button1);
+    uno.add(reprodutcor_txt);
+    uno.add(button4);
+    uno.setBorder(BorderFactory.createEmptyBorder(50, 12, 300, 40));
 
+    dos.add(button2);
+    dos.add(button3);
+    dos.setBorder(BorderFactory.createEmptyBorder(0, 0, 500, 25));
+    
+    
     panel.add(uno);
-    panel.add(button2);
-    panel.add(button3);
-    panel.add(button4);
+    panel.add(dos);
   }
 
 
