@@ -140,15 +140,15 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static String[] mostrarDatos() {
-    String[] mostrarDatosStr = new String[10];
+  public static Vector<String> mostrarDatos() {
+    Vector<String> mostrarDatosStr = new Vector<>(10);
     valoresAleatorios();
 
     for (int i = 0; i <= valores; i++) {
-      mostrarDatosStr[i] = (String.format(
+      mostrarDatosStr.add((String.format(
           "\t\tCarro no.%d:\n\t\tColor: %s\n\t\tMarca: %s\n\t\tModelo: %s\n\t\tPrecio: %d",
           array.get(i), color.get(i), marca.get(i), modelo.get(i),
-          monto.get(i)));
+          monto.get(i))));
     }
 
     return mostrarDatosStr;
@@ -159,8 +159,7 @@ public class GuiPrototype extends JFrame {
     Vector<String> CarrosVendidosHastaElMomento = new Vector<>(10);
 
     for (int i = 0; i < numCarrosVendidos; i++) {
-      CarrosVendidosHastaElMomento.set(
-          i,
+      CarrosVendidosHastaElMomento.add(
           String.format(
               "Venta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
               i + 1, nombreComprador.get(i),
@@ -168,7 +167,7 @@ public class GuiPrototype extends JFrame {
               carrosVendidos.get(i).getColor(),
               carrosVendidos.get(i).getMarca(),
               carrosVendidos.get(i).getModelo(),
-              carrosVendidos.get(i).getMonto()));
+              carrosVendidos.get(i).getMonto()).toString());
     }
 
     return CarrosVendidosHastaElMomento;
@@ -180,8 +179,7 @@ public class GuiPrototype extends JFrame {
     for (int i = 0; i < numCompradores; i++) {
 
       if (montoEnganche.get(i) == liquidacion.get(i)) {
-        datosCompradorF.set(
-            i, ((String.format("Comprador %d: %s", i + 1,
+        datosCompradorF.add( ((String.format("Comprador %d: %s", i + 1,
                                nombreComprador.get(i))) +
                 (String.format("\nEdad: %d", edad.get(i))) +
                 (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
@@ -191,8 +189,7 @@ public class GuiPrototype extends JFrame {
                                compradores.get(i).getMarca(),
                                compradores.get(i).getModelo()))));
       } else {
-        datosCompradorF.set(
-            i, ((String.format("Comprador %d: %s", i + 1,
+        datosCompradorF.add(((String.format("Comprador %d: %s", i + 1,
                                nombreComprador.get(i))) +
                 (String.format("\nEdad: %d", edad.get(i))) +
                 (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
@@ -212,15 +209,13 @@ public class GuiPrototype extends JFrame {
     for (int i = 0; i < numCompradores; i++) {
 
       if (montoEnganche.get(i) == liquidacion.get(i)) {
-        InfoDePagoF.set(
-            i,
+        InfoDePagoF.add(
             ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
               String.format("\nMétodo de pago: %s", metodoPago.get(i)) +
               String.format("\nSe realizará el pago completo: %.2f\n\n",
                             liquidacion.get(i)))));
       } else {
-        InfoDePagoF.set(
-            i,
+        InfoDePagoF.add(
             ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
               String.format("\nMétodo de pago: %s", metodoPago.get(i)) +
               String.format("\nMonto de Enganche: %.2f", montoEnganche.get(i)) +
@@ -268,14 +263,14 @@ public class GuiPrototype extends JFrame {
     carro.setModelo(modelo.get(inicio));
     carro.setMonto(monto.get(inicio));
 
-    carrosVendidos.set(numCarrosVendidos, new GuiPrototype().new Carro());
+    carrosVendidos.add(new GuiPrototype().new Carro());
     carrosVendidos.get(numCarrosVendidos)
         .setNumeroControl(carro.getNumeroControl());
     carrosVendidos.get(numCarrosVendidos).setColor(carro.getColor());
     carrosVendidos.get(numCarrosVendidos).setMarca(carro.getMarca());
     carrosVendidos.get(numCarrosVendidos).setModelo(carro.getModelo());
     carrosVendidos.get(numCarrosVendidos).setMonto(carro.getMonto());
-    compradores.set(numCompradores, new GuiPrototype().new Carro());
+    compradores.add(new GuiPrototype().new Carro());
     compradores.get(numCompradores).setMarca(carro.getMarca());
     compradores.get(numCompradores).setModelo(carro.getModelo());
   }
@@ -283,31 +278,31 @@ public class GuiPrototype extends JFrame {
   public static void datos(int i, Carro carro) {
     double a, b, c;
 
-    nombreComprador.set(i, nombreCompradorTXT.getText());
+    nombreComprador.add(nombreCompradorTXT.getText());
 
     String str = edadTXT.getText();
-    edad.set(i, Integer.parseInt(str));
+    edad.add(Integer.parseInt(str));
 
-    metodoPago.set(i, switchStr);
+    metodoPago.add(switchStr);
 
     String str2 = engancheTXT.getText();
     b = Double.parseDouble(str2);
 
     a = b / 100;
-    montoEnganche.set(i, a * carro.monto);
-    adeudo.set(i, carro.monto - montoEnganche.get(i));
-    liquidacion.set(i, (double)carro.monto);
+    montoEnganche.add(a * carro.monto);
+    adeudo.add(carro.monto - montoEnganche.get(i));
+    liquidacion.add((double)carro.monto);
 
     if (b > 19 && b < 81) {
       String str3 = plazoTXT.getText();
       try {
-        mesesAdeudo.set(i, Integer.parseInt(str3));
+        mesesAdeudo.add(Integer.parseInt(str3));
       } catch (Exception e) {
         System.out.println("Error");
       }
 
       c = mesesAdeudo.get(i) * 12;
-      pagoPorMes.set(i, adeudo.get(i) / c);
+      pagoPorMes.add(adeudo.get(i) / c);
 
       JOptionPane.showMessageDialog(
           null, String.format("Mensualidad: %.2f", pagoPorMes.get(i)));
@@ -723,7 +718,7 @@ public class GuiPrototype extends JFrame {
                           new ImageIcon("images/nissan.png"),
                           new ImageIcon("images/Mazda.png"),
                           new ImageIcon("images/Renault.png")};
-    String[] moDaStr = mostrarDatos();
+    Vector<String> moDaStr = mostrarDatos();
 
     for (int h = 0; h < 10; h++) {
 
@@ -734,7 +729,7 @@ public class GuiPrototype extends JFrame {
 
       JLabel label =
           new JLabel("<html><font color='#9B9B9B'> " +
-                     moDaStr[h].replace("\n", "<br>").replace("\t", "&nbsp;") +
+                     moDaStr.get(h).replace("\n", "<br>").replace("\t", "&nbsp;") +
                      "</font></html>");
       label.setPreferredSize(new Dimension(300, 300));
       label.setFont(new Font("Arial", Font.PLAIN, 25));
