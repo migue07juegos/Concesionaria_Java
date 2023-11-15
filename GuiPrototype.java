@@ -850,6 +850,7 @@ public class GuiPrototype extends JFrame {
     Vector<String> canciones = new Vector<>();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+    JButton btnAnterior = new JButton("Anterior");
     JButton btnSalir = new JButton("Salir");
     JButton btnPausa = new JButton("Pausar");
     JButton btnSig = new JButton("Siguiente");
@@ -946,6 +947,33 @@ public class GuiPrototype extends JFrame {
       }
     });
 
+    btnAnterior.setAlignmentX(Component.LEFT_ALIGNMENT);
+    btnAnterior.setFocusPainted(false);
+    btnAnterior.setPreferredSize(new Dimension(300, 100));
+    btnAnterior.setVerticalTextPosition(SwingConstants.BOTTOM);
+    btnAnterior.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnAnterior.getVerifyInputWhenFocusTarget();
+    btnAnterior.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        btnAnterior.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        btnAnterior.setBackground(null);
+      }
+    });
+    btnAnterior.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+        // pedir_recibo(informacion, funcion);
+      }
+    });
+
 
     btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
     btnAgregar.setFocusPainted(false);
@@ -986,6 +1014,7 @@ public class GuiPrototype extends JFrame {
     uno.add(btnAgregar);
     uno.setBorder(BorderFactory.createEmptyBorder(50, 12, 300, 40));
 
+    dos.add(btnAnterior);
     dos.add(btnPausa);
     dos.add(btnSig);
     dos.setBorder(BorderFactory.createEmptyBorder(0, 0, 500, 25));
