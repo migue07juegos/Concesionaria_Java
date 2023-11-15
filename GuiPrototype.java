@@ -130,6 +130,8 @@ public class GuiPrototype extends JFrame {
 
   public GuiPrototype() {}
 
+  private static Process procesoReproductor;
+
   public static void valoresAleatorios() {
     Random rand = new Random();
     for (int i = 0; i < 10; i++) {
@@ -864,16 +866,13 @@ public class GuiPrototype extends JFrame {
     btnSalir.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-
-        // pedir_recibo(informacion, funcion);
+          detenerReproductor();  // Llamada para detener el reproductor al presionar "Salir"
       }
     });
-        
 
     reproductorTxt.setForeground(new Color(155,155,155));
     reproductorTxt.setBackground(Color.black);
     reproductorTxt.setPreferredSize(new Dimension(600, 100));
-
 
     btnPausa.setAlignmentX(Component.CENTER_ALIGNMENT);
     btnPausa.setFocusPainted(false);
@@ -901,7 +900,6 @@ public class GuiPrototype extends JFrame {
         // pedir_recibo(informacion, funcion);
       }
     });
-
 
     btnSig.setAlignmentX(Component.CENTER_ALIGNMENT);
     btnSig.setFocusPainted(false);
@@ -957,7 +955,6 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-
     btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
     btnAgregar.setFocusPainted(false);
     btnAgregar.setPreferredSize(new Dimension(300, 100));
@@ -982,13 +979,15 @@ public class GuiPrototype extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
         String cancion = "";
         canciones.add(reproductorTxt.getText());
-        
+
         try {
           cancion = canciones.get(reproductor_i);
+          System.out.print(cancion);
           reproducirMP3(cancion);
         } catch (Exception e) {
           JOptionPane.showMessageDialog(null, "Error al reproducir" + cancion);
         }
+        //reproductor_i++;
       }
     });
 
@@ -1007,13 +1006,22 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void reproducirMP3(String cancion) {
-    ProcessBuilder processBuilder;
-    processBuilder = new ProcessBuilder("mpv", "--no-video", cancion);
-    try {
-        Process proceso = processBuilder.start();
-        proceso.waitFor();
-    } catch (Exception e) {
-        System.err.println("Error al reproducir musica");
+    Thread reproducirThread = new Thread(() -> {
+        ProcessBuilder processBuilder = new ProcessBuilder("mpv", "--no-video", cancion);
+        try {
+            procesoReproductor = processBuilder.start();
+            procesoReproductor.waitFor();
+        } catch (Exception e) {
+            System.err.println("Error al reproducir musica");
+        }
+    });
+
+    reproducirThread.start();
+  }
+
+  public static void detenerReproductor() {
+    if (procesoReproductor != null) {
+        procesoReproductor.destroy();  // Detener el proceso del reproductor
     }
   }
 
