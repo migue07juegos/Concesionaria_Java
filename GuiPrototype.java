@@ -44,8 +44,8 @@ public class GuiPrototype extends JFrame {
     public void setMonto(int monto) { this.monto = monto; }
   }
 
-  public static Vector<Integer> array = new Vector<>(10);
-  public static Vector<Integer> mesesAdeudo = new Vector<>(10);
+  public static Vector<Integer> array = new Vector<>();
+  public static Vector<Integer> mesesAdeudo = new Vector<>();
   public static int i, l, valores = 9, a = 0, inicio, nuevoValor, valorEliminar,
                           posicion;
   public static char eliminar;
@@ -99,19 +99,16 @@ public class GuiPrototype extends JFrame {
     monto.add(230100);
   }
 
-  public static Vector<String> nombreComprador = new Vector<>(10);
-  public static Vector<Integer> edad = new Vector<>(10);
-  public static Vector<String> metodoPago = new Vector<>(10);
-  public static Vector<Double> montoEnganche = new Vector<>(10);
-  public static Vector<Double> liquidacion = new Vector<>(10);
-  public static Vector<Double> adeudo = new Vector<>(10);
-  public static Vector<Double> pagoPorMes = new Vector<>(10);
-
+  public static Vector<String> nombreComprador = new Vector<>();
+  public static Vector<Integer> edad = new Vector<>();
+  public static Vector<String> metodoPago = new Vector<>();
+  public static Vector<Double> montoEnganche = new Vector<>();
+  public static Vector<Double> liquidacion = new Vector<>();
+  public static Vector<Double> adeudo = new Vector<>();
+  public static Vector<Double> pagoPorMes = new Vector<>();
   public static Carro carroSeleccionado = new GuiPrototype().new Carro();
-
-  public static Vector<Carro> carrosVendidos = new Vector<>(10);
-  public static Vector<Carro> compradores = new Vector<>(10);
-
+  public static Vector<Carro> carrosVendidos = new Vector<>();
+  public static Vector<Carro> compradores = new Vector<>();
   public static int numCompradores = 0;
   public static int numCarrosVendidos = 0;
   public static int w = 0;
@@ -142,7 +139,7 @@ public class GuiPrototype extends JFrame {
   }
 
   public static Vector<String> mostrarDatos() {
-    Vector<String> mostrarDatosStr = new Vector<>(10);
+    Vector<String> mostrarDatosStr = new Vector<>();
     valoresAleatorios();
 
     for (int i = 0; i <= valores; i++) {
@@ -156,7 +153,7 @@ public class GuiPrototype extends JFrame {
   }
 
   public static Vector<String> mostrarCarrosVendidos(Vector<Carro> carrosVendidos, int numCarrosVendidos) {
-    Vector<String> CarrosVendidosHastaElMomento = new Vector<>(10);
+    Vector<String> CarrosVendidosHastaElMomento = new Vector<>();
 
     for (int i = 0; i < numCarrosVendidos; i++) {
       CarrosVendidosHastaElMomento.add(
@@ -175,10 +172,10 @@ public class GuiPrototype extends JFrame {
 
   public static Vector<String> mostrarDatosComprador(Vector<Carro> compradores,
                                                      int numCompradores) {
-    Vector<String> datosCompradorF = new Vector<>(10);
+    Vector<String> datosCompradorF = new Vector<>();
     for (int i = 0; i < numCompradores; i++) {
 
-      if (montoEnganche.get(i) == liquidacion.get(i)) {
+      if (pagoPorMes.get(i) == 0 && mesesAdeudo.get(i) == 0) {
         datosCompradorF.add( ((String.format("Comprador %d: %s", i + 1,
                                nombreComprador.get(i))) +
                 (String.format("\nEdad: %d", edad.get(i))) +
@@ -205,10 +202,11 @@ public class GuiPrototype extends JFrame {
   }
 
   public static Vector<String> mostrarInfoPago(int numCompradores) {
-    Vector<String> InfoDePagoF = new Vector<>(10);
+    Vector<String> InfoDePagoF = new Vector<>();
     for (int i = 0; i < numCompradores; i++) {
 
-      if (montoEnganche.get(i) == liquidacion.get(i)) {
+      if (pagoPorMes.get(i) == 0 && mesesAdeudo.get(i) == 0) {
+        System.out.print("A");
         InfoDePagoF.add(
             ((String.format("Comprador %d: %s", i + 1, nombreComprador.get(i)) +
               String.format("\nMétodo de pago: %s", metodoPago.get(i)) +
@@ -289,17 +287,13 @@ public class GuiPrototype extends JFrame {
     b = Double.parseDouble(str2);
 
     a = b / 100;
-    montoEnganche.add(a * carro.monto);
-    adeudo.add(carro.monto - montoEnganche.get(i));
-    liquidacion.add((double)carro.monto);
+    montoEnganche.add( a * carro.monto);
+    adeudo.add( carro.monto - montoEnganche.get(i));
+    liquidacion.add( (double) carro.monto);
 
     if (b > 19 && b < 81) {
       String str3 = plazoTXT.getText();
-      try {
-        mesesAdeudo.add(Integer.parseInt(str3));
-      } catch (Exception e) {
-        System.out.println("Error");
-      }
+      mesesAdeudo.add(Integer.parseInt(str3));
 
       c = mesesAdeudo.get(i) * 12;
       pagoPorMes.add(adeudo.get(i) / c);
@@ -307,12 +301,15 @@ public class GuiPrototype extends JFrame {
       JOptionPane.showMessageDialog(
           null, String.format("Mensualidad: %.2f", pagoPorMes.get(i)));
     }
+    else {
+      pagoPorMes.add(0.0);
+      mesesAdeudo.add(0);
+    }
   }
 
   public static void recibo_personal(Vector<Carro> compradores,
                                      int num_compradores, JPanel informacion,
                                      JCheckBox check) throws IOException {
-
     try {
 
       LocalDateTime date = LocalDateTime.now();
@@ -766,7 +763,7 @@ public class GuiPrototype extends JFrame {
     informacion.repaint();
 
     String resStr = "";
-    Vector<String> resStrArr = new Vector<>(10);
+    Vector<String> resStrArr = new Vector<>();
 
     switch (indexButton) {
     case 2:
@@ -809,17 +806,7 @@ public class GuiPrototype extends JFrame {
     if (!recibo) {
       informacion.setLayout(new BoxLayout(informacion, BoxLayout.Y_AXIS));
 
-      /*int numColumnas = 3;
-
-      ArrayList<JPanel> columnas = new ArrayList<>();
-      for (int i = 0; i < numColumnas; i++) {
-        JPanel columna = new JPanel();
-        columna.setLayout(new BoxLayout(columna, BoxLayout.Y_AXIS));
-        columnas.add(columna);
-      }*/
-
       for (int j = 0; j < numCompradores; j++) {
-        //JPanel columnaActual = columnas.get(h % numColumnas);
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
@@ -833,10 +820,6 @@ public class GuiPrototype extends JFrame {
 
         informacion.add(panel);
       }
-
-      /*for (JPanel columna : columnas) {
-        informacion.add(columna);
-      }*/
     }
 
     else {
@@ -1019,7 +1002,6 @@ public class GuiPrototype extends JFrame {
     dos.add(btnSig);
     dos.setBorder(BorderFactory.createEmptyBorder(0, 0, 500, 25));
     
-    
     panel.add(uno);
     panel.add(dos);
   }
@@ -1095,7 +1077,6 @@ public class GuiPrototype extends JFrame {
         // pedir_recibo(informacion, funcion);
       }
     });
-
 
     panel2.add(button);
     panel2.add(btnPausa);
