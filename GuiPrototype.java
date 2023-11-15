@@ -127,8 +127,9 @@ public class GuiPrototype extends JFrame {
   public static JTextField abrir_txt = new JTextField();
   public static int switchBtn = 0;
   public static String switchStr = "";
-  public static JTextField reprodutcor_txt = new JTextField();
+  public static JTextField reproductorTxt = new JTextField();
   public static boolean confirm2 = true;
+  public static int reproductor_i = 0;
 
   public GuiPrototype() {}
 
@@ -845,36 +846,38 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void reproductor(JPanel panel){
+
+    Vector<String> canciones = new Vector<>();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-    JButton button1 = new JButton("Salir");
-    JButton button2 = new JButton("Pausar");
-    JButton button3 = new JButton("Siguiente");
-    JButton button4 = new JButton("Agregar");
+    JButton btnSalir = new JButton("Salir");
+    JButton btnPausa = new JButton("Pausar");
+    JButton btnSig = new JButton("Siguiente");
+    JButton btnAgregar = new JButton("Agregar");
 
     JPanel uno = new JPanel();
     JPanel dos = new JPanel();
 
-    button1.setAlignmentX(Component.CENTER_ALIGNMENT);
-    button1.setFocusPainted(false);
-    button1.setPreferredSize(new Dimension(300, 100));
-    button1.setVerticalTextPosition(SwingConstants.BOTTOM);
-    button1.setHorizontalTextPosition(SwingConstants.RIGHT);
-    button1.getVerifyInputWhenFocusTarget();
-    button1.addMouseListener(new MouseAdapter() {
+    btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
+    btnSalir.setFocusPainted(false);
+    btnSalir.setPreferredSize(new Dimension(300, 100));
+    btnSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
+    btnSalir.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnSalir.getVerifyInputWhenFocusTarget();
+    btnSalir.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseEntered(MouseEvent e) {
 
-        button1.setBackground(Color.DARK_GRAY);
+        btnSalir.setBackground(Color.DARK_GRAY);
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
 
-        button1.setBackground(null);
+        btnSalir.setBackground(null);
       }
     });
-    button1.addActionListener(new ActionListener() {
+    btnSalir.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
 
@@ -883,31 +886,31 @@ public class GuiPrototype extends JFrame {
     });
         
 
-    reprodutcor_txt.setForeground(new Color(155,155,155));
-    reprodutcor_txt.setBackground(Color.black);
-    reprodutcor_txt.setPreferredSize(new Dimension(600, 100));
+    reproductorTxt.setForeground(new Color(155,155,155));
+    reproductorTxt.setBackground(Color.black);
+    reproductorTxt.setPreferredSize(new Dimension(600, 100));
 
 
-    button2.setAlignmentX(Component.CENTER_ALIGNMENT);
-    button2.setFocusPainted(false);
-    button2.setPreferredSize(new Dimension(300, 100));
-    button2.setVerticalTextPosition(SwingConstants.BOTTOM);
-    button2.setHorizontalTextPosition(SwingConstants.RIGHT);
-    button2.getVerifyInputWhenFocusTarget();
-    button2.addMouseListener(new MouseAdapter() {
+    btnPausa.setAlignmentX(Component.CENTER_ALIGNMENT);
+    btnPausa.setFocusPainted(false);
+    btnPausa.setPreferredSize(new Dimension(300, 100));
+    btnPausa.setVerticalTextPosition(SwingConstants.BOTTOM);
+    btnPausa.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnPausa.getVerifyInputWhenFocusTarget();
+    btnPausa.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseEntered(MouseEvent e) {
 
-        button2.setBackground(Color.DARK_GRAY);
+        btnPausa.setBackground(Color.DARK_GRAY);
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
 
-        button2.setBackground(null);
+        btnPausa.setBackground(null);
       }
     });
-    button2.addActionListener(new ActionListener() {
+    btnPausa.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
 
@@ -916,26 +919,26 @@ public class GuiPrototype extends JFrame {
     });
 
 
-    button3.setAlignmentX(Component.CENTER_ALIGNMENT);
-    button3.setFocusPainted(false);
-    button3.setPreferredSize(new Dimension(300, 100));
-    button3.setVerticalTextPosition(SwingConstants.BOTTOM);
-    button3.setHorizontalTextPosition(SwingConstants.RIGHT);
-    button3.getVerifyInputWhenFocusTarget();
-    button3.addMouseListener(new MouseAdapter() {
+    btnSig.setAlignmentX(Component.CENTER_ALIGNMENT);
+    btnSig.setFocusPainted(false);
+    btnSig.setPreferredSize(new Dimension(300, 100));
+    btnSig.setVerticalTextPosition(SwingConstants.BOTTOM);
+    btnSig.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnSig.getVerifyInputWhenFocusTarget();
+    btnSig.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseEntered(MouseEvent e) {
 
-        button3.setBackground(Color.DARK_GRAY);
+        btnSig.setBackground(Color.DARK_GRAY);
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
 
-        button3.setBackground(null);
+        btnSig.setBackground(null);
       }
     });
-    button3.addActionListener(new ActionListener() {
+    btnSig.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
 
@@ -944,46 +947,63 @@ public class GuiPrototype extends JFrame {
     });
 
 
-    button4.setAlignmentX(Component.CENTER_ALIGNMENT);
-    button4.setFocusPainted(false);
-    button4.setPreferredSize(new Dimension(300, 100));
-    button4.setVerticalTextPosition(SwingConstants.BOTTOM);
-    button4.setHorizontalTextPosition(SwingConstants.RIGHT);
-    button4.getVerifyInputWhenFocusTarget();
-    button4.addMouseListener(new MouseAdapter() {
+    btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
+    btnAgregar.setFocusPainted(false);
+    btnAgregar.setPreferredSize(new Dimension(300, 100));
+    btnAgregar.setVerticalTextPosition(SwingConstants.BOTTOM);
+    btnAgregar.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnAgregar.getVerifyInputWhenFocusTarget();
+    btnAgregar.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseEntered(MouseEvent e) {
 
-        button4.setBackground(Color.DARK_GRAY);
+        btnAgregar.setBackground(Color.DARK_GRAY);
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
 
-        button4.setBackground(null);
+        btnAgregar.setBackground(null);
       }
     });
-    button4.addActionListener(new ActionListener() {
+    btnAgregar.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-
-        // pedir_recibo(informacion, funcion);
+        String cancion = "";
+        canciones.add(reproductorTxt.getText());
+        
+        try {
+          cancion = canciones.get(reproductor_i);
+          reproducirMP3(cancion);
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(null, "Error al reproducir" + cancion);
+        }
       }
     });
 
-
-    uno.add(button1);
-    uno.add(reprodutcor_txt);
-    uno.add(button4);
+    uno.add(btnSalir);
+    uno.add(reproductorTxt);
+    uno.add(btnAgregar);
     uno.setBorder(BorderFactory.createEmptyBorder(50, 12, 300, 40));
 
-    dos.add(button2);
-    dos.add(button3);
+    dos.add(btnPausa);
+    dos.add(btnSig);
     dos.setBorder(BorderFactory.createEmptyBorder(0, 0, 500, 25));
     
     
     panel.add(uno);
     panel.add(dos);
+  }
+
+  public static void reproducirMP3(String cancion) {
+    ProcessBuilder processBuilder;
+    processBuilder = new ProcessBuilder("mpv", "--no-video", cancion);
+    try {
+        Process proceso = processBuilder.start();
+        proceso.waitFor();
+    } catch (Exception e) {
+        System.err.println("Error al reproducir musica");
+    }
   }
 
   public static void agregar_elemento(JPanel panel){
@@ -1018,28 +1038,28 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    JButton button2 = new JButton();
-    button2.setAlignmentX(Component.CENTER_ALIGNMENT);
-    button2.setFocusPainted(false);
-    button2.setPreferredSize(new Dimension(300, 100));
-    button2.setVerticalTextPosition(SwingConstants.BOTTOM);
-    button2.setHorizontalTextPosition(SwingConstants.RIGHT);
-    button2.getVerifyInputWhenFocusTarget();
-    button2.addMouseListener(new MouseAdapter() {
+    JButton btnPausa = new JButton();
+    btnPausa.setAlignmentX(Component.CENTER_ALIGNMENT);
+    btnPausa.setFocusPainted(false);
+    btnPausa.setPreferredSize(new Dimension(300, 100));
+    btnPausa.setVerticalTextPosition(SwingConstants.BOTTOM);
+    btnPausa.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnPausa.getVerifyInputWhenFocusTarget();
+    btnPausa.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseEntered(MouseEvent e) {
 
-        button2.setBackground(Color.DARK_GRAY);
+        btnPausa.setBackground(Color.DARK_GRAY);
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
 
-        button2.setBackground(null);
+        btnPausa.setBackground(null);
       }
     });
 
-    button2.addActionListener(new ActionListener() {
+    btnPausa.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
 
@@ -1049,7 +1069,7 @@ public class GuiPrototype extends JFrame {
 
 
     panel2.add(button);
-    panel2.add(button2);
+    panel2.add(btnPausa);
 
     panel.add(panel2);
   }
