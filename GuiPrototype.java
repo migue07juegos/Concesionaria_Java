@@ -140,6 +140,8 @@ public class GuiPrototype extends JFrame {
   public static JTextField reproductorTxt = new JTextField();
   public static boolean confirm2 = true;
   public static int reproductor_i = 0;
+  static Vector<String> canciones = new Vector<>();
+  public static Reproductor reproductor1 = new Reproductor();
 
   public GuiPrototype() {}
 
@@ -842,7 +844,6 @@ public class GuiPrototype extends JFrame {
 
   public static void reproductor(JPanel panel){
 
-    Vector<String> canciones = new Vector<>();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
     JButton btnAnterior = new JButton("Anterior");
@@ -850,6 +851,7 @@ public class GuiPrototype extends JFrame {
     JButton btnPausa = new JButton("Pausar");
     JButton btnSig = new JButton("Siguiente");
     JButton btnAgregar = new JButton("Agregar");
+    JButton btnReproducir = new JButton("Reproducir");
 
     JPanel uno = new JPanel();
     JPanel dos = new JPanel();
@@ -933,7 +935,7 @@ public class GuiPrototype extends JFrame {
     btnSig.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-
+        reproductor_i ++;
         // pedir_recibo(informacion, funcion);
       }
     });
@@ -965,6 +967,36 @@ public class GuiPrototype extends JFrame {
       }
     });
 
+<<<<<<< HEAD
+=======
+    btnReproducir.setAlignmentX(Component.LEFT_ALIGNMENT);
+    btnReproducir.setFocusPainted(false);
+    btnReproducir.setPreferredSize(new Dimension(300, 100));
+    btnReproducir.setVerticalTextPosition(SwingConstants.BOTTOM);
+    btnReproducir.setHorizontalTextPosition(SwingConstants.RIGHT);
+    btnReproducir.getVerifyInputWhenFocusTarget();
+    btnReproducir.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        btnReproducir.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        btnReproducir.setBackground(null);
+      }
+    });
+    btnReproducir.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent arg0) {
+
+        reproductor1.start();
+      }
+    });
+
+>>>>>>> e8f784a (se pueden agregar varias canciones, pero crashea si la siguiente cancion no esta disponible y le das a reproducir)
     btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
     btnAgregar.setFocusPainted(false);
     btnAgregar.setPreferredSize(new Dimension(300, 100));
@@ -989,6 +1021,7 @@ public class GuiPrototype extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
         String cancion = "";
         canciones.add(reproductorTxt.getText());
+<<<<<<< HEAD
 
         try {
           cancion = canciones.get(reproductor_i);
@@ -998,6 +1031,15 @@ public class GuiPrototype extends JFrame {
           JOptionPane.showMessageDialog(null, "Error al reproducir" + cancion);
         }
         //reproductor_i++;
+=======
+        
+        // try {
+        //   cancion = canciones.get(reproductor_i);
+        //   reproductor.start();
+        // } catch (Exception e) {
+        //   JOptionPane.showMessageDialog(null, "Error al reproducir" + cancion);
+        // }
+>>>>>>> e8f784a (se pueden agregar varias canciones, pero crashea si la siguiente cancion no esta disponible y le das a reproducir)
       }
     });
 
@@ -1007,6 +1049,7 @@ public class GuiPrototype extends JFrame {
     uno.setBorder(BorderFactory.createEmptyBorder(50, 12, 300, 40));
 
     dos.add(btnAnterior);
+    dos.add(btnReproducir);
     dos.add(btnPausa);
     dos.add(btnSig);
     dos.setBorder(BorderFactory.createEmptyBorder(0, 0, 500, 25));
@@ -1015,6 +1058,7 @@ public class GuiPrototype extends JFrame {
     panel.add(dos);
   }
 
+<<<<<<< HEAD
   public static void reproducirMP3(String cancion) {
     Thread reproducirThread = new Thread(() -> {
         ProcessBuilder processBuilder = new ProcessBuilder("mpv", "--no-video", cancion);
@@ -1032,6 +1076,21 @@ public class GuiPrototype extends JFrame {
   public static void detenerReproductor() {
     if (procesoReproductor != null) {
         procesoReproductor.destroy();  // Detener el proceso del reproductor
+=======
+  static class Reproductor extends Thread {
+    public void run() {
+      do  {
+        ProcessBuilder processBuilder;
+        processBuilder = new ProcessBuilder("mpv", "--no-video", canciones.get(reproductor_i));
+        try {
+            Process proceso = processBuilder.start();
+            //proceso.waitFor();
+            reproductor_i ++;
+        } catch (Exception e) {
+            System.err.println("Error al reproducir musica");
+        }
+      } while (!canciones.get(reproductor_i).isEmpty());
+>>>>>>> e8f784a (se pueden agregar varias canciones, pero crashea si la siguiente cancion no esta disponible y le das a reproducir)
     }
   }
 
