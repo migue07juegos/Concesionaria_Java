@@ -694,6 +694,13 @@ public class GuiPrototype extends JFrame {
       Realizar_venta(inicioPanel, scrollPane);
 
       add(scrollPane, BorderLayout.CENTER);
+      
+      addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+          detenerReproductor();
+        }
+      });
     }
   }
 
