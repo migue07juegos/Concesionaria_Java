@@ -128,6 +128,11 @@ public class GuiPrototype extends JFrame {
   public JButton toggleButton;
   public static boolean menuExpandido = false;
   public JPanel menuPanel;
+  public static JTextField marcaTXT = new JTextField();
+  public static JTextField colorTXT = new JTextField();
+  public static JTextField modeloTXT = new JTextField();
+  public static JTextField montoTXT = new JTextField();
+  public static JTextField imgTXT = new JTextField();
   public static JTextField nombreCompradorTXT = new JTextField();
   public static JTextField edadTXT = new JTextField();
   public static JTextField engancheTXT = new JTextField();
@@ -140,6 +145,7 @@ public class GuiPrototype extends JFrame {
   public static JTextField reproductorTxt = new JTextField();
   public static boolean confirm2 = true;
   public static int reproductor_i = 0;
+  public static int oX = 10;
   static Vector<String> canciones = new Vector<>();
 
   public GuiPrototype() {}
@@ -705,7 +711,7 @@ public class GuiPrototype extends JFrame {
 
       SwingUtilities.invokeLater(
           () -> { relojGui(this, inicioPanel, infoPanel); });
-      Realizar_venta(inicioPanel);
+      Realizar_venta(inicioPanel,0);
 
       add(scrollPane, BorderLayout.CENTER);
 
@@ -719,13 +725,13 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void Realizar_venta(JPanel contentPanel) {
+  public static void Realizar_venta(JPanel contentPanel, int o) {
 
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
     Vector<String> moDaStr = mostrarDatos();
 
-    for (int h = 0; h < modelo.size(); h++) {
+    for (int h = o; h < modelo.size(); h++) {
 
       JPanel panel = new JPanel(new BorderLayout());
       panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
@@ -1078,14 +1084,7 @@ public class GuiPrototype extends JFrame {
     button.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-
-        color.add("");
-        marca.add("");
-        modelo.add("");
-        monto.add(25403);
-        images.add(new ImageIcon("images/Audi.png"));
-
-        Realizar_venta(iniciox);
+        pedirCarro(iniciox);
       }
     });
 
@@ -1123,6 +1122,112 @@ public class GuiPrototype extends JFrame {
 
     panel.add(panel2);
   }
+
+  public static void pedirCarro(JPanel iniciox){
+    JFrame frame = new JFrame();
+    frame.setLayout(new GridLayout(1, 2));
+
+    JLabel marcaLabel = new JLabel("Marca del carro:");
+    JLabel colorLabel = new JLabel("Color del carro:");
+    JLabel modeloLabel = new JLabel("Modelo del carro:");
+    JLabel montoLabel = new JLabel("Monto del carro: ");
+    JLabel rutaImgLabel = new JLabel("Ruta de la imagen del carro:");
+
+    Color labelColor = new Color(155, 155, 155);
+    Font labelFont = new Font("Arial", Font.PLAIN, 16);
+
+    marcaLabel.setForeground(labelColor);
+    marcaLabel.setFont(labelFont);
+    colorLabel.setForeground(labelColor);
+    colorLabel.setFont(labelFont);
+    modeloLabel.setForeground(labelColor);
+    modeloLabel.setFont(labelFont);
+    montoLabel.setForeground(labelColor);
+    montoLabel.setFont(labelFont);
+    rutaImgLabel.setForeground(labelColor);
+    rutaImgLabel.setFont(labelFont);
+
+    JPanel labelsPanel = new JPanel();
+    labelsPanel.setLayout(new GridLayout(7, 1));
+    labelsPanel.setBackground(Color.black);
+    labelsPanel.add(marcaLabel);
+    labelsPanel.add(colorLabel);
+    labelsPanel.add(modeloLabel);
+    labelsPanel.add(montoLabel);
+    labelsPanel.add(rutaImgLabel);
+
+    JPanel componentesPanel = new JPanel();
+    componentesPanel.setLayout(new GridLayout(7, 1));
+    componentesPanel.add(marcaTXT);
+    componentesPanel.add(colorTXT);
+    componentesPanel.add(modeloTXT);
+    componentesPanel.add(montoTXT);
+    componentesPanel.add(imgTXT);
+
+    marcaTXT.setForeground(labelColor);
+    marcaTXT.setBackground(Color.black);
+    colorTXT.setForeground(labelColor);
+    colorTXT.setBackground(Color.black);
+    modeloTXT.setForeground(labelColor);
+    modeloTXT.setBackground(Color.black);
+    montoTXT.setForeground(labelColor);
+    montoTXT.setBackground(Color.black);
+    imgTXT.setForeground(labelColor);
+    imgTXT.setBackground(Color.black);
+
+    frame.add(labelsPanel);
+    frame.add(componentesPanel);
+
+    JButton aceptarButton = new JButton("Aceptar");
+
+    aceptarButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String marcax = marcaTXT.getText();
+        String colorx = colorTXT.getText();
+        String modelox = modeloTXT.getText();
+        String montox = montoTXT.getText();
+        String imagesx = imgTXT.getText();
+        boolean itegerCorrect = false;
+
+        try {
+          Integer.parseInt(montox);
+          itegerCorrect = true;
+        } catch (Exception p) {
+          JOptionPane.showMessageDialog(null, "Imgresa un número sin decimal");
+        }
+
+        if (marcax != null && colorx != null && modelox != null && montox != null && imagesx != null && itegerCorrect) {
+          color.add(marcax);
+          marca.add(colorx);
+          modelo.add(modelox);
+          monto.add(Integer.parseInt(montox));
+          images.add(new ImageIcon(imagesx));
+          Realizar_venta(iniciox, oX);
+          oX++;
+          System.out.println(oX);
+          marcaTXT.setText("");
+          colorTXT.setText("");
+          modeloTXT.setText("");
+          montoTXT.setText("");
+          imgTXT.setText("");
+          frame.dispose();
+          return;
+        }
+      }
+    });
+
+    aceptarButton.setBorder(null);
+    componentesPanel.add(new Label(""));
+    componentesPanel.add(aceptarButton);
+
+    frame.setVisible(true);
+    frame.setResizable(false);
+    frame.setSize(new Dimension(450, 320));
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    return;
+  }
+
   public static void relojGui(JFrame frame, JPanel panelInicio,
                               JPanel infoPanel) {
 
