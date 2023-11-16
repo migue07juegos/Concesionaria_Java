@@ -46,13 +46,15 @@ public class GuiPrototype extends JFrame {
 
   public static Vector<Integer> array = new Vector<>();
   public static Vector<Integer> mesesAdeudo = new Vector<>();
-  public static int i, l, valores = 9, a = 0, inicio, nuevoValor, valorEliminar,
+  public static int i, l, a = 0, inicio, nuevoValor, valorEliminar,
                           posicion;
   public static char eliminar;
   public static Vector<String> color = new Vector<>();
   public static Vector<String> marca = new Vector<>();
   public static Vector<String> modelo = new Vector<>();
   public static Vector<Integer> monto = new Vector<>();
+  public static Vector<ImageIcon> images = new Vector<>(); 
+    
   static {
     color.add("Blanco");
     color.add("Azul");
@@ -97,6 +99,17 @@ public class GuiPrototype extends JFrame {
     monto.add(737900);
     monto.add(388900);
     monto.add(230100);
+
+    images.add(new ImageIcon("images/Audi.png"));
+    images.add(new ImageIcon("images/bmw.png"));
+    images.add(new ImageIcon("images/Mercedes.png"));
+    images.add(new ImageIcon("images/Mclaren.png"));
+    images.add(new ImageIcon("images/Lamborghini.png"));
+    images.add(new ImageIcon("images/Toyota.png"));
+    images.add(new ImageIcon("images/Chevrolet.png"));
+    images.add(new ImageIcon("images/nissan.png"));
+    images.add(new ImageIcon("images/Mazda.png"));
+    images.add(new ImageIcon("images/Renault.png"));
   }
 
   public static Vector<String> nombreComprador = new Vector<>();
@@ -134,7 +147,7 @@ public class GuiPrototype extends JFrame {
 
   public static void valoresAleatorios() {
     Random rand = new Random();
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < marca.size(); i++) {
       array.add(rand.nextInt(9000) + 1000);
       System.err.println(array.get(i));
     }
@@ -144,7 +157,7 @@ public class GuiPrototype extends JFrame {
     Vector<String> mostrarDatosStr = new Vector<>();
     valoresAleatorios();
 
-    for (int i = 0; i <= valores; i++) {
+    for (int i = 0; i < marca.size(); i++) {
       mostrarDatosStr.add((String.format(
           "\t\tCarro no.%d:\n\t\tColor: %s\n\t\tMarca: %s\n\t\tModelo: %s\n\t\tPrecio: %d",
           array.get(i), color.get(i), marca.get(i), modelo.get(i),
@@ -237,7 +250,7 @@ public class GuiPrototype extends JFrame {
 
       valorEliminar = numBtn;
 
-      for (int i = 0; i <= valores; i++) {
+      for (int i = 0; i < marca.size(); i++) {
         if (array.get(i) == valorEliminar) {
           truE = 1;
           a = 1;
@@ -691,37 +704,27 @@ public class GuiPrototype extends JFrame {
 
       SwingUtilities.invokeLater(
           () -> { relojGui(this, inicioPanel, infoPanel); });
-      Realizar_venta(inicioPanel, scrollPane);
+      Realizar_venta(inicioPanel);
 
       add(scrollPane, BorderLayout.CENTER);
-      
+
       addWindowListener(new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent e) {
           detenerReproductor();
+          System.exit(0);
         }
       });
     }
   }
 
-  public static void Realizar_venta(JPanel contentPanel,
-                                    JScrollPane scrollPane) {
+  public static void Realizar_venta(JPanel contentPanel) {
 
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-    ImageIcon images[] = {new ImageIcon("images/Audi.png"),
-                          new ImageIcon("images/bmw.png"),
-                          new ImageIcon("images/Mercedes.png"),
-                          new ImageIcon("images/Mclaren.png"),
-                          new ImageIcon("images/Lamborghini.png"),
-                          new ImageIcon("images/Toyota.png"),
-                          new ImageIcon("images/Chevrolet.png"),
-                          new ImageIcon("images/nissan.png"),
-                          new ImageIcon("images/Mazda.png"),
-                          new ImageIcon("images/Renault.png")};
     Vector<String> moDaStr = mostrarDatos();
 
-    for (int h = 0; h < 10; h++) {
+    for (int h = 0; h < modelo.size(); h++) {
 
       JPanel panel = new JPanel(new BorderLayout());
       panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
@@ -736,7 +739,7 @@ public class GuiPrototype extends JFrame {
       label.setFont(new Font("Arial", Font.PLAIN, 25));
       panel.add(label, BorderLayout.CENTER);
 
-      JButton button = new JButton(images[h]);
+      JButton button = new JButton(images.get(h));
 
       button.setPreferredSize(new Dimension(300, 300));
       button.addActionListener(new BotonListener(button, label, h, panel));
@@ -765,7 +768,7 @@ public class GuiPrototype extends JFrame {
   }
 
   public static void
-  informacion_compradores(boolean ventana, JPanel informacion, int indexButton)
+  informacion_compradores(boolean ventana, JPanel informacion, int indexButton, JPanel iniciox)
       throws IOException {
     informacion.removeAll();
     informacion.revalidate();
@@ -801,7 +804,7 @@ public class GuiPrototype extends JFrame {
       // button(informacion, 3);
       break;
     case 8:
-      agregar_elemento(informacion);
+      agregar_elemento(informacion, iniciox);
       break;
     }
   }
@@ -1032,10 +1035,10 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void agregar_elemento(JPanel panel){
+  public static void agregar_elemento(JPanel panel, JPanel iniciox){
     
     JPanel panel2 = new JPanel();
-    JButton button = new JButton();
+    JButton button = new JButton("1");
     button.setAlignmentX(Component.CENTER_ALIGNMENT);
     button.setFocusPainted(false);
     button.setPreferredSize(new Dimension(300, 100));
@@ -1060,32 +1063,38 @@ public class GuiPrototype extends JFrame {
       @Override
       public void actionPerformed(ActionEvent arg0) {
 
-        // pedir_recibo(informacion, funcion);
+        color.add("");
+        marca.add("");
+        modelo.add("");
+        monto.add(25403);
+        images.add(new ImageIcon("images/Audi.png"));
+
+        Realizar_venta(iniciox);
       }
     });
 
-    JButton btnPausa = new JButton();
-    btnPausa.setAlignmentX(Component.CENTER_ALIGNMENT);
-    btnPausa.setFocusPainted(false);
-    btnPausa.setPreferredSize(new Dimension(300, 100));
-    btnPausa.setVerticalTextPosition(SwingConstants.BOTTOM);
-    btnPausa.setHorizontalTextPosition(SwingConstants.RIGHT);
-    btnPausa.getVerifyInputWhenFocusTarget();
-    btnPausa.addMouseListener(new MouseAdapter() {
+    JButton button2 = new JButton("2");
+    button2.setAlignmentX(Component.CENTER_ALIGNMENT);
+    button2.setFocusPainted(false);
+    button2.setPreferredSize(new Dimension(300, 100));
+    button2.setVerticalTextPosition(SwingConstants.BOTTOM);
+    button2.setHorizontalTextPosition(SwingConstants.RIGHT);
+    button2.getVerifyInputWhenFocusTarget();
+    button2.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseEntered(MouseEvent e) {
 
-        btnPausa.setBackground(Color.DARK_GRAY);
+        button2.setBackground(Color.DARK_GRAY);
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
 
-        btnPausa.setBackground(null);
+        button2.setBackground(null);
       }
     });
 
-    btnPausa.addActionListener(new ActionListener() {
+    button2.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
 
@@ -1094,7 +1103,7 @@ public class GuiPrototype extends JFrame {
     });
 
     panel2.add(button);
-    panel2.add(btnPausa);
+    panel2.add(button2);
 
     panel.add(panel2);
   }
@@ -1261,7 +1270,7 @@ public class GuiPrototype extends JFrame {
       } else {
         panelInicio.setVisible(false);
         try {
-          informacion_compradores(menuExpandido, infoPanel, indexButton);
+          informacion_compradores(menuExpandido, infoPanel, indexButton, panelInicio);
         } catch (IOException e1) {
           e1.printStackTrace();
         }
