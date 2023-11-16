@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -850,7 +851,6 @@ public class GuiPrototype extends JFrame {
     JButton btnPausa = new JButton("Pausar");
     JButton btnSig = new JButton("Siguiente");
     JButton btnAgregar = new JButton("Agregar");
-    JButton btnReproducir = new JButton("Reproducir");
 
     JPanel uno = new JPanel();
     JPanel dos = new JPanel();
@@ -907,7 +907,7 @@ public class GuiPrototype extends JFrame {
     btnPausa.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-
+        
         // pedir_recibo(informacion, funcion);
       }
     });
@@ -934,7 +934,9 @@ public class GuiPrototype extends JFrame {
     btnSig.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-        // pedir_recibo(informacion, funcion);
+        if (procesoReproductor != null && reproductor_i <= canciones.size() - 2) {
+          procesoReproductor.destroy(); 
+        }
       }
     });
 
@@ -960,35 +962,11 @@ public class GuiPrototype extends JFrame {
     btnAnterior.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-
-        // pedir_recibo(informacion, funcion);
-      }
-    });
-
-    btnReproducir.setAlignmentX(Component.LEFT_ALIGNMENT);
-    btnReproducir.setFocusPainted(false);
-    btnReproducir.setPreferredSize(new Dimension(300, 100));
-    btnReproducir.setVerticalTextPosition(SwingConstants.BOTTOM);
-    btnReproducir.setHorizontalTextPosition(SwingConstants.RIGHT);
-    btnReproducir.getVerifyInputWhenFocusTarget();
-    btnReproducir.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseEntered(MouseEvent e) {
-
-        btnReproducir.setBackground(Color.DARK_GRAY);
-      }
-
-      @Override
-      public void mouseExited(MouseEvent e) {
-
-        btnReproducir.setBackground(null);
-      }
-    });
-    btnReproducir.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        Reproductor reproductor1 = new Reproductor();
-        reproductor1.start();
+        if (procesoReproductor != null && reproductor_i >= 1) {
+          reproductor_i --;
+          reproductor_i --;
+          procesoReproductor.destroy(); 
+        }
       }
     });
 
@@ -1016,6 +994,10 @@ public class GuiPrototype extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
         canciones.add(reproductorTxt.getText());
         reproductorTxt.setText(null);
+        if (canciones.size() == 1) {
+          Reproductor reproductor1 = new Reproductor();
+          reproductor1.start();
+        }
         // try {
         //   cancion = canciones.get(reproductor_i);
         //   reproductor.start();
@@ -1031,7 +1013,6 @@ public class GuiPrototype extends JFrame {
     uno.setBorder(BorderFactory.createEmptyBorder(50, 12, 300, 40));
 
     dos.add(btnAnterior);
-    dos.add(btnReproducir);
     dos.add(btnPausa);
     dos.add(btnSig);
     dos.setBorder(BorderFactory.createEmptyBorder(0, 0, 500, 25));
@@ -1042,6 +1023,8 @@ public class GuiPrototype extends JFrame {
 
   public static void detenerReproductor() {
     if (procesoReproductor != null) {
+        canciones.clear();
+        reproductor_i = 0;
         procesoReproductor.destroy(); 
     }
   }
@@ -1062,7 +1045,7 @@ public class GuiPrototype extends JFrame {
         } catch (IOException | InterruptedException e) {
             System.err.println("Error al reproducir musica: " + e);
         }
-      } while (!canciones.get(reproductor_i).isEmpty());
+      }
       canciones.clear();
       reproductor_i = 0;
       System.err.println("listo para cerrar hilo");
