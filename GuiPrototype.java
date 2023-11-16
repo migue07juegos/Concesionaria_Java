@@ -141,7 +141,6 @@ public class GuiPrototype extends JFrame {
   public static boolean confirm2 = true;
   public static int reproductor_i = 0;
   static Vector<String> canciones = new Vector<>();
-  public static Reproductor reproductor1 = new Reproductor();
 
   public GuiPrototype() {}
 
@@ -935,7 +934,6 @@ public class GuiPrototype extends JFrame {
     btnSig.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-        reproductor_i ++;
         // pedir_recibo(informacion, funcion);
       }
     });
@@ -991,7 +989,7 @@ public class GuiPrototype extends JFrame {
     btnReproducir.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-
+        Reproductor reproductor1 = new Reproductor();
         reproductor1.start();
       }
     });
@@ -1019,8 +1017,8 @@ public class GuiPrototype extends JFrame {
     btnAgregar.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-        String cancion = "";
         canciones.add(reproductorTxt.getText());
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         try {
@@ -1032,6 +1030,9 @@ public class GuiPrototype extends JFrame {
         }
         //reproductor_i++;
 =======
+=======
+        reproductorTxt.setText(null);
+>>>>>>> 89f8784 (agregar reproductor 2.0)
         
         // try {
         //   cancion = canciones.get(reproductor_i);
@@ -1078,19 +1079,30 @@ public class GuiPrototype extends JFrame {
         procesoReproductor.destroy();  // Detener el proceso del reproductor
 =======
   static class Reproductor extends Thread {
+    @Override //https://stackoverflow.com/questions/2865315/threads-in-java dice que es override, entonces ha de ser polimorfismo
     public void run() {
-      do  {
-        ProcessBuilder processBuilder;
-        processBuilder = new ProcessBuilder("mpv", "--no-video", canciones.get(reproductor_i));
+      while (reproductor_i <= canciones.size() - 1) {
         try {
+            ProcessBuilder processBuilder;
+            System.err.println(canciones.get(reproductor_i));
+            processBuilder = new ProcessBuilder("mpv", "--no-video", canciones.get(reproductor_i));
             Process proceso = processBuilder.start();
-            //proceso.waitFor();
+            proceso.waitFor();
+            proceso.destroy();
             reproductor_i ++;
-        } catch (Exception e) {
-            System.err.println("Error al reproducir musica");
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Error al reproducir musica: " + e);
         }
+<<<<<<< HEAD
       } while (!canciones.get(reproductor_i).isEmpty());
 >>>>>>> e8f784a (se pueden agregar varias canciones, pero crashea si la siguiente cancion no esta disponible y le das a reproducir)
+=======
+      }
+      canciones.clear();
+      reproductor_i = 0;
+      System.err.println("listo para cerrar hilo");
+      return;
+>>>>>>> 89f8784 (agregar reproductor 2.0)
     }
   }
 
