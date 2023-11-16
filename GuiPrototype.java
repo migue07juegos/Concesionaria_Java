@@ -965,8 +965,6 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-<<<<<<< HEAD
-=======
     btnReproducir.setAlignmentX(Component.LEFT_ALIGNMENT);
     btnReproducir.setFocusPainted(false);
     btnReproducir.setPreferredSize(new Dimension(300, 100));
@@ -994,7 +992,6 @@ public class GuiPrototype extends JFrame {
       }
     });
 
->>>>>>> e8f784a (se pueden agregar varias canciones, pero crashea si la siguiente cancion no esta disponible y le das a reproducir)
     btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
     btnAgregar.setFocusPainted(false);
     btnAgregar.setPreferredSize(new Dimension(300, 100));
@@ -1018,29 +1015,13 @@ public class GuiPrototype extends JFrame {
       @Override
       public void actionPerformed(ActionEvent arg0) {
         canciones.add(reproductorTxt.getText());
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-        try {
-          cancion = canciones.get(reproductor_i);
-          System.out.print(cancion);
-          reproducirMP3(cancion);
-        } catch (Exception e) {
-          JOptionPane.showMessageDialog(null, "Error al reproducir" + cancion);
-        }
-        //reproductor_i++;
-=======
-=======
         reproductorTxt.setText(null);
->>>>>>> 89f8784 (agregar reproductor 2.0)
-        
         // try {
         //   cancion = canciones.get(reproductor_i);
         //   reproductor.start();
         // } catch (Exception e) {
         //   JOptionPane.showMessageDialog(null, "Error al reproducir" + cancion);
         // }
->>>>>>> e8f784a (se pueden agregar varias canciones, pero crashea si la siguiente cancion no esta disponible y le das a reproducir)
       }
     });
 
@@ -1059,25 +1040,13 @@ public class GuiPrototype extends JFrame {
     panel.add(dos);
   }
 
-<<<<<<< HEAD
-  public static void reproducirMP3(String cancion) {
-    Thread reproducirThread = new Thread(() -> {
-        ProcessBuilder processBuilder = new ProcessBuilder("mpv", "--no-video", cancion);
-        try {
-            procesoReproductor = processBuilder.start();
-            procesoReproductor.waitFor();
-        } catch (Exception e) {
-            System.err.println("Error al reproducir musica");
-        }
-    });
-
-    reproducirThread.start();
-  }
-
   public static void detenerReproductor() {
     if (procesoReproductor != null) {
-        procesoReproductor.destroy();  // Detener el proceso del reproductor
-=======
+        procesoReproductor.destroy(); 
+    }
+  }
+
+   // Detener el proceso del reproductor
   static class Reproductor extends Thread {
     @Override //https://stackoverflow.com/questions/2865315/threads-in-java dice que es override, entonces ha de ser polimorfismo
     public void run() {
@@ -1086,26 +1055,20 @@ public class GuiPrototype extends JFrame {
             ProcessBuilder processBuilder;
             System.err.println(canciones.get(reproductor_i));
             processBuilder = new ProcessBuilder("mpv", "--no-video", canciones.get(reproductor_i));
-            Process proceso = processBuilder.start();
-            proceso.waitFor();
-            proceso.destroy();
+            procesoReproductor = processBuilder.start();
+            procesoReproductor.waitFor();
+            procesoReproductor.destroy();
             reproductor_i ++;
         } catch (IOException | InterruptedException e) {
             System.err.println("Error al reproducir musica: " + e);
         }
-<<<<<<< HEAD
       } while (!canciones.get(reproductor_i).isEmpty());
->>>>>>> e8f784a (se pueden agregar varias canciones, pero crashea si la siguiente cancion no esta disponible y le das a reproducir)
-=======
-      }
       canciones.clear();
       reproductor_i = 0;
       System.err.println("listo para cerrar hilo");
       return;
->>>>>>> 89f8784 (agregar reproductor 2.0)
     }
   }
-
   public static void agregar_elemento(JPanel panel, JPanel iniciox){
     
     JPanel panel2 = new JPanel();
