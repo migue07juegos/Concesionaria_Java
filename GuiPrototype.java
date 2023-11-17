@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -913,7 +914,7 @@ public class GuiPrototype extends JFrame {
       @Override
       public void actionPerformed(ActionEvent arg0) {
         ProcessBuilder processBuilder1;
-        if (System.getProperty("os.name").contains("win")) {
+        if (System.getProperty("os.name").contains("Win")) {
           processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat"); //por hacer
         } else {
           processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.sh");
@@ -1050,11 +1051,12 @@ public class GuiPrototype extends JFrame {
   static class Reproductor extends Thread {
     @Override //https://stackoverflow.com/questions/2865315/threads-in-java dice que es override, entonces ha de ser polimorfismo
     public void run() {
+      String mpvsocket = Paths.get(System.getProperty("java.io.tmpdir"), "mpvsocket").toString();
       while (reproductor_i <= canciones.size() - 1) {
         try {
             ProcessBuilder processBuilder;
             System.err.println(canciones.get(reproductor_i));
-            processBuilder = new ProcessBuilder("mpv", "--no-video", "--input-ipc-server=/tmp/mpvsocket", canciones.get(reproductor_i));
+            processBuilder = new ProcessBuilder("mpv", "--no-video", "--input-ipc-server=" + mpvsocket, canciones.get(reproductor_i));
             procesoReproductor = processBuilder.start();
             procesoReproductor.waitFor();
             procesoReproductor.destroy();
