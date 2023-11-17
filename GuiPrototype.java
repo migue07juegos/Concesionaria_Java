@@ -915,7 +915,7 @@ public class GuiPrototype extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
         ProcessBuilder processBuilder1;
         if (System.getProperty("os.name").contains("Win")) {
-          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat"); //por hacer
+          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat"); //por probar
         } else {
           processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.sh");
         }
