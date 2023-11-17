@@ -1,19 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.StandardProtocolFamily;
-import java.net.UnixDomainSocketAddress;
-import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -924,9 +914,9 @@ public class GuiPrototype extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
         ProcessBuilder processBuilder1;
         if (System.getProperty("os.name").contains("win")) {
-          processBuilder1 = new ProcessBuilder("/$HOME/programación/JavaProyect/pause.bat"); //por hacer
+          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat"); //por hacer
         } else {
-          processBuilder1 = new ProcessBuilder(System.getProperty("user.home") + "/programación/JavaProyect/pause.sh");
+          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.sh");
         }
 
         try {
@@ -934,33 +924,8 @@ public class GuiPrototype extends JFrame {
           procesoReproductor1.waitFor();
           procesoReproductor1.destroy();
         } catch (IOException | InterruptedException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
-        
-        // try {
-        //   Path socketPath = Path.of(System.getProperty("user.home")).resolve("mpvsocket");
-        //   UnixDomainSocketAddress socketAddress = UnixDomainSocketAddress.of(socketPath);
-        //   SocketChannel channel = SocketChannel
-        //   .open(StandardProtocolFamily.UNIX);
-        //   channel.connect(socketAddress);
-        //   String message = "{ \"command\": [\"set_property\", \"pause\", true] }";
-        //   System.err.println(message);
-        //   ByteBuffer buffer = ByteBuffer.allocate(2048*4);
-        //   buffer.clear();
-        //   buffer.put(message.getBytes());
-        //   buffer.flip();
-        //   while (buffer.hasRemaining()) {
-        //     channel.write(buffer);
-        // }
-        // } catch (UnknownHostException e) {
-        //   // TODO Auto-generated catch block
-        //   e.printStackTrace();
-        // } catch (IOException e) {
-        //   // TODO Auto-generated catch block
-        //   e.printStackTrace();
-        // }
-        // pedir_recibo(informacion, funcion);
       }
     });
 
@@ -1089,7 +1054,7 @@ public class GuiPrototype extends JFrame {
         try {
             ProcessBuilder processBuilder;
             System.err.println(canciones.get(reproductor_i));
-            processBuilder = new ProcessBuilder("mpv", "--no-video", "--input-ipc-server=mpvsocket", canciones.get(reproductor_i));
+            processBuilder = new ProcessBuilder("mpv", "--no-video", "--input-ipc-server=/tmp/mpvsocket", canciones.get(reproductor_i));
             procesoReproductor = processBuilder.start();
             procesoReproductor.waitFor();
             procesoReproductor.destroy();

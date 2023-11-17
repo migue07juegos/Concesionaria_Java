@@ -1,1 +1,1 @@
-echo '{ "command": ["cycle", "pause"] }' | socat - /$HOME/programación/JavaProyect/mpvsocket
+echo '{ "command": ["cycle", "pause"] }' | socat - /tmp/mpvsocket
