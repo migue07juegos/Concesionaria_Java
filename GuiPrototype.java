@@ -915,7 +915,7 @@ public class GuiPrototype extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
         ProcessBuilder processBuilder1;
         if (System.getProperty("os.name").contains("Win")) {
-          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat"); //por probar
+          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat");
         } else {
           processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.sh");
         }
@@ -1016,12 +1016,6 @@ public class GuiPrototype extends JFrame {
           Reproductor reproductor1 = new Reproductor();
           reproductor1.start();
         }
-        // try {
-        //   cancion = canciones.get(reproductor_i);
-        //   reproductor.start();
-        // } catch (Exception e) {
-        //   JOptionPane.showMessageDialog(null, "Error al reproducir" + cancion);
-        // }
       }
     });
 
@@ -1047,11 +1041,16 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-   // Detener el proceso del reproductor
   static class Reproductor extends Thread {
     @Override //https://stackoverflow.com/questions/2865315/threads-in-java dice que es override, entonces ha de ser polimorfismo
     public void run() {
-      String mpvsocket = Paths.get(System.getProperty("java.io.tmpdir"), "mpvsocket").toString();
+      String mpvsocket;
+      if (System.getProperty("os.name").contains("Win")) {
+        mpvsocket = "\\\\.\\" + "pipe\\mpvsocket";
+      } else {
+        mpvsocket = Paths.get(System.getProperty("java.io.tmpdir"), "mpvsocket").toString();
+      }
+
       while (reproductor_i <= canciones.size() - 1) {
         try {
             ProcessBuilder processBuilder;

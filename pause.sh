@@ -1,1 +1,1 @@
-echo '{ "command": ["cycle", "pause"] }' | socat - /tmp/mpvsocket
+echo '{ "command": ["cycle", "pause"] }' > /tmp/mpvsocket
