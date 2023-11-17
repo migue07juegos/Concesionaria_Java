@@ -922,7 +922,13 @@ public class GuiPrototype extends JFrame {
     btnPausa.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-        ProcessBuilder processBuilder1 = new ProcessBuilder("/home/mig/programación/JavaProyect/pause.sh");
+        ProcessBuilder processBuilder1;
+        if (System.getProperty("os.name").contains("win")) {
+          processBuilder1 = new ProcessBuilder("/$HOME/programación/JavaProyect/pause.bat"); //por hacer
+        } else {
+          processBuilder1 = new ProcessBuilder(System.getProperty("user.home") + "/programación/JavaProyect/pause.sh");
+        }
+
         try {
           Process procesoReproductor1 = processBuilder1.start();
           procesoReproductor1.waitFor();

@@ -1,1 +1,1 @@
-echo '{ "command": ["set_property", "pause", true] }' | socat - /home/mig/programación/JavaProyect/mpvsocket
+echo '{ "command": ["cycle", "pause"] }' | socat - /$HOME/programación/JavaProyect/mpvsocket
