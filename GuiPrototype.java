@@ -1136,7 +1136,6 @@ public class GuiPrototype extends JFrame {
 
     valorAnterior = slider.getValue();
     slider.addChangeListener(e -> {
-<<<<<<< HEAD
                 
       if (slider.getValue() > valorAnterior) {
         String command = "echo { \"command\": [\"add\", \"volume\", \"+2\"] } > \\\\.\\pipe\\mpvsocket";
@@ -1159,8 +1158,6 @@ public class GuiPrototype extends JFrame {
           e1.printStackTrace();
         }*/
       }
-=======
->>>>>>> 469ea6c (Se arreglo sonido del reproductor y se agregaron simbolos)
 
           try {
 
