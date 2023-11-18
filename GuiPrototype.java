@@ -4,7 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -1137,28 +1140,6 @@ public class GuiPrototype extends JFrame {
     valorAnterior = slider.getValue();
     slider.addChangeListener(e -> {
                 
-      if (slider.getValue() > valorAnterior) {
-        String command = "echo { \"command\": [\"add\", \"volume\", \"+2\"] } > \\\\.\\pipe\\mpvsocket";
-        String fileName = "raise_volume.bat";
-        String fileNameSh = "pause.sh";
-        scripts(command, fileName, fileNameSh);
-        /*try {
-          new ProcessBuilder(System.getProperty("user.dir") + "/scripts/raise_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
-        } catch (IOException e1) {
-          e1.printStackTrace();
-        }*/
-      }else{
-        String command = "echo { \"command\": [\"add\", \"volume\", \"-2\"] } > \\\\.\\pipe\\mpvsocket";
-        String fileName = "lower_volume.bat";
-        String fileNameSh = "lower_volume.sh";
-        scripts(command, fileName, fileNameSh);
-        /*try {
-          new ProcessBuilder(System.getProperty("user.dir") + "/scripts/lower_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
-        } catch (IOException e1) {
-          e1.printStackTrace();
-        }*/
-      }
-
           try {
 
             if (System.getProperty("os.name").contains("Win")) {
@@ -1226,32 +1207,16 @@ public class GuiPrototype extends JFrame {
       }
     });
     btnPausa.addActionListener(e -> {
-<<<<<<< HEAD
-        String command = "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket";
-        String fileName = "pause.bat";
-        String fileNameSh = "pause.sh";
-        scripts(command, fileName, fileNameSh);
-=======
-    
-        ProcessBuilder processBuilder1;
-
-        processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") +
-                          "/scripts/pause."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh"));
-
-        if (btnPausa.getText().equals("▶")) {
-          btnPausa.setText("||");
-        }else{
-          btnPausa.setText("▶");
-        }
-
-        try {
-          Process procesoReproductor1 = processBuilder1.start();
-          procesoReproductor1.waitFor();
-          procesoReproductor1.destroy();
-        } catch (IOException | InterruptedException x) {
-          x.printStackTrace();
-        }
->>>>>>> 469ea6c (Se arreglo sonido del reproductor y se agregaron simbolos)
+        
+      if (btnPausa.getText().equals("▶")) {
+        btnPausa.setText("||");
+      }else{
+        btnPausa.setText("▶");
+      }
+      String command = "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket";
+      String fileName = "pause.bat";
+      String fileNameSh = "pause.sh";
+      scripts(command, fileName, fileNameSh);
     });
 
     btnSig.setAlignmentX(Component.CENTER_ALIGNMENT);
