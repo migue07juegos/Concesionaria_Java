@@ -1,0 +1,1 @@
+echo { "command": ["cycle", "pause"] } >\\.\pipe\mpvsocket

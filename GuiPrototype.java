@@ -877,13 +877,13 @@ public class GuiPrototype extends JFrame {
                 
       if (slider.getValue() > valorAnterior) {
         try {
-          new ProcessBuilder(System.getProperty("user.dir") + "/raise_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
+          new ProcessBuilder(System.getProperty("user.dir") + "/scripts/raise_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
         } catch (IOException e1) {
           e1.printStackTrace();
         }
       }else{
         try {
-          new ProcessBuilder(System.getProperty("user.dir") + "/lower_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
+          new ProcessBuilder(System.getProperty("user.dir") + "/scripts/lower_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
         } catch (IOException e1) {
           e1.printStackTrace();
         }
@@ -941,52 +941,18 @@ public class GuiPrototype extends JFrame {
     });
     btnPausa.addActionListener(e -> {{
         ProcessBuilder processBuilder1;
-        String nombreArchivo = "A.txt";
-        String command = "";
-        String command2 = "";
 
         if (System.getProperty("os.name").contains("Win")) {
-          nombreArchivo = "pause.bat";
-          command = "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket";
-          command2 =  "@echo off";
+          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/scripts/pause.bat");
+        } else {
+          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/scripts/pause.sh");
         }
-        else {
-          nombreArchivo = "pause.sh";
-          command = "echo '{ \"command\": [\"cycle\", \"pause\"] }' | socat - /tmp/mpvsocket ";
-          command2 =  "";
-        }
+
         try {
-          File archivo = new File(nombreArchivo);
-          FileWriter fileWriter = new FileWriter(archivo);
-          BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-          if (archivo.exists()) {
-              archivo.delete();
-          }
-
-          bufferedWriter.write(command2);
-          bufferedWriter.newLine();
-          bufferedWriter.write(command);
-          bufferedWriter.newLine();
-
-          bufferedWriter.close();
-
-          String tempPath = System.getProperty("java.io.tmpdir");
-          Path tempFilePath = Path.of(tempPath, nombreArchivo);
-
-          Files.copy(archivo.toPath(), tempFilePath, StandardCopyOption.REPLACE_EXISTING);
-
-          archivo.delete();
-        
-          processBuilder1 = new ProcessBuilder(tempPath + "/" + nombreArchivo);
-          try {
-            Process procesoReproductor1 = processBuilder1.start();
-            procesoReproductor1.waitFor();
-            procesoReproductor1.destroy();
-          } catch (IOException | InterruptedException x) {
-            x.printStackTrace();
-          }
-        } catch (IOException x) {
+          Process procesoReproductor1 = processBuilder1.start();
+          procesoReproductor1.waitFor();
+          procesoReproductor1.destroy();
+        } catch (IOException | InterruptedException x) {
           x.printStackTrace();
         }
       }
