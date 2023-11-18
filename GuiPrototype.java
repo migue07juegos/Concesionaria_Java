@@ -15,8 +15,6 @@ import java.util.Random;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
@@ -152,6 +150,7 @@ public class GuiPrototype extends JFrame {
   public static int oX = 10;
   static Vector<String> canciones = new Vector<>();
   public static int get_img = 0;
+  public static int valorAnterior;
 
   public GuiPrototype() {}
 
@@ -865,6 +864,34 @@ public class GuiPrototype extends JFrame {
     JPanel uno = new JPanel();
     JPanel dos = new JPanel();
 
+    JSlider slider = new JSlider(JSlider.VERTICAL, 0, 100, 50);
+    slider.setMajorTickSpacing(50);
+    slider.setPaintTicks(true);
+    slider.setPaintLabels(true);
+    slider.setForeground(Color.white);
+    slider.setBackground(Color.black);
+    slider.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 0));
+
+    valorAnterior = slider.getValue();
+    slider.addChangeListener(e -> {
+                
+      if (slider.getValue() > valorAnterior) {
+        try {
+          new ProcessBuilder(System.getProperty("user.dir") + "/raise_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        }
+      }else{
+        try {
+          new ProcessBuilder(System.getProperty("user.dir") + "/lower_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
+        } catch (IOException e1) {
+          e1.printStackTrace();
+        }
+      }
+
+      valorAnterior = slider.getValue();
+    });
+
     btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
     btnSalir.setFocusPainted(false);
     btnSalir.setPreferredSize(new Dimension(300, 100));
@@ -884,11 +911,9 @@ public class GuiPrototype extends JFrame {
         btnSalir.setBackground(null);
       }
     });
-    btnSalir.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-          detenerReproductor();  // Llamada para detener el reproductor al presionar "Salir"
-      }
+    
+    btnSalir.addActionListener(e -> {
+      detenerReproductor();  // Llamada para detener el reproductor al presionar "Salir"
     });
 
     reproductorTxt.setForeground(new Color(155,155,155));
@@ -914,6 +939,7 @@ public class GuiPrototype extends JFrame {
         btnPausa.setBackground(null);
       }
     });
+<<<<<<< HEAD
     btnPausa.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
@@ -966,6 +992,22 @@ public class GuiPrototype extends JFrame {
         } catch (IOException e) {
           e.printStackTrace();
         }    
+=======
+    btnPausa.addActionListener(e -> {
+      ProcessBuilder processBuilder1;
+      if (System.getProperty("os.name").contains("Win")) {
+        processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat");
+      } else {
+        processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.sh");
+      }
+
+      try {
+        Process procesoReproductor1 = processBuilder1.start();
+        procesoReproductor1.waitFor();
+        procesoReproductor1.destroy();
+      } catch (IOException | InterruptedException a) {
+        a.printStackTrace();
+>>>>>>> 436cc22 (Se redujeron lineas con lambdas, se agego la opcion de bajar el volumen al reproductor, no se si funciona en windows y con videos de yt)
       }
     });
 
@@ -988,12 +1030,9 @@ public class GuiPrototype extends JFrame {
         btnSig.setBackground(null);
       }
     });
-    btnSig.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        if (procesoReproductor != null && reproductor_i <= canciones.size() - 2) {
-          procesoReproductor.destroy(); 
-        }
+    btnSig.addActionListener(e -> {
+      if (procesoReproductor != null && reproductor_i <= canciones.size() - 2) {
+        procesoReproductor.destroy(); 
       }
     });
 
@@ -1016,14 +1055,11 @@ public class GuiPrototype extends JFrame {
         btnAnterior.setBackground(null);
       }
     });
-    btnAnterior.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        if (procesoReproductor != null && reproductor_i >= 1) {
-          reproductor_i --;
-          reproductor_i --;
-          procesoReproductor.destroy(); 
-        }
+    btnAnterior.addActionListener(e -> {
+      if (procesoReproductor != null && reproductor_i >= 1) {
+        reproductor_i --;
+        reproductor_i --;
+        procesoReproductor.destroy(); 
       }
     });
 
@@ -1064,7 +1100,8 @@ public class GuiPrototype extends JFrame {
     dos.add(btnAnterior);
     dos.add(btnPausa);
     dos.add(btnSig);
-    dos.setBorder(BorderFactory.createEmptyBorder(0, 0, 500, 25));
+    dos.add(slider);
+    dos.setBorder(BorderFactory.createEmptyBorder(0, 130, 500, 0));
     
     panel.add(uno);
     panel.add(dos);
@@ -1110,7 +1147,11 @@ public class GuiPrototype extends JFrame {
       return;
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 436cc22 (Se redujeron lineas con lambdas, se agego la opcion de bajar el volumen al reproductor, no se si funciona en windows y con videos de yt)
   public static void agregar_elemento(JPanel panel, JPanel iniciox){
     
     JPanel panel2 = new JPanel();
@@ -1188,6 +1229,8 @@ public class GuiPrototype extends JFrame {
     Font labelFont = new Font("Arial", Font.PLAIN, 16);
     
     file_chooser.addActionListener(e -> a = file.showOpenDialog(frame));
+    file_chooser.setFocusPainted(false);
+
 
     marcaLabel.setForeground(labelColor);
     marcaLabel.setFont(labelFont);
@@ -1233,9 +1276,7 @@ public class GuiPrototype extends JFrame {
 
     JButton aceptarButton = new JButton("Aceptar");
 
-    aceptarButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
+    aceptarButton.addActionListener( e -> {
         String marcax = marcaTXT.getText();
         String colorx = colorTXT.getText();
         String modelox = modeloTXT.getText();
@@ -1247,7 +1288,7 @@ public class GuiPrototype extends JFrame {
           Integer.parseInt(montox);
           itegerCorrect = true;
         } catch (Exception p) {
-          JOptionPane.showMessageDialog(null, "Imgresa un número sin decimal");
+          JOptionPane.showMessageDialog(null, "Ingresa los datos correctamente");
         }
 
         if (marcax != null && colorx != null && modelox != null && montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
@@ -1270,9 +1311,8 @@ public class GuiPrototype extends JFrame {
           imgTXT.setText("");
           frame.dispose();
           return;
-        }
-      }
-    });
+          }
+        });
 
     aceptarButton.setBorder(null);
     componentesPanel.add(new Label(""));
@@ -1310,12 +1350,24 @@ public class GuiPrototype extends JFrame {
     button.setOpaque(isDefaultLookAndFeelDecorated());
     button.setBackground(Color.gray);
     button.setBorder(
-        BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0, 85, 119)));
+        BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0, 85, 119)));    
     button.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
         toggleMenu(menuPanel, panelInicio, infoPanel);
       }
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+        button.setBackground(Color.DARK_GRAY);
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+        button.setBackground(null);
+      }
+
     });
 
     panel.setLayout(new BorderLayout());
@@ -1471,32 +1523,11 @@ public class GuiPrototype extends JFrame {
     JRadioButton radio3 = new JRadioButton("Efectivo");
     ButtonGroup bg = new ButtonGroup();
 
-    radio1.addChangeListener(new ChangeListener() {
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        if (radio1.isSelected()) {
-          switchBtn = 1;
-        }
-      }
-    });
+    radio1.addChangeListener(e -> { if(radio1.isSelected()){ switchBtn = 1; }});
 
-    radio2.addChangeListener(new ChangeListener() {
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        if (radio2.isSelected()) {
-          switchBtn = 2;
-        }
-      }
-    });
+    radio2.addChangeListener(e -> { if(radio2.isSelected()){ switchBtn = 2; }});
 
-    radio3.addChangeListener(new ChangeListener() {
-      @Override
-      public void stateChanged(ChangeEvent e) {
-        if (radio3.isSelected()) {
-          switchBtn = 3;
-        }
-      }
-    });
+    radio3.addChangeListener(e -> { if(radio3.isSelected()){ switchBtn = 3; }});
 
     Color labelColor = new Color(155, 155, 155);
     Font labelFont = new Font("Arial", Font.PLAIN, 16);
@@ -1557,108 +1588,105 @@ public class GuiPrototype extends JFrame {
 
     JButton aceptarButton = new JButton("Aceptar");
 
-    aceptarButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
+    aceptarButton.addActionListener( e -> {
 
-        boolean[] confirmBuscar = new boolean[4];
-        int aC = 0;
-        double bC = 0;
-        int cC = 0;
-        String str = edadTXT.getText();
-        String str2 = engancheTXT.getText();
-        String str3 = plazoTXT.getText();
+      boolean[] confirmBuscar = new boolean[4];
+      int aC = 0;
+      double bC = 0;
+      int cC = 0;
+      String str = edadTXT.getText();
+      String str2 = engancheTXT.getText();
+      String str3 = plazoTXT.getText();
 
-        confirmBuscar[0] = false;
-        confirmBuscar[1] = false;
-        confirmBuscar[2] = false;
-        confirmBuscar[3] = false;
+      confirmBuscar[0] = false;
+      confirmBuscar[1] = false;
+      confirmBuscar[2] = false;
+      confirmBuscar[3] = false;
 
-        try {
-          aC = Integer.parseInt(str);
-          if (aC < 18 || aC > 100) {
-            JOptionPane.showMessageDialog(
-                null,
-                "El cliente no puede ser menor de edad o tener más de 100 años");
-          } else {
-            confirmBuscar[0] = true;
-          }
-        } catch (NumberFormatException p) {
+      try {
+        aC = Integer.parseInt(str);
+        if (aC < 18 || aC > 100) {
           JOptionPane.showMessageDialog(
               null,
-              "Entrada no válida. Ingresa un número válido para la edad.");
+              "El cliente no puede ser menor de edad o tener más de 100 años");
+        } else {
+          confirmBuscar[0] = true;
         }
+      } catch (NumberFormatException p) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Entrada no válida. Ingresa un número válido para la edad.");
+      }
 
-        try {
-          bC = Double.parseDouble(str2);
+      try {
+        bC = Double.parseDouble(str2);
 
-          if (bC == 100) {
+        if (bC == 100) {
+          confirmBuscar[1] = true;
+          confirmBuscar[2] = true;
+        } else {
+          if (bC < 20 || bC > 80) {
+            JOptionPane.showMessageDialog(
+                null,
+                "Entrada no válida. Ingresa un número entre 20 y 80 ó 100.");
+          } else {
             confirmBuscar[1] = true;
-            confirmBuscar[2] = true;
+          }
+        }
+      } catch (NumberFormatException p) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Entrada no válida. Ingresa un número válido para el porcentaje de enganche.");
+      }
+
+      switch (switchBtn) {
+      case 0:
+        JOptionPane.showMessageDialog(null, "Elija un método de pago.");
+        break;
+      case 1:
+        switchStr = "Tarjeta";
+        confirmBuscar[3] = true;
+        break;
+      case 2:
+        switchStr = "Cheque";
+        confirmBuscar[3] = true;
+        break;
+      case 3:
+        switchStr = "Efectivo";
+        confirmBuscar[3] = true;
+        break;
+      }
+
+      if (!confirmBuscar[2]) {
+        try {
+          cC = Integer.parseInt(str3);
+          if (cC > 10 || cC <= 0) {
+            JOptionPane.showMessageDialog(
+                null, "Entrada no válida. Ingresa un número entre 1 y 10.");
           } else {
-            if (bC < 20 || bC > 80) {
-              JOptionPane.showMessageDialog(
-                  null,
-                  "Entrada no válida. Ingresa un número entre 20 y 80 ó 100.");
-            } else {
-              confirmBuscar[1] = true;
-            }
+            confirmBuscar[2] = true;
           }
         } catch (NumberFormatException p) {
           JOptionPane.showMessageDialog(
               null,
-              "Entrada no válida. Ingresa un número válido para el porcentaje de enganche.");
+              "Entrada no válida. Ingresa un número válido para el plazo de pago.");
         }
+      }
 
-        switch (switchBtn) {
-        case 0:
-          JOptionPane.showMessageDialog(null, "Elija un método de pago.");
-          break;
-        case 1:
-          switchStr = "Tarjeta";
-          confirmBuscar[3] = true;
-          break;
-        case 2:
-          switchStr = "Cheque";
-          confirmBuscar[3] = true;
-          break;
-        case 3:
-          switchStr = "Efectivo";
-          confirmBuscar[3] = true;
-          break;
-        }
-
-        if (!confirmBuscar[2]) {
-          try {
-            cC = Integer.parseInt(str3);
-            if (cC > 10 || cC <= 0) {
-              JOptionPane.showMessageDialog(
-                  null, "Entrada no válida. Ingresa un número entre 1 y 10.");
-            } else {
-              confirmBuscar[2] = true;
-            }
-          } catch (NumberFormatException p) {
-            JOptionPane.showMessageDialog(
-                null,
-                "Entrada no válida. Ingresa un número válido para el plazo de pago.");
-          }
-        }
-
-        if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2] &&
-            confirmBuscar[3]) {
-          buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
-                 compradores, numCompradores, array.get(ho));
-          datos(w, carroSeleccionado);
-          numCompradores++;
-          numCarrosVendidos++;
-          w++;
-          nombreCompradorTXT.setText("");
-          edadTXT.setText("");
-          engancheTXT.setText("");
-          plazoTXT.setText("");
-          frame.dispose();
-          return;
-        }
+      if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2] &&
+          confirmBuscar[3]) {
+        buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
+                compradores, numCompradores, array.get(ho));
+        datos(w, carroSeleccionado);
+        numCompradores++;
+        numCarrosVendidos++;
+        w++;
+        nombreCompradorTXT.setText("");
+        edadTXT.setText("");
+        engancheTXT.setText("");
+        plazoTXT.setText("");
+        frame.dispose();
+        return;
       }
     });
 
