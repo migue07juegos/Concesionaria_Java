@@ -4,7 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -915,19 +918,54 @@ public class GuiPrototype extends JFrame {
       @Override
       public void actionPerformed(ActionEvent arg0) {
         ProcessBuilder processBuilder1;
-        if (System.getProperty("os.name").contains("Win")) {
-          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat");
-        } else {
-          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.sh");
-        }
+        String nombreArchivo = "A.txt";
+        String command = "";
+        String command2 = "";
 
-        try {
-          Process procesoReproductor1 = processBuilder1.start();
-          procesoReproductor1.waitFor();
-          procesoReproductor1.destroy();
-        } catch (IOException | InterruptedException e) {
-          e.printStackTrace();
+        if (System.getProperty("os.name").contains("Win")) {
+          nombreArchivo = "pause.bat";
+          command = "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket";
+          command2 =  "@echo off";
         }
+        else {
+          nombreArchivo = "pause.sh";
+          command = "echo '{ \"command\": [\"cycle\", \"pause\"] }' | socat - /tmp/mpvsocket ";
+          command2 =  "";
+        }
+        try {
+          File archivo = new File(nombreArchivo);
+          FileWriter fileWriter = new FileWriter(archivo);
+          BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+          if (archivo.exists()) {
+              archivo.delete();
+          }
+
+          bufferedWriter.write(command2);
+          bufferedWriter.newLine();
+          bufferedWriter.write(command);
+          bufferedWriter.newLine();
+
+          bufferedWriter.close();
+
+          String tempPath = System.getProperty("java.io.tmpdir");
+          Path tempFilePath = Path.of(tempPath, nombreArchivo);
+
+          Files.copy(archivo.toPath(), tempFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+          archivo.delete();
+        
+          processBuilder1 = new ProcessBuilder(tempPath + "/" + nombreArchivo);
+          try {
+            Process procesoReproductor1 = processBuilder1.start();
+            procesoReproductor1.waitFor();
+            procesoReproductor1.destroy();
+          } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+        }    
       }
     });
 
@@ -1072,6 +1110,7 @@ public class GuiPrototype extends JFrame {
       return;
     }
   }
+  
   public static void agregar_elemento(JPanel panel, JPanel iniciox){
     
     JPanel panel2 = new JPanel();
