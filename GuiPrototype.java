@@ -148,6 +148,7 @@ public class GuiPrototype extends JFrame {
   public static int reproductor_i = 0;
   public static int oX = 10;
   static Vector<String> canciones = new Vector<>();
+  public static int get_img = 0;
 
   public GuiPrototype() {}
 
@@ -1007,15 +1008,13 @@ public class GuiPrototype extends JFrame {
         btnAgregar.setBackground(null);
       }
     });
-    btnAgregar.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        canciones.add(reproductorTxt.getText());
-        reproductorTxt.setText(null);
-        if (canciones.size() == 1) {
-          Reproductor reproductor1 = new Reproductor();
-          reproductor1.start();
-        }
+
+    btnAgregar.addActionListener(e -> { 
+      canciones.add(reproductorTxt.getText());
+      reproductorTxt.setText(null);
+      if (canciones.size() == 1) {
+        Reproductor reproductor1 = new Reproductor();
+        reproductor1.start();
       }
     });
 
@@ -1094,12 +1093,7 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    button.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
-        pedirCarro(iniciox);
-      }
-    });
+    button.addActionListener(e -> pedirCarro(iniciox));
 
     JButton button2 = new JButton("2");
     button2.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1145,9 +1139,13 @@ public class GuiPrototype extends JFrame {
     JLabel modeloLabel = new JLabel("Modelo del carro:");
     JLabel montoLabel = new JLabel("Monto del carro: ");
     JLabel rutaImgLabel = new JLabel("Ruta de la imagen del carro:");
+    JButton file_chooser = new JButton("Imagen");
+    JFileChooser file = new JFileChooser();
 
     Color labelColor = new Color(155, 155, 155);
     Font labelFont = new Font("Arial", Font.PLAIN, 16);
+    
+    file_chooser.addActionListener(e -> a = file.showOpenDialog(frame));
 
     marcaLabel.setForeground(labelColor);
     marcaLabel.setFont(labelFont);
@@ -1175,7 +1173,7 @@ public class GuiPrototype extends JFrame {
     componentesPanel.add(colorTXT);
     componentesPanel.add(modeloTXT);
     componentesPanel.add(montoTXT);
-    componentesPanel.add(imgTXT);
+    componentesPanel.add(file_chooser);
 
     marcaTXT.setForeground(labelColor);
     marcaTXT.setBackground(Color.black);
@@ -1185,8 +1183,8 @@ public class GuiPrototype extends JFrame {
     modeloTXT.setBackground(Color.black);
     montoTXT.setForeground(labelColor);
     montoTXT.setBackground(Color.black);
-    imgTXT.setForeground(labelColor);
-    imgTXT.setBackground(Color.black);
+    file_chooser.setForeground(labelColor);
+    file_chooser.setBackground(Color.black);
 
     frame.add(labelsPanel);
     frame.add(componentesPanel);
@@ -1200,7 +1198,7 @@ public class GuiPrototype extends JFrame {
         String colorx = colorTXT.getText();
         String modelox = modeloTXT.getText();
         String montox = montoTXT.getText();
-        String imagesx = imgTXT.getText();
+
         boolean itegerCorrect = false;
 
         try {
@@ -1210,15 +1208,19 @@ public class GuiPrototype extends JFrame {
           JOptionPane.showMessageDialog(null, "Imgresa un número sin decimal");
         }
 
-        if (marcax != null && colorx != null && modelox != null && montox != null && imagesx != null && itegerCorrect) {
+        if (marcax != null && colorx != null && modelox != null && montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
+
+          File selectedFile = file.getSelectedFile();
+          ImageIcon icono = new ImageIcon(selectedFile.getAbsolutePath());
+
           color.add(marcax);
           marca.add(colorx);
           modelo.add(modelox);
           monto.add(Integer.parseInt(montox));
-          images.add(new ImageIcon(imagesx));
+          images.add(icono);
           Realizar_venta(iniciox, oX);
           oX++;
-          System.out.println(oX);
+          System.out.println(oX); 
           marcaTXT.setText("");
           colorTXT.setText("");
           modeloTXT.setText("");
