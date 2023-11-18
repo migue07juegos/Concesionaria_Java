@@ -876,17 +876,25 @@ public class GuiPrototype extends JFrame {
     slider.addChangeListener(e -> {
                 
       if (slider.getValue() > valorAnterior) {
-        try {
+        String command = "echo { \"command\": [\"add\", \"volume\", \"+2\"] } > \\\\.\\pipe\\mpvsocket";
+        String fileName = "raise_volume.bat";
+        String fileNameSh = "pause.sh";
+        scripts(command, fileName, fileNameSh);
+        /*try {
           new ProcessBuilder(System.getProperty("user.dir") + "/scripts/raise_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
         } catch (IOException e1) {
           e1.printStackTrace();
-        }
+        }*/
       }else{
-        try {
+        String command = "echo { \"command\": [\"add\", \"volume\", \"-2\"] } > \\\\.\\pipe\\mpvsocket";
+        String fileName = "lower_volume.bat";
+        String fileNameSh = "lower_volume.sh";
+        scripts(command, fileName, fileNameSh);
+        /*try {
           new ProcessBuilder(System.getProperty("user.dir") + "/scripts/lower_volume."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh")).start();
         } catch (IOException e1) {
           e1.printStackTrace();
-        }
+        }*/
       }
 
       valorAnterior = slider.getValue();
@@ -939,23 +947,11 @@ public class GuiPrototype extends JFrame {
         btnPausa.setBackground(null);
       }
     });
-    btnPausa.addActionListener(e -> {{
-        ProcessBuilder processBuilder1;
-
-        if (System.getProperty("os.name").contains("Win")) {
-          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/scripts/pause.bat");
-        } else {
-          processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/scripts/pause.sh");
-        }
-
-        try {
-          Process procesoReproductor1 = processBuilder1.start();
-          procesoReproductor1.waitFor();
-          procesoReproductor1.destroy();
-        } catch (IOException | InterruptedException x) {
-          x.printStackTrace();
-        }
-      }
+    btnPausa.addActionListener(e -> {
+        String command = "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket";
+        String fileName = "pause.bat";
+        String fileNameSh = "pause.sh";
+        scripts(command, fileName, fileNameSh);
     });
 
     btnSig.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1052,6 +1048,49 @@ public class GuiPrototype extends JFrame {
     
     panel.add(uno);
     panel.add(dos);
+  }
+
+  public static void scripts(String commandBat, String fileNameBat, String fileNameSh) {
+    if (System.getProperty("os.name").contains("Win")) {
+      try {
+        String nombreArchivo = fileNameBat;
+        File archivo = new File(nombreArchivo);
+        FileWriter fileWriter = new FileWriter(archivo);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+        if (archivo.exists()) {
+            archivo.delete();
+        }
+
+        bufferedWriter.write("@echo off");
+        bufferedWriter.newLine();
+        bufferedWriter.write(commandBat);
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        String tempPath = System.getProperty("java.io.tmpdir");
+        Path tempFilePath = Path.of(tempPath, nombreArchivo);
+
+        Files.copy(archivo.toPath(), tempFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+        archivo.delete();
+
+        try {
+          new ProcessBuilder(tempPath + "/" + fileNameBat).start();
+        } catch (IOException x) {
+          x.printStackTrace();
+        }
+      } catch (IOException x) {
+         // x.printStackTrace();
+      }
+    } else {
+      try {
+        new ProcessBuilder(System.getProperty("user.dir") + "/scripts/" + fileNameSh).start();
+      } catch (IOException x) {
+        x.printStackTrace();
+      }
+    }
   }
 
   public static void detenerReproductor() {
