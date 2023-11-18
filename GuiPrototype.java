@@ -4,10 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -56,6 +53,9 @@ public class GuiPrototype extends JFrame {
   public static Vector<String> modelo = new Vector<>();
   public static Vector<Integer> monto = new Vector<>();
   public static Vector<ImageIcon> images = new Vector<>(); 
+  public static Process process;
+  public static ProcessBuilder processBuilder;
+
     
   static {
     color.add("Blanco");
@@ -1116,10 +1116,10 @@ public class GuiPrototype extends JFrame {
 
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-    JButton btnAnterior = new JButton("Anterior");
+    JButton btnAnterior = new JButton("|<-");
     JButton btnSalir = new JButton("Salir");
-    JButton btnPausa = new JButton("Pausar");
-    JButton btnSig = new JButton("Siguiente");
+    JButton btnPausa = new JButton("||");
+    JButton btnSig = new JButton("->|");
     JButton btnAgregar = new JButton("Agregar");
 
     JPanel uno = new JPanel();
@@ -1129,12 +1129,14 @@ public class GuiPrototype extends JFrame {
     slider.setMajorTickSpacing(50);
     slider.setPaintTicks(true);
     slider.setPaintLabels(true);
+    slider.setMinorTickSpacing(50);
     slider.setForeground(Color.white);
     slider.setBackground(Color.black);
     slider.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 0));
 
     valorAnterior = slider.getValue();
     slider.addChangeListener(e -> {
+<<<<<<< HEAD
                 
       if (slider.getValue() > valorAnterior) {
         String command = "echo { \"command\": [\"add\", \"volume\", \"+2\"] } > \\\\.\\pipe\\mpvsocket";
@@ -1157,8 +1159,25 @@ public class GuiPrototype extends JFrame {
           e1.printStackTrace();
         }*/
       }
+=======
+>>>>>>> 469ea6c (Se arreglo sonido del reproductor y se agregaron simbolos)
 
-      valorAnterior = slider.getValue();
+          try {
+
+            if (System.getProperty("os.name").contains("Win")) {
+              processBuilder = new ProcessBuilder("cmd.exe", "/c", String.format("echo set_property volume %d > mpv-ipc", slider.getValue()));
+            }else{
+              processBuilder = new ProcessBuilder("bash", "-c", String.format(
+                                                                "echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
+            }
+            process = processBuilder.start();
+            int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                System.err.println("Error al ajustar el volumen");
+            }
+        } catch (IOException | InterruptedException ex) {
+            ex.printStackTrace();
+        }
     });
 
     btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1183,6 +1202,7 @@ public class GuiPrototype extends JFrame {
     
     btnSalir.addActionListener(e -> {
       detenerReproductor();  // Llamada para detener el reproductor al presionar "Salir"
+      btnPausa.setText("||");
     });
 
     reproductorTxt.setForeground(new Color(155,155,155));
@@ -1209,10 +1229,32 @@ public class GuiPrototype extends JFrame {
       }
     });
     btnPausa.addActionListener(e -> {
+<<<<<<< HEAD
         String command = "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket";
         String fileName = "pause.bat";
         String fileNameSh = "pause.sh";
         scripts(command, fileName, fileNameSh);
+=======
+    
+        ProcessBuilder processBuilder1;
+
+        processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") +
+                          "/scripts/pause."+(System.getProperty("os.name").contains("Win") ? "bat" : "sh"));
+
+        if (btnPausa.getText().equals("▶")) {
+          btnPausa.setText("||");
+        }else{
+          btnPausa.setText("▶");
+        }
+
+        try {
+          Process procesoReproductor1 = processBuilder1.start();
+          procesoReproductor1.waitFor();
+          procesoReproductor1.destroy();
+        } catch (IOException | InterruptedException x) {
+          x.printStackTrace();
+        }
+>>>>>>> 469ea6c (Se arreglo sonido del reproductor y se agregaron simbolos)
     });
 
     btnSig.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1288,6 +1330,7 @@ public class GuiPrototype extends JFrame {
     });
 
     btnAgregar.addActionListener(e -> { 
+      btnPausa.setText("||");
       canciones.add(reproductorTxt.getText());
       reproductorTxt.setText(null);
       if (canciones.size() == 1) {
@@ -1378,7 +1421,7 @@ public class GuiPrototype extends JFrame {
       while (reproductor_i <= canciones.size() - 1) {
         try {
             ProcessBuilder processBuilder;
-            processBuilder = new ProcessBuilder("mpv", "--no-video", "--input-ipc-server=" + mpvsocket, canciones.get(reproductor_i));
+            processBuilder = new ProcessBuilder("mpv", "--no-video", "--volume=50", "--volume-max=100", "--af=scaletempo", "--input-ipc-server=" + mpvsocket, canciones.get(reproductor_i));
             processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(new File(logFilePath)));
             procesoReproductor = processBuilder.start();
             procesoReproductor.waitFor();
