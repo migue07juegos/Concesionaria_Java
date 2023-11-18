@@ -939,10 +939,7 @@ public class GuiPrototype extends JFrame {
         btnPausa.setBackground(null);
       }
     });
-<<<<<<< HEAD
-    btnPausa.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
+    btnPausa.addActionListener(e -> {{
         ProcessBuilder processBuilder1;
         String nombreArchivo = "A.txt";
         String command = "";
@@ -986,28 +983,12 @@ public class GuiPrototype extends JFrame {
             Process procesoReproductor1 = processBuilder1.start();
             procesoReproductor1.waitFor();
             procesoReproductor1.destroy();
-          } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+          } catch (IOException | InterruptedException x) {
+            x.printStackTrace();
           }
-        } catch (IOException e) {
-          e.printStackTrace();
-        }    
-=======
-    btnPausa.addActionListener(e -> {
-      ProcessBuilder processBuilder1;
-      if (System.getProperty("os.name").contains("Win")) {
-        processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.bat");
-      } else {
-        processBuilder1 = new ProcessBuilder(System.getProperty("user.dir") + "/pause.sh");
-      }
-
-      try {
-        Process procesoReproductor1 = processBuilder1.start();
-        procesoReproductor1.waitFor();
-        procesoReproductor1.destroy();
-      } catch (IOException | InterruptedException a) {
-        a.printStackTrace();
->>>>>>> 436cc22 (Se redujeron lineas con lambdas, se agego la opcion de bajar el volumen al reproductor, no se si funciona en windows y con videos de yt)
+        } catch (IOException x) {
+          x.printStackTrace();
+        }
       }
     });
 
@@ -1147,15 +1128,11 @@ public class GuiPrototype extends JFrame {
       return;
     }
   }
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> 436cc22 (Se redujeron lineas con lambdas, se agego la opcion de bajar el volumen al reproductor, no se si funciona en windows y con videos de yt)
   public static void agregar_elemento(JPanel panel, JPanel iniciox){
     
     JPanel panel2 = new JPanel();
-    JButton button = new JButton("1");
+    JButton button = new JButton("Agregar auto");
     button.setAlignmentX(Component.CENTER_ALIGNMENT);
     button.setFocusPainted(false);
     button.setPreferredSize(new Dimension(300, 100));
@@ -1178,7 +1155,7 @@ public class GuiPrototype extends JFrame {
 
     button.addActionListener(e -> pedirCarro(iniciox));
 
-    JButton button2 = new JButton("2");
+    JButton button2 = new JButton("Eliminar auto");
     button2.setAlignmentX(Component.CENTER_ALIGNMENT);
     button2.setFocusPainted(false);
     button2.setPreferredSize(new Dimension(300, 100));
@@ -1288,7 +1265,7 @@ public class GuiPrototype extends JFrame {
           Integer.parseInt(montox);
           itegerCorrect = true;
         } catch (Exception p) {
-          JOptionPane.showMessageDialog(null, "Ingresa los datos correctamente");
+          JOptionPane.showMessageDialog(null, "Ingresa un número válido sin décimal");
         }
 
         if (marcax != null && colorx != null && modelox != null && montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
