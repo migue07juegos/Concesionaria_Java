@@ -1044,23 +1044,26 @@ public class GuiPrototype extends JFrame {
     @Override //https://stackoverflow.com/questions/2865315/threads-in-java dice que es override, entonces ha de ser polimorfismo
     public void run() {
       String mpvsocket;
+      String logFilePath;
       if (System.getProperty("os.name").contains("Win")) {
         mpvsocket = "\\\\.\\" + "pipe\\mpvsocket";
+        logFilePath = "NUL";
       } else {
         mpvsocket = Paths.get(System.getProperty("java.io.tmpdir"), "mpvsocket").toString();
+        logFilePath = "/dev/null";
       }
 
       while (reproductor_i <= canciones.size() - 1) {
         try {
             ProcessBuilder processBuilder;
-            System.err.println(canciones.get(reproductor_i));
             processBuilder = new ProcessBuilder("mpv", "--no-video", "--input-ipc-server=" + mpvsocket, canciones.get(reproductor_i));
+            processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(new File(logFilePath)));
             procesoReproductor = processBuilder.start();
             procesoReproductor.waitFor();
             procesoReproductor.destroy();
             reproductor_i ++;
         } catch (IOException | InterruptedException e) {
-            System.err.println("Error al reproducir musica: " + e);
+            e.printStackTrace();
         }
       }
       canciones.clear();
