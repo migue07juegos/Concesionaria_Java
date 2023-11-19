@@ -1687,37 +1687,37 @@ public class GuiPrototype extends JFrame {
 
     button.addActionListener(e -> pedirCarro(iniciox));
 
-    JButton button2 = new JButton("Eliminar auto");
-    button2.setAlignmentX(Component.CENTER_ALIGNMENT);
-    button2.setFocusPainted(false);
-    button2.setPreferredSize(new Dimension(300, 100));
-    button2.setVerticalTextPosition(SwingConstants.BOTTOM);
-    button2.setHorizontalTextPosition(SwingConstants.RIGHT);
-    button2.getVerifyInputWhenFocusTarget();
-    button2.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseEntered(MouseEvent e) {
+    // JButton button2 = new JButton("Eliminar auto");
+    // button2.setAlignmentX(Component.CENTER_ALIGNMENT);
+    // button2.setFocusPainted(false);
+    // button2.setPreferredSize(new Dimension(300, 100));
+    // button2.setVerticalTextPosition(SwingConstants.BOTTOM);
+    // button2.setHorizontalTextPosition(SwingConstants.RIGHT);
+    // button2.getVerifyInputWhenFocusTarget();
+    // button2.addMouseListener(new MouseAdapter() {
+    //   @Override
+    //   public void mouseEntered(MouseEvent e) {
 
-        button2.setBackground(Color.DARK_GRAY);
-      }
+    //     button2.setBackground(Color.DARK_GRAY);
+    //   }
 
-      @Override
-      public void mouseExited(MouseEvent e) {
+    //   @Override
+    //   public void mouseExited(MouseEvent e) {
 
-        button2.setBackground(null);
-      }
-    });
+    //     button2.setBackground(null);
+    //   }
+    // });
 
-    button2.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent arg0) {
+    // button2.addActionListener(new ActionListener() {
+    //   @Override
+    //   public void actionPerformed(ActionEvent arg0) {
 
-        // eliminar_auto();
-      }
-    });
+    //     // eliminar_auto();
+    //   }
+    // });
 
     panel2.add(button);
-    panel2.add(button2);
+    // panel2.add(button2);
 
     panel.add(panel2);
   }
