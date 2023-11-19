@@ -151,20 +151,20 @@ public class GuiPrototype extends JFrame {
   static Vector<String> canciones = new Vector<>();
   public static int get_img = 0;
   public static int valorAnterior;
-  private boolean ctrlPressed = false;
-  private boolean altPressed = false;
-  private boolean sPressed = false;
-  private boolean shiftPressed = false;
-  private boolean xPressed = false;
-  private boolean mPressed = false;
-  public static final int SCREEN_WIDTH = 800;
-  public static final int SCREEN_HEIGHT = 800;
+  public boolean ctrlPressed = false;
+  public boolean altPressed = false;
+  public boolean sPressed = false;
+  public boolean shiftPressed = false;
+  public boolean xPressed = false;
+  public boolean mPressed = false;
   public static Process process;
   public static ProcessBuilder processBuilder;
+  public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+  public static Process procesoReproductor;
+  public static final int SCREEN_WIDTH = screenSize.width;
+  public static final int SCREEN_HEIGHT = screenSize.height - 15;
 
   public GuiPrototype() {}
-
-  private static Process procesoReproductor;
 
   public static void valoresAleatorios() {
     Random rand = new Random();
@@ -903,11 +903,17 @@ public class GuiPrototype extends JFrame {
       double starttime;
       double endtime;
       public Mine(){
-          this.addKeyListener(new MyKeyAdapter(this));
-          this.getRootPane().setBackground(Color.BLACK);
-          this.setTitle("Busca minas");
-          this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-          this.setResizable(false);
+          addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent k) {
+              if (k.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                  dispose();
+              }
+            }
+          });
+          getRootPane().setBackground(Color.BLACK);
+          setTitle("Busca minas");
+          setDefaultCloseOperation(EXIT_ON_CLOSE);
+          setResizable(false);
           perm = new int[n][m];
           boolean allmines = false;
           guesses = new int [n+2][m+2];
@@ -964,6 +970,8 @@ public class GuiPrototype extends JFrame {
               }
           }
           pack();
+          setFocusable(true);
+          setSize(screenSize.width, screenSize.height);
           setVisible(true);
           for (int y = 0;y<m+2;y++){
               for (int x = 0;x<n+2;x++){
@@ -999,7 +1007,7 @@ public class GuiPrototype extends JFrame {
               }//end inner for
           }//end for
           if(!found) {
-              System.out.println("didn't find the button, there was an error "); System.exit(-1);
+              System.out.println("No se encontro el botón, hubo un error"); System.exit(-1);
           }
           Component temporaryLostComponent = null;
           if (b[row][column].getBackground() == Color.orange){
@@ -1089,7 +1097,7 @@ public class GuiPrototype extends JFrame {
                       }
               }
               if(!found) {
-                  System.out.println("didn't find the button, there was an error "); System.exit(-1);
+                  System.out.println("No se encontro el botón, hubo un error"); System.exit(-1);
               }
               if ((guesses[row+1][column+1] == 0) && (b[row][column].isEnabled())){
                   b[row][column].setText("x");
@@ -1098,7 +1106,7 @@ public class GuiPrototype extends JFrame {
               } else if (guesses[row+1][column+1] == 1){
                   b[row][column].setText("?");
                   guesses[row+1][column+1] = 0;
-                  b[row][column].setBackground(null);
+                  b[row][column].setBackground(Color.BLACK);
               }
           }
       }
@@ -2246,7 +2254,6 @@ public class GuiPrototype extends JFrame {
   public static void main(String[] args) {
     System.setProperty("awt.useSystemAAFontSettings", "on");
     GuiPrototype frame = new GuiPrototype(true);
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setVisible(true);
     frame.setBounds(0, 0, screenSize.width, screenSize.height);
     frame.setResizable(false);
