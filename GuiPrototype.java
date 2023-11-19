@@ -1395,28 +1395,48 @@ public class GuiPrototype extends JFrame {
     slider.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 0));
 
     valorAnterior = slider.getValue();
-    slider.addChangeListener(e -> {
-                
-          try {
 
-            if (System.getProperty("os.name").contains("Win")) {
-              // processBuilder = new ProcessBuilder("cmd.exe", "/c", String.format("echo set_property volume %d > mpv-ipc", slider.getValue()));
-              String command = String.format("echo { \"command\": [\"set_property\", \"volume\", %d]] } >\\\\.\\pipe\\mpvsocket",slider.getValue());
-              String fileName = "vol.bat";
-              scripts(command, fileName, null);
-        
-            }else{
-              processBuilder = new ProcessBuilder("bash", "-c", String.format(
-                                                  "echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
-            }
-            process = processBuilder.start();
-            int exitCode = process.waitFor();
-            if (exitCode != 0) {
-                System.err.println("Error al ajustar el volumen");
-            }
-        } catch (IOException | InterruptedException ex) {
-            ex.printStackTrace();
+    File archivo = new File("vol.bat");
+
+    // if (System.getProperty("os.name").contains("Win")) {
+    //     if (archivo.exists()) {
+    //         archivo.delete();
+    //     }
+    //   }
+
+
+    slider.addChangeListener(e -> {
+      try {
+        if (System.getProperty("os.name").contains("Win")) {
+          FileWriter fileWriter = new FileWriter(archivo);
+          BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);      
+          // processBuilder = new ProcessBuilder("cmd.exe", "/c", String.format("echo set_property volume %d > mpv-ipc", slider.getValue()));
+          String commandBat = String.format("echo { \"command\": [\"set_property\", \"volume\", %d]] } >\\\\.\\pipe\\mpvsocket",slider.getValue());
+          bufferedWriter.write("@echo off");
+          bufferedWriter.newLine();
+          bufferedWriter.write(commandBat);
+          bufferedWriter.newLine();
+          bufferedWriter.close();
+  
+          String tempPath = System.getProperty("java.io.tmpdir");
+          Path tempFilePath = Path.of(tempPath, "vol.bat");
+          Files.copy(archivo.toPath(), tempFilePath, StandardCopyOption.REPLACE_EXISTING);
+          processBuilder = new ProcessBuilder(tempPath + "/" + archivo);
+  
+        }else{
+          processBuilder = new ProcessBuilder("bash", "-c", String.format(
+                                              "echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
         }
+        process = processBuilder.start();
+        int exitCode = process.waitFor();
+
+        if (exitCode != 0) {
+            System.err.println("Error al ajustar el volumen");
+        }
+        
+      } catch (IOException | InterruptedException ex) {
+          ex.printStackTrace();
+      }
     });
 
     btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1476,8 +1496,7 @@ public class GuiPrototype extends JFrame {
       }
       String command = "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket";
       String fileName = "pause.bat";
-      String fileNameSh = "pause.sh";
-      scripts(command, fileName, fileNameSh);
+      scripts(command, fileName);
     });
 
     btnSig.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1577,7 +1596,7 @@ public class GuiPrototype extends JFrame {
     panel.add(dos);
   }
 
-  public static void scripts(String commandBat, String fileNameBat, String fileNameSh) {
+  public static void scripts(String commandBat, String fileNameBat) {
     if (System.getProperty("os.name").contains("Win")) {
       try {
 
@@ -1609,13 +1628,13 @@ public class GuiPrototype extends JFrame {
           x.printStackTrace();
         }
       } catch (IOException x) {
-         // x.printStackTrace();
+        x.printStackTrace();
       }
     } else {
       try {
-        new ProcessBuilder(System.getProperty("user.dir") + "/scripts/" + fileNameSh).start();
-      } catch (IOException x) {
-        x.printStackTrace();
+        new ProcessBuilder ("bash", "-c", "echo '{ \"command\": [\"cycle\", \"pause\"] }' | socat - /tmp/mpvsocket").start();
+      } catch (IOException e) {
+        e.printStackTrace();
       }
     }
   }
