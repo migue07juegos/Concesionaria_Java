@@ -56,9 +56,6 @@ public class GuiPrototype extends JFrame {
   public static Vector<String> modelo = new Vector<>();
   public static Vector<Integer> monto = new Vector<>();
   public static Vector<ImageIcon> images = new Vector<>(); 
-  public static Process process;
-  public static ProcessBuilder processBuilder;
-
     
   static {
     color.add("Blanco");
@@ -157,8 +154,13 @@ public class GuiPrototype extends JFrame {
   private boolean ctrlPressed = false;
   private boolean altPressed = false;
   private boolean sPressed = false;
+  private boolean shiftPressed = false;
+  private boolean xPressed = false;
+  private boolean mPressed = false;
   public static final int SCREEN_WIDTH = 800;
   public static final int SCREEN_HEIGHT = 800;
+  public static Process process;
+  public static ProcessBuilder processBuilder;
 
   public GuiPrototype() {}
 
@@ -676,188 +678,194 @@ public class GuiPrototype extends JFrame {
     boolean keyInput = false;
     String randomGameOverMessage = "";
       
-      SnakeGame(JFrame frame){
-
-          frame.setFocusable(true);
-      frame.requestFocus();
-          frame.addKeyListener(new MyKeyAdapter());
-          this.setSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
-          this.setBackground(Color.DARK_GRAY);
+    SnakeGame(JFrame frame){
+        frame.setFocusable(true);
+        frame.requestFocus();
+        frame.addKeyListener(new MyKeyAdapter(frame));
+        this.setSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
+        this.setBackground(Color.DARK_GRAY);
+    }
+  
+    public void startGame(){
+      snakeSize = INITIAL_SNAKE_SIZE;
+      applesEaten = 0;
+      for(int i = 0; i < snakeSize; i++){
+          snakeX[i] = 0;
+          snakeY[i] = 0;
       }
-    
-      public void startGame(){
-          snakeSize = INITIAL_SNAKE_SIZE;
-          applesEaten = 0;
-          for(int i = 0; i < snakeSize; i++){
-              snakeX[i] = 0;
-              snakeY[i] = 0;
-          }
-          direction = 'R';
-          timer.start();
-          newApple();
+      direction = 'R';
+      timer.start();
+      newApple();
       randomGameOverMessage = "Perdiste :(";
-      }
+    }
 
-      public void actionPerformed(ActionEvent ev){
-          move();
-          checkCollision();
-          eatApple();
-          repaint();
-      }
+    public void actionPerformed(ActionEvent ev){
+        move();
+        checkCollision();
+        eatApple();
+        repaint();
+    }
 
-      public void paintComponent(Graphics g){
-          super.paintComponent(g); 
-          //Manzana en X y Y
-          g.setColor(Color.red);
-          g.fillOval(appleX , appleY, UNIT_SIZE, UNIT_SIZE);
-          //Cabeza serpiente
-          g.setColor(Color.blue);
-          g.fillRect(snakeX[0], snakeY[0], UNIT_SIZE, UNIT_SIZE);
-          //Cuerpo de serpiente
-          for(int i = 1; i < snakeSize; i++){
-              g.fillRect(snakeX[i], snakeY[i], UNIT_SIZE, UNIT_SIZE);
-          }
+    public void paintComponent(Graphics g){
+        super.paintComponent(g); 
+        g.setColor(Color.red);
+        g.fillOval(appleX , appleY, UNIT_SIZE, UNIT_SIZE);
+        g.setColor(Color.blue);
+        g.fillRect(snakeX[0], snakeY[0], UNIT_SIZE, UNIT_SIZE);
+        for(int i = 1; i < snakeSize; i++){
+            g.fillRect(snakeX[i], snakeY[i], UNIT_SIZE, UNIT_SIZE);
+        }
 
-          g.setColor(Color.white);
-          g.setFont(new Font("Liberation Mono", Font.PLAIN, 25));
-          FontMetrics fontSize = g.getFontMetrics();
-          int fontX = SCREEN_WIDTH - fontSize.stringWidth("Score: " + applesEaten + "  ") - 10;
-          int fontY = fontSize.getHeight();
-          g.drawString("Score: " + applesEaten, fontX, fontY);
-          
-          if(!timer.isRunning()){
-              g.setColor(Color.white);
-              g.setFont(new Font("Liberation Mono", Font.PLAIN, 58));
-              
-              String message = randomGameOverMessage;
-              fontSize = g.getFontMetrics();
-              fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2 ;
-              fontY = (SCREEN_HEIGHT - fontSize.getHeight()) /2;
-              g.drawString(message, fontX, fontY);
+        g.setColor(Color.white);
+        g.setFont(new Font("Liberation Mono", Font.PLAIN, 25));
+        FontMetrics fontSize = g.getFontMetrics();
+        int fontX = SCREEN_WIDTH - fontSize.stringWidth("Score: " + applesEaten + "  ") - 10;
+        int fontY = fontSize.getHeight();
+        g.drawString("Score: " + applesEaten, fontX, fontY);
+        
+        if(!timer.isRunning()){
+            g.setColor(Color.white);
+            g.setFont(new Font("Liberation Mono", Font.PLAIN, 58));
+            
+            String message = randomGameOverMessage;
+            fontSize = g.getFontMetrics();
+            fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2 ;
+            fontY = (SCREEN_HEIGHT - fontSize.getHeight()) /2;
+            g.drawString(message, fontX, fontY);
 
-              g.setFont(new Font("Liberation Mono", Font.PLAIN, 24));
-              message = "Presiona R para reiniciar el juego";
-              fontSize = g.getFontMetrics();
-              fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2 ;
-              fontY = fontY + fontSize.getHeight() + 20;
-              g.drawString(message, fontX, fontY);
-          }
-      }
+            g.setFont(new Font("Liberation Mono", Font.PLAIN, 24));
+            message = "Presiona R para reiniciar el juego";
+            fontSize = g.getFontMetrics();
+            fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2 ;
+            fontY = fontY + fontSize.getHeight() + 20;
+            g.drawString(message, fontX, fontY);
+
+            g.setFont(new Font("Liberation Mono", Font.PLAIN, 24));
+            message = "Presiona Esc para salir";
+            fontSize = g.getFontMetrics();
+            fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2 ;
+            fontY = fontY + fontSize.getHeight() + 20;
+            g.drawString(message, fontX, fontY);
+            
+        }
+    }
+  
+    public void newApple(){
+        int x = random(HORIZONTAL_UNITS) * UNIT_SIZE;
+        int y = random(VERTICAL_UNITS) * UNIT_SIZE;
+        Point provisional = new Point(x,y);
+        Point snakePos = new Point();
+        boolean newApplePermission = true;
+        for(int i = 0; i < snakeSize; i++){
+            snakePos.setLocation(snakeX[i], snakeY[i]);
+            if(provisional.equals(snakePos)){
+                newApplePermission = false;
+            }
+        }
+        if(newApplePermission){
+            appleX = x;
+            appleY = y;
+        }else{
+            newApple();
+        }
+    }
+
+    public void checkCollision(){
+        if(snakeX[0] >= (SCREEN_WIDTH) || snakeX[0] < 0 || snakeY[0] >= (SCREEN_HEIGHT-20) || snakeY[0] < 0){
+            gameOver();
+        }
+        for(int i = 1; i < snakeSize; i++){
+            if((snakeX[0] == snakeX[i]) && (snakeY[0] == snakeY[i])){
+                gameOver();
+            }
+        }
+    }
     
-      public void newApple(){
-          //numero random entre 0 y 23 * unit size
-          int x = random(HORIZONTAL_UNITS) * UNIT_SIZE;
-          int y = random(VERTICAL_UNITS) * UNIT_SIZE;
-          Point provisional = new Point(x,y);
-          Point snakePos = new Point();
-          boolean newApplePermission = true;
-          for(int i = 0; i < snakeSize; i++){
-              snakePos.setLocation(snakeX[i], snakeY[i]);
-              if(provisional.equals(snakePos)){
-                  newApplePermission = false;
-              }
-          }
-          if(newApplePermission){
-              appleX = x;
-              appleY = y;
-          }else{
-              newApple();
-          }
-      }
-
-      public void checkCollision(){
-          if(snakeX[0] >= (SCREEN_WIDTH) || snakeX[0] < 0 || snakeY[0] >= (SCREEN_HEIGHT-20) || snakeY[0] < 0){
-              gameOver();
-          }
-          for(int i = 1; i < snakeSize; i++){
-              if((snakeX[0] == snakeX[i]) && (snakeY[0] == snakeY[i])){
-                  gameOver();
-              }
-          }
-      }
-      
     public void eatApple(){
-          if(snakeX[0] == appleX && snakeY[0] == appleY){
-              snakeSize++;
-              applesEaten++;
-              newApple();
-          }
-      }
-      
+        if(snakeX[0] == appleX && snakeY[0] == appleY){
+            snakeSize++;
+            applesEaten++;
+            newApple();
+        }
+    }
+    
     public void move(){
-          for(int i = snakeSize; i > 0; i--){
-              snakeX[i] = snakeX[i-1]; 
-              snakeY[i] = snakeY[i-1]; 
-          }
-          switch(direction){
-              case 'R':
-                  snakeX[0] += UNIT_SIZE;
-                  break;
-              case 'L':
-                  snakeX[0] -= UNIT_SIZE;
-                  break;
-              case 'U':
-                  snakeY[0] -= UNIT_SIZE;
-                  break;
-              case 'D':
-                  snakeY[0] += UNIT_SIZE;
-                  break;
-          }
+        for(int i = snakeSize; i > 0; i--){
+            snakeX[i] = snakeX[i-1]; 
+            snakeY[i] = snakeY[i-1]; 
+        }
+        switch(direction){
+            case 'R':
+                snakeX[0] += UNIT_SIZE;
+                break;
+            case 'L':
+                snakeX[0] -= UNIT_SIZE;
+                break;
+            case 'U':
+                snakeY[0] -= UNIT_SIZE;
+                break;
+            case 'D':
+                snakeY[0] += UNIT_SIZE;
+                break;
+        }
 
-          keyInput = false;
-      }
-      
+        keyInput = false;
+    }
+    
     public void gameOver(){
-          timer.stop();
-      }
+        timer.stop();
+    }
 
-      public int random(int range){
-          //returns an int from 0 to range
-          return (int)(Math.random() * range);
-      }
+    public int random(int range){
+        return (int)(Math.random() * range);
+    }
       
-      class MyKeyAdapter extends KeyAdapter{
-          public void keyPressed(KeyEvent k){
-              
-              switch(k.getKeyCode()){
-                  case (KeyEvent.VK_5) :
-                      snakeSize++;
-                      applesEaten++;
+    class MyKeyAdapter extends KeyAdapter{
+      JFrame frame;
+      MyKeyAdapter(JFrame frame){
+        this.frame = frame;
+      }
+        public void keyPressed(KeyEvent k){
+          switch(k.getKeyCode()){
+              case (KeyEvent.VK_5) :
+                  snakeSize++;
+                  applesEaten++;
+              break;
+              case (KeyEvent.VK_DOWN):
+                  if(direction != 'U' && keyInput == false){
+                      direction = 'D';
+                      keyInput = true;
+                  }
                   break;
-                  case (KeyEvent.VK_DOWN):
-                      if(direction != 'U' && keyInput == false){
-                          direction = 'D';
-                          keyInput = true;
-                      }
-                      break;
-                  case (KeyEvent.VK_UP):
-                      if(direction != 'D' && !keyInput){
-                          direction = 'U';
-                          keyInput = true;
-                      }
-                      break;
-                  case (KeyEvent.VK_LEFT):
-                      if(direction != 'R' && keyInput == false){
-                          direction = 'L';
-                          keyInput = true;
-                      }
-                      break;
-                  case (KeyEvent.VK_RIGHT):
-                      if(direction != 'L' && keyInput == false){
-                          direction = 'R';
-                          keyInput = true;
-                      }
-                      break;
-                  case (KeyEvent.VK_R):
-                      if(!timer.isRunning()){
-                          startGame();
-                      }
-                      break;
-                  case KeyEvent.VK_ESCAPE:
-            break;
-              }
+              case (KeyEvent.VK_UP):
+                  if(direction != 'D' && !keyInput){
+                      direction = 'U';
+                      keyInput = true;
+                  }
+                  break;
+              case (KeyEvent.VK_LEFT):
+                  if(direction != 'R' && keyInput == false){
+                      direction = 'L';
+                      keyInput = true;
+                  }
+                  break;
+              case (KeyEvent.VK_RIGHT):
+                  if(direction != 'L' && keyInput == false){
+                      direction = 'R';
+                      keyInput = true;
+                  }
+                  break;
+              case (KeyEvent.VK_R):
+                  if(!timer.isRunning()){
+                      startGame();
+                  }
+                  break;
+              case KeyEvent.VK_ESCAPE:
+                  frame.dispose();
+                  break;
           }
-      }   
+        }
+    }   
   }
 
   public static class InnerSnakeGame extends JFrame {
@@ -875,42 +883,281 @@ public class GuiPrototype extends JFrame {
           this.add(SnakeGame);
           SnakeGame.startGame();
       } 
-  } 
+  }
+
+  public static class Mine extends JFrame implements ActionListener, MouseListener{
+      int nomines = 80;
+      int perm[][];
+      String tmp;
+      boolean found = false;
+      int row;
+      int column;
+      int guesses[][];
+      JButton b[][];
+      int[][] mines;
+      boolean allmines;
+      int n = 30;
+      int m = 30;
+      int deltax[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+      int deltay[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+      double starttime;
+      double endtime;
+      public Mine(){
+          this.addKeyListener(new MyKeyAdapter(this));
+          this.getRootPane().setBackground(Color.BLACK);
+          this.setTitle("Busca minas");
+          this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+          this.setResizable(false);
+          perm = new int[n][m];
+          boolean allmines = false;
+          guesses = new int [n+2][m+2];
+          mines = new int[n+2][m+2];
+          b = new JButton [n][m];
+          setLayout(new GridLayout(n,m));
+          for (int y = 0;y<m+2;y++){
+              mines[0][y] = 3;
+              mines[n+1][y] = 3;
+              guesses[0][y] = 3;
+              guesses[n+1][y] = 3;
+          }
+          for (int x = 0;x<n+2;x++){
+              mines[x][0] = 3;
+              mines[x][m+1] = 3;
+              guesses[x][0] = 3;
+              guesses[x][m+1] = 3;
+          }
+          do {
+              int check = 0;
+              for (int y = 1;y<m+1;y++){
+                  for (int x = 1;x<n+1;x++){
+                      mines[x][y] = 0;
+                      guesses[x][y] = 0;
+                  }
+              }
+              for (int x = 0;x<nomines;x++){
+                  mines [(int) (Math.random()*(n)+1)][(int) (Math.random()*(m)+1)] = 1;
+              }
+              for (int x = 0;x<n;x++){
+                  for (int y = 0;y<m;y++){
+                  if (mines[x+1][y+1] == 1){
+                          check++;
+                      }
+                  }
+              }
+              if (check == nomines){
+                  allmines = true;
+              }
+          }while (allmines == false);
+          for (int y = 0;y<m;y++){
+              for (int x = 0;x<n;x++){
+                  if ((mines[x+1][y+1] == 0) || (mines[x+1][y+1] == 1)){
+                      perm[x][y] = perimcheck(x,y);
+                  }
+                  b[x][y] = new JButton("?");
+                  b[x][y].setBackground(Color.BLACK);
+                  b[x][y].setForeground(new Color(155, 155, 155));
+                  b[x][y].setFocusPainted(false);
+                  b[x][y].addActionListener(this);
+                  b[x][y].addMouseListener(this);
+                  add(b[x][y]);
+                  b[x][y].setEnabled(true);
+              }
+          }
+          pack();
+          setVisible(true);
+          for (int y = 0;y<m+2;y++){
+              for (int x = 0;x<n+2;x++){
+                  System.out.print(mines[x][y]);
+              }
+          System.out.println("");}
+          starttime = System.nanoTime();
+      }
+
+      class MyKeyAdapter extends KeyAdapter{
+      JFrame frame;
+      MyKeyAdapter(JFrame frame){
+          this.frame = frame;
+        }
+          public void keyPressed(KeyEvent k){
+            switch(k.getKeyCode()){
+                case KeyEvent.VK_ESCAPE:
+                    frame.dispose();
+                    break;
+            }
+          }
+      } 
+  
+      public void actionPerformed(ActionEvent e){
+          found =  false;
+          JButton current = (JButton)e.getSource();
+          for (int y = 0;y<m;y++){
+              for (int x = 0;x<n;x++){
+                  JButton t = b[x][y];
+                  if(t == current){
+                      row=x;column=y; found =true;
+                  }
+              }//end inner for
+          }//end for
+          if(!found) {
+              System.out.println("didn't find the button, there was an error "); System.exit(-1);
+          }
+          Component temporaryLostComponent = null;
+          if (b[row][column].getBackground() == Color.orange){
+              return;
+          }else if (mines[row+1][column+1] == 1){
+                  JOptionPane.showMessageDialog(temporaryLostComponent, "Perdiste!!!!.");
+                  dispose();
+          } else {
+              tmp = Integer.toString(perm[row][column]);
+              if (perm[row][column] == 0){
+                      tmp = " ";
+              }
+              b[row][column].setText(tmp);
+              b[row][column].setEnabled(false);
+              checkifend();
+              if (perm[row][column] == 0){
+                  scan(row, column);
+                  checkifend();
+              }
+          }
+      }
+  
+      public void checkifend(){
+          int check= 0;
+          for (int y = 0; y<m;y++){
+              for (int x = 0;x<n;x++){
+          if (b[x][y].isEnabled()){
+              check++;
+          }
+              }}
+          if (check == nomines){
+              endtime = System.nanoTime();
+              Component temporaryLostComponent = null;
+              JOptionPane.showMessageDialog(temporaryLostComponent, "Felicidades Has Ganado!!! \nTe Tomo "+(int)((endtime-starttime)/1000000000)+" segundos!");
+          }
+      }
+  
+      public void scan(int x, int y){
+          for (int a = 0;a<8;a++){
+              if (mines[x+1+deltax[a]][y+1+deltay[a]] == 3){
+  
+              } else if ((perm[x+deltax[a]][y+deltay[a]] == 0) && (mines[x+1+deltax[a]][y+1+deltay[a]] == 0) && (guesses[x+deltax[a]+1][y+deltay[a]+1] == 0)){
+                  if (b[x+deltax[a]][y+deltay[a]].isEnabled()){
+                      b[x+deltax[a]][y+deltay[a]].setText(" ");
+                      b[x+deltax[a]][y+deltay[a]].setEnabled(false);
+                      scan(x+deltax[a], y+deltay[a]);
+                  }
+              } else if ((perm[x+deltax[a]][y+deltay[a]] != 0) && (mines[x+1+deltax[a]][y+1+deltay[a]] == 0)  && (guesses[x+deltax[a]+1][y+deltay[a]+1] == 0)){
+                  //tmp = tmp = String.valueOf(perm[x+deltax[a]][y+deltay[a]]);
+                  b[x+deltax[a]][y+deltay[a]].setText(Integer.toString(perm[x+deltax[a]][y+deltay[a]]));
+                  b[x+deltax[a]][y+deltay[a]].setEnabled(false);
+              }
+          }
+      }
+  
+      public int perimcheck(int a, int y){
+          int minecount = 0;
+          for (int x = 0;x<8;x++){
+              if (mines[a+deltax[x]+1][y+deltay[x]+1] == 1){
+                  minecount++;
+              }
+          }
+          return minecount;
+      }
+  
+      public void windowIconified(WindowEvent e){}
+  
+      public void mouseClicked(MouseEvent e) {}
+
+      @Override
+      public void mouseEntered(MouseEvent arg0) {}
+
+      @Override
+      public void mouseExited(MouseEvent arg0) {}
+  
+      @Override
+      public void mousePressed(MouseEvent e) {
+          if (e.getButton() == MouseEvent.BUTTON3) {
+              found =  false;
+              Object current = e.getSource();
+              for (int y = 0;y<m;y++){
+                      for (int x = 0;x<n;x++){
+                              JButton t = b[x][y];
+                              if(t == current){
+                                      row=x;column=y; found =true;
+                              }
+                      }
+              }
+              if(!found) {
+                  System.out.println("didn't find the button, there was an error "); System.exit(-1);
+              }
+              if ((guesses[row+1][column+1] == 0) && (b[row][column].isEnabled())){
+                  b[row][column].setText("x");
+                  guesses[row+1][column+1] = 1;
+                  b[row][column].setBackground(Color.orange);
+              } else if (guesses[row+1][column+1] == 1){
+                  b[row][column].setText("?");
+                  guesses[row+1][column+1] = 0;
+                  b[row][column].setBackground(null);
+              }
+          }
+      }
+  
+      @Override
+      public void mouseReleased(MouseEvent arg0) {}
+  }
 
   public GuiPrototype(boolean Ventana) {
 
     if (Ventana) {
-      // Agregar el KeyListener al JFrame
       addKeyListener(new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {}
 
         @Override
         public void keyPressed(KeyEvent e) {
-            // Verificar las teclas presionadas
             if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
                 ctrlPressed = true;
             } else if (e.getKeyCode() == KeyEvent.VK_ALT) {
                 altPressed = true;
-            } else if (e.getKeyCode() == KeyEvent.VK_A) {
+            } else if (e.getKeyCode() == KeyEvent.VK_S) {
                 sPressed = true;
+            }else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+                shiftPressed = true;
+            }else if (e.getKeyCode() == KeyEvent.VK_X) {
+                xPressed = true;
+            }else if (e.getKeyCode() == KeyEvent.VK_M) {
+                mPressed = true;
             }
-
-            // Si se presionan Ctrl + Alt + A, realizar acciones
+            System.out.println(ctrlPressed + "\nalt: " + altPressed + "\ns:" + sPressed + "\nsh:" + shiftPressed + "\nta:" + xPressed + "\nm:" + mPressed);
             if (ctrlPressed && altPressed && sPressed) {
                 new InnerSnakeGame();
+                ctrlPressed = false;
+                altPressed = false;
+                sPressed = false;
+            }
+            else if (shiftPressed && xPressed && mPressed) {
+                new Mine();
+                shiftPressed = false;
+                xPressed = false;
+                mPressed = false;
             }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            // Verificar las teclas liberadas
             if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
                 ctrlPressed = false;
             } else if (e.getKeyCode() == KeyEvent.VK_ALT) {
                 altPressed = false;
             } else if (e.getKeyCode() == KeyEvent.VK_S) {
                 sPressed = false;
+            }else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+                shiftPressed = false;
+            }else if (e.getKeyCode() == KeyEvent.VK_X) {
+                xPressed = false;
+            }else if (e.getKeyCode() == KeyEvent.VK_M) {
+                mPressed = false;
             }
         }
       });
