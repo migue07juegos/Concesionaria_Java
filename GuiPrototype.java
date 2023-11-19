@@ -1272,7 +1272,9 @@ public class GuiPrototype extends JFrame {
       JButton button = new JButton(images.get(h));
 
       button.setPreferredSize(new Dimension(300, 300));
+
       button.addActionListener(new BotonListener(button, label, h, panel));
+      
       button.setVerticalTextPosition(SwingConstants.BOTTOM);
       button.setHorizontalTextPosition(SwingConstants.CENTER);
       button.setBorder(
@@ -1398,10 +1400,14 @@ public class GuiPrototype extends JFrame {
           try {
 
             if (System.getProperty("os.name").contains("Win")) {
-              processBuilder = new ProcessBuilder("cmd.exe", "/c", String.format("echo set_property volume %d > mpv-ipc", slider.getValue()));
+              // processBuilder = new ProcessBuilder("cmd.exe", "/c", String.format("echo set_property volume %d > mpv-ipc", slider.getValue()));
+              String command = String.format("echo { \"command\": [\"set_property\", \"volume\", %d]] } >\\\\.\\pipe\\mpvsocket",slider.getValue());
+              String fileName = "vol.bat";
+              scripts(command, fileName, null);
+        
             }else{
               processBuilder = new ProcessBuilder("bash", "-c", String.format(
-                                                                "echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
+                                                  "echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
             }
             process = processBuilder.start();
             int exitCode = process.waitFor();
@@ -1574,8 +1580,8 @@ public class GuiPrototype extends JFrame {
   public static void scripts(String commandBat, String fileNameBat, String fileNameSh) {
     if (System.getProperty("os.name").contains("Win")) {
       try {
-        String nombreArchivo = fileNameBat;
-        File archivo = new File(nombreArchivo);
+
+        File archivo = new File(fileNameBat);
         FileWriter fileWriter = new FileWriter(archivo);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
@@ -1591,7 +1597,7 @@ public class GuiPrototype extends JFrame {
         bufferedWriter.close();
 
         String tempPath = System.getProperty("java.io.tmpdir");
-        Path tempFilePath = Path.of(tempPath, nombreArchivo);
+        Path tempFilePath = Path.of(tempPath, fileNameBat);
 
         Files.copy(archivo.toPath(), tempFilePath, StandardCopyOption.REPLACE_EXISTING);
 
@@ -1706,7 +1712,7 @@ public class GuiPrototype extends JFrame {
       @Override
       public void actionPerformed(ActionEvent arg0) {
 
-        // pedir_recibo(informacion, funcion);
+        // eliminar_auto();
       }
     });
 
@@ -1778,6 +1784,7 @@ public class GuiPrototype extends JFrame {
     frame.add(componentesPanel);
 
     JButton aceptarButton = new JButton("Aceptar");
+    aceptarButton.setFocusPainted(false);
 
     aceptarButton.addActionListener( e -> {
         String marcax = marcaTXT.getText();
@@ -2090,7 +2097,7 @@ public class GuiPrototype extends JFrame {
     frame.add(componentesPanel);
 
     JButton aceptarButton = new JButton("Aceptar");
-
+    aceptarButton.setFocusPainted(false);
     aceptarButton.addActionListener( e -> {
 
       boolean[] confirmBuscar = new boolean[4];
@@ -2222,7 +2229,9 @@ public class GuiPrototype extends JFrame {
     public void actionPerformed(ActionEvent e) {
       boolean confirm = true;
 
-      String[] opciones = {"Realizar venta", "Cancelar"};
+      String[] opciones = { "Realizar venta" , "Eliminar auto", "Cancelar"};
+      String[] opciones2 = {"Confirmar", "Cancelar"};
+
 
       int seleccion = JOptionPane.showOptionDialog(
           null, "Selecciona una opción", "Venta del auto seleccionado",
@@ -2232,10 +2241,19 @@ public class GuiPrototype extends JFrame {
       switch (seleccion) {
       case 0:
         confirm = false;
-        pedirDatos(ho);
-
+          pedirDatos(ho);
         break;
-      case 1:
+      case 1: 
+        int seleccion2 = JOptionPane.showOptionDialog(
+        null, "Esta seguro que desea eliminar el auto?", null,
+        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+        opciones2, opciones[0]);
+
+        if (seleccion2 == 0) {
+          confirm = false;
+        }
+        break;
+      case 2:
         JOptionPane.showMessageDialog(null, "Venta cancelada", "Advertencia",
                                       JOptionPane.WARNING_MESSAGE);
         break;
