@@ -51,8 +51,6 @@ public class GuiPrototype extends JFrame {
     public void setMonto(int monto) { this.monto = monto; }
   }
 
-  public JButton toggleButton;
-  public JPanel menuPanel;
   public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
   public static final int SCREEN_WIDTH = screenSize.width;
   public static final int SCREEN_HEIGHT = screenSize.height - 15;
@@ -65,9 +63,7 @@ public class GuiPrototype extends JFrame {
   public static int valorAnterior;
   public static int reproductor_i = 0;
   public static int oX = 10;
-  public static char eliminar;
   public static boolean menuExpandido = false;
-  public static boolean confirm2 = true;
   public static String switchStr = "";
   public static String x = "";
   public static Carro carroSeleccionado = new GuiPrototype().new Carro();
@@ -448,7 +444,7 @@ public class GuiPrototype extends JFrame {
               (metodoPago.get(i) == null ? "" : metodoPago.get(i))));
           bufferedWriter.newLine();
 
-          if (montoEnganche.get(i) == liquidacion.get(i)) {
+          if (adeudo.get(i) == 0) {
 
             bufferedWriter.write(String.format(
                 "Se realizará el pago completo: %.2f", liquidacion.get(i)));
@@ -587,7 +583,7 @@ public class GuiPrototype extends JFrame {
 
     frame.add(labelsPanel);
     frame.add(componentesPanel);
-    frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     JButton aceptarButton = new JButton("Aceptar");
     aceptarButton.addMouseListener(new MouseAdapter() {
@@ -669,12 +665,12 @@ public class GuiPrototype extends JFrame {
 
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         if (i == 0) {
-          bufferedWriter.write("Fecha de impresion: " + fecha +
+          bufferedWriter.write("\nFecha de impresion: " + fecha +
                                "             " + hora);
           bufferedWriter.newLine();
         }
         bufferedWriter.write(String.format(
-            "\n\nComprador %d: %s", i + 1,
+            "\nComprador %d: %s", i + 1,
             (nombreComprador.get(i) == null ? "" : nombreComprador.get(i))));
         bufferedWriter.newLine();
         bufferedWriter.write(String.format("Edad: %d", edad.get(i)));
@@ -684,7 +680,7 @@ public class GuiPrototype extends JFrame {
             (metodoPago.get(i) == null ? "" : metodoPago.get(i))));
         bufferedWriter.newLine();
 
-        if (montoEnganche.get(i) == liquidacion.get(i)) {
+        if (adeudo.get(i) == 0) {
 
           bufferedWriter.write(String.format(
               "Se realizará el pago completo: %.2f", liquidacion.get(i)));
@@ -693,16 +689,9 @@ public class GuiPrototype extends JFrame {
               String.format("Monto de Enganche: %.2f", montoEnganche.get(i)));
           bufferedWriter.newLine();
           bufferedWriter.write(String.format("Adeudo: %.2f", adeudo.get(i)));
-          bufferedWriter.newLine();
-          bufferedWriter.write(String.format("Plazo: %d años\nMensualidad %.2f",
-                                             mesesAdeudo.get(i),
-                                             pagoPorMes.get(i)));
-          bufferedWriter.newLine();
-          bufferedWriter.write(String.format(
-              "Si tarda mas de 3 meses en pagar su mensualidad se le embargará"));
         }
         bufferedWriter.newLine();
-        bufferedWriter.write(String.format("Modelo solicitado: %s %s",
+        bufferedWriter.write(String.format("Modelo solicitado: %s %s\n",
                                            compradores2.get(i).marca,
                                            compradores2.get(i).modelo));
         bufferedWriter.close();
@@ -2196,7 +2185,7 @@ public class GuiPrototype extends JFrame {
     JLabel nombreLabel = new JLabel("Nombre del Comprador:");
     JLabel edadLabel = new JLabel("Edad:");
     JLabel engancheLabel = new JLabel("Enganche: %");
-    JLabel plazoLabel = new JLabel("Plazo:");
+    JLabel plazoLabel = new JLabel("Plazo (años):");
     JRadioButton radio1 = new JRadioButton("Tarjeta");
     JRadioButton radio2 = new JRadioButton("Cheque");
     JRadioButton radio3 = new JRadioButton("Efectivo");
