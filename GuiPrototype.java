@@ -15,6 +15,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
@@ -1695,15 +1696,17 @@ public class GuiPrototype extends JFrame {
     JLabel modeloLabel = new JLabel("Modelo del carro:");
     JLabel montoLabel = new JLabel("Monto del carro: ");
     JLabel rutaImgLabel = new JLabel("Ruta de la imagen del carro:");
-    JButton file_chooser = new JButton("Imagen");
+    JButton btn_img = new JButton("Imagen");
     JFileChooser file = new JFileChooser();
 
     Color labelColor = new Color(155, 155, 155);
     Font labelFont = new Font("Arial", Font.PLAIN, 16);
     
-    file_chooser.addActionListener(e -> a = file.showOpenDialog(frame));
-    file_chooser.setFocusPainted(false);
-
+    btn_img.addActionListener(e -> a = file.showOpenDialog(frame));
+    btn_img.setFocusPainted(false);
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen", "jpg", "jpeg", "png", "gif");
+    file.setFileFilter(filter);
+    file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
     marcaLabel.setForeground(labelColor);
     marcaLabel.setFont(labelFont);
@@ -1731,7 +1734,7 @@ public class GuiPrototype extends JFrame {
     componentesPanel.add(colorTXT);
     componentesPanel.add(modeloTXT);
     componentesPanel.add(montoTXT);
-    componentesPanel.add(file_chooser);
+    componentesPanel.add(btn_img);
 
     marcaTXT.setForeground(labelColor);
     marcaTXT.setBackground(Color.black);
@@ -1741,8 +1744,8 @@ public class GuiPrototype extends JFrame {
     modeloTXT.setBackground(Color.black);
     montoTXT.setForeground(labelColor);
     montoTXT.setBackground(Color.black);
-    file_chooser.setForeground(labelColor);
-    file_chooser.setBackground(Color.black);
+    btn_img.setForeground(labelColor);
+    btn_img.setBackground(Color.black);
 
     frame.add(labelsPanel);
     frame.add(componentesPanel);
