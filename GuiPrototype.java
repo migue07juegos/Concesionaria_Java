@@ -143,20 +143,20 @@ public class GuiPrototype extends JFrame {
     monto.add(737900);
     monto.add(388900);
     monto.add(230100);
-    // if (new File("monto.txt").exists()) {
-    //   try {
-    //     try (BufferedReader br = new BufferedReader(new FileReader("monto.txt"))) {
-    //       String linea;
-    //       while ((linea = br.readLine()) != null) {
-    //           System.out.println("Debug: " + linea); // Print for debugging
-    //           int valor = Integer.parseInt(linea.trim());
-    //           monto.add(valor);
-    //       }
-    //     }
-    //   } catch (IOException a) {
-    //     a.printStackTrace();
-    //   }
-    // }
+    if (new File("monto.txt").exists()) {
+      try {
+        try (BufferedReader br = new BufferedReader(new FileReader("monto.txt"))) {
+          String linea;
+          while ((linea = br.readLine()) != null) {
+              System.out.println("Debug: " + linea);
+              int valor = Integer.parseInt(linea.trim());
+              monto.add(valor);
+          }
+        }
+      } catch (IOException a) {
+        a.printStackTrace();
+      }
+    }
 
     images.add(new ImageIcon("images/Audi.png"));
     images.add(new ImageIcon("images/bmw.png"));
@@ -1370,8 +1370,7 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void
-  informacion_compradores(boolean ventana, JPanel informacion, int indexButton, JPanel iniciox)
+  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton, JPanel iniciox)
       throws IOException {
     informacion.removeAll();
     informacion.revalidate();
@@ -1898,7 +1897,7 @@ public class GuiPrototype extends JFrame {
             if (!new File("monto.txt").exists()) {
               writer = new BufferedWriter(new FileWriter("monto.txt"));       
             }
-            writer.write(Integer.parseInt(montox));
+            writer.write(montox);
             writer.flush();
           } catch (IOException a) {
               a.printStackTrace();
