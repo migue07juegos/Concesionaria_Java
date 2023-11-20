@@ -1704,7 +1704,7 @@ public class GuiPrototype extends JFrame {
     
     btn_img.addActionListener(e -> a = file.showOpenDialog(frame));
     btn_img.setFocusPainted(false);
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen", "jpg", "jpeg", "png", "gif");
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen", "png");
     file.setFileFilter(filter);
     file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -1772,17 +1772,15 @@ public class GuiPrototype extends JFrame {
 
           File selectedFile = file.getSelectedFile();
 
-          String rutaImagenOriginal = selectedFile.toString();
-          String rutaImagenRedimensionada = selectedFile.toString();
 
           int anchoDeseado = 300;
           int altoDeseado = 169;
 
-          Redimensionar(rutaImagenOriginal, rutaImagenRedimensionada, anchoDeseado, altoDeseado);
+          Redimensionar(selectedFile.toString(), anchoDeseado, altoDeseado);
 
           System.out.println("Imagen redimensionada con éxito.");
 
-          ImageIcon icono = new ImageIcon(rutaImagenRedimensionada);
+          ImageIcon icono = new ImageIcon(selectedFile.toString());
 
           color.add(marcax);
           marca.add(colorx);
@@ -1813,7 +1811,7 @@ public class GuiPrototype extends JFrame {
     return;
   }
 
-  public static void Redimensionar(String rutaImagenOriginal, String rutaImagenRedimensionada,
+  public static void Redimensionar(String rutaImagenOriginal,
     int anchoDeseado, int altoDeseado) {
 
     try {
@@ -1822,7 +1820,7 @@ public class GuiPrototype extends JFrame {
       BufferedImage nuevaImagen = new BufferedImage(anchoDeseado, altoDeseado, BufferedImage.TYPE_INT_RGB);
   
       nuevaImagen.createGraphics().drawImage(imagenRedimensionada, 0, 0, null);
-      ImageIO.write(nuevaImagen, "png", new File(rutaImagenRedimensionada));
+      ImageIO.write(nuevaImagen, "png", new File(rutaImagenOriginal));
   
     } catch (IOException e) {
       e.printStackTrace();
