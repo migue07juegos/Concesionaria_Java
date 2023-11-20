@@ -7,7 +7,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -1772,28 +1775,29 @@ public class GuiPrototype extends JFrame {
 
         if (marcax != null && colorx != null && modelox != null && montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
 
-          int anchoDeseado = 300;
-          int altoDeseado = 169;
-
-          Redimensionar(file.getSelectedFile().toString(), anchoDeseado, altoDeseado);
-
-          ImageIcon icono = new ImageIcon(file.getSelectedFile().toString());
-
+          Redimensionar(file.getSelectedFile().toString(), 300, 169);
           try {
-
-            while (!new File("datos.txt").exists()) {
-              BufferedWriter writer = new BufferedWriter(new FileWriter("datos.txt"));       
-              writer.close();
-            }
-
-
-            BufferedReader reader = new BufferedReader(new FileReader("datos.txt"));
-            String line = reader.readLine();
-            System.out.println(line);
-            reader.close();
-          } catch (IOException a) {
-              a.printStackTrace();
+            copiarImagen(file.getSelectedFile().toString(), "images/");
+          } catch (IOException e1) {
+            e1.printStackTrace();
           }
+          ImageIcon icono = new ImageIcon("images/"+file.getName());
+
+          // try {
+
+          //   while (!new File("datos.txt").exists()) {
+          //     BufferedWriter writer = new BufferedWriter(new FileWriter("datos.txt"));       
+          //     writer.close();
+          //   }
+
+
+          //   BufferedReader reader = new BufferedReader(new FileReader("datos.txt"));
+          //   String line = reader.readLine();
+          //   System.out.println(line);
+          //   reader.close();
+          // } catch (IOException a) {
+          //     a.printStackTrace();
+          // }
 
           color.add(marcax);
           marca.add(colorx);
@@ -1822,6 +1826,16 @@ public class GuiPrototype extends JFrame {
     frame.setSize(new Dimension(450, 320));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     return;
+  }
+
+  public static void copiarImagen(String rutaImagenOriginal, String rutaCarpetaDestino) throws IOException {
+
+    Path archivoOriginal = Path.of(rutaImagenOriginal);
+    String nombreArchivo = archivoOriginal.getFileName().toString();
+
+    Path rutaDestino = Path.of(rutaCarpetaDestino, nombreArchivo);
+
+    Files.copy(archivoOriginal, rutaDestino, StandardCopyOption.REPLACE_EXISTING);
   }
 
   public static void Redimensionar(String rutaImagenOriginal,
