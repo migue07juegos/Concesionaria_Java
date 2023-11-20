@@ -74,6 +74,18 @@ public class GuiPrototype extends JFrame {
     color.add("Naranja");
     color.add("Plata");
     color.add("Cobre");
+    if (new File("color.txt").exists()) {
+      try {
+        try (BufferedReader br = new BufferedReader(new FileReader("color.txt"))) {
+          String linea;
+          while ((linea = br.readLine()) != null) {
+            color.add(linea);
+          }
+        }
+        } catch (IOException a) {
+        a.printStackTrace();
+      }
+    }
 
     marca.add("Audi");
     marca.add("BMW");
@@ -85,6 +97,18 @@ public class GuiPrototype extends JFrame {
     marca.add("Nissan");
     marca.add("Mazda");
     marca.add("Renault");
+    if (new File("marca.txt").exists()) {
+      try {
+        try (BufferedReader br = new BufferedReader(new FileReader("marca.txt"))) {
+          String linea;
+          while ((linea = br.readLine()) != null) {
+            marca.add(linea);
+          }
+        }
+        } catch (IOException a) {
+        a.printStackTrace();
+      }
+    }
 
     modelo.add("A1");
     modelo.add("325i");
@@ -96,6 +120,18 @@ public class GuiPrototype extends JFrame {
     modelo.add("Altima");
     modelo.add("Mazda 3");
     modelo.add("Kwid");
+    if (new File("modelo.txt").exists()) {
+      try {
+        try (BufferedReader br = new BufferedReader(new FileReader("modelo.txt"))) {
+          String linea;
+          while ((linea = br.readLine()) != null) {
+            modelo.add(linea);
+          }
+        }
+        } catch (IOException a) {
+        a.printStackTrace();
+      }
+    }
 
     monto.add(599900);
     monto.add(975000);
@@ -107,6 +143,20 @@ public class GuiPrototype extends JFrame {
     monto.add(737900);
     monto.add(388900);
     monto.add(230100);
+    // if (new File("monto.txt").exists()) {
+    //   try {
+    //     try (BufferedReader br = new BufferedReader(new FileReader("monto.txt"))) {
+    //       String linea;
+    //       while ((linea = br.readLine()) != null) {
+    //           System.out.println("Debug: " + linea); // Print for debugging
+    //           int valor = Integer.parseInt(linea.trim());
+    //           monto.add(valor);
+    //       }
+    //     }
+    //   } catch (IOException a) {
+    //     a.printStackTrace();
+    //   }
+    // }
 
     images.add(new ImageIcon("images/Audi.png"));
     images.add(new ImageIcon("images/bmw.png"));
@@ -118,6 +168,19 @@ public class GuiPrototype extends JFrame {
     images.add(new ImageIcon("images/nissan.png"));
     images.add(new ImageIcon("images/Mazda.png"));
     images.add(new ImageIcon("images/Renault.png"));
+    
+    if (new File("images.txt").exists()) {
+      try {
+        try (BufferedReader br = new BufferedReader(new FileReader("images.txt"))) {
+          String linea;
+          while ((linea = br.readLine()) != null) {
+            images.add(new ImageIcon("images/"+linea));
+          }
+        }
+        } catch (IOException a) {
+        a.printStackTrace();
+      }
+    }
   }
 
   public static Vector<String> nombreComprador = new Vector<>();
@@ -169,6 +232,8 @@ public class GuiPrototype extends JFrame {
   public static Process procesoReproductor;
   public static final int SCREEN_WIDTH = screenSize.width;
   public static final int SCREEN_HEIGHT = screenSize.height - 15;
+  public static BufferedWriter writer;
+  public static String x = "";
 
   public GuiPrototype() {}
 
@@ -1781,23 +1846,63 @@ public class GuiPrototype extends JFrame {
           } catch (IOException e1) {
             e1.printStackTrace();
           }
-          ImageIcon icono = new ImageIcon(file.getSelectedFile().toString());
 
-          // try {
+          ImageIcon icono = new ImageIcon("images/"+file.getName(file.getSelectedFile()));
 
-          //   while (!new File("datos.txt").exists()) {
-          //     BufferedWriter writer = new BufferedWriter(new FileWriter("datos.txt"));       
-          //     writer.close();
-          //   }
+          try {
 
+            if (!new File("images.txt").exists()) {
+              writer = new BufferedWriter(new FileWriter("images.txt"));       
+            }
 
-          //   BufferedReader reader = new BufferedReader(new FileReader("datos.txt"));
-          //   String line = reader.readLine();
-          //   System.out.println(line);
-          //   reader.close();
-          // } catch (IOException a) {
-          //     a.printStackTrace();
-          // }
+            x += file.getName(file.getSelectedFile())+"\n";
+
+            writer.write(x);
+            writer.flush();
+
+          } catch (IOException a) {
+              a.printStackTrace();
+          }
+
+          try {
+            if (!new File("color.txt").exists()) {
+              writer = new BufferedWriter(new FileWriter("color.txt"));       
+            }
+            writer.write(marcax);
+            writer.flush();
+          } catch (IOException a) {
+              a.printStackTrace();
+          }
+
+          try {
+            if (!new File("marca.txt").exists()) {
+              writer = new BufferedWriter(new FileWriter("marca.txt"));       
+            }
+            writer.write(colorx);
+            writer.flush();
+          } catch (IOException a) {
+              a.printStackTrace();
+          }
+
+          try {
+            if (!new File("modelo.txt").exists()) {
+              writer = new BufferedWriter(new FileWriter("modelo.txt"));       
+            }
+            writer.write(modelox);
+            writer.flush();
+          } catch (IOException a) {
+              a.printStackTrace();
+          }
+
+          try {
+            if (!new File("monto.txt").exists()) {
+              writer = new BufferedWriter(new FileWriter("monto.txt"));       
+            }
+            writer.write(Integer.parseInt(montox));
+            writer.flush();
+          } catch (IOException a) {
+              a.printStackTrace();
+          }
 
           color.add(marcax);
           marca.add(colorx);
