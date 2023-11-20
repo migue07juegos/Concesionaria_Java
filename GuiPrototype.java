@@ -1437,7 +1437,7 @@ public class GuiPrototype extends JFrame {
 
     JButton btnAnterior = new JButton("|<-");
     JButton btnSalir = new JButton("Salir");
-    JButton btnPausa = new JButton("||");
+    JButton btnPausa = new JButton("⏸︎");
     JButton btnSig = new JButton("->|");
     JButton btnAgregar = new JButton("Agregar");
 
@@ -1498,7 +1498,7 @@ public class GuiPrototype extends JFrame {
     
     btnSalir.addActionListener(e -> {
       detenerReproductor();
-      btnPausa.setText("||");
+      btnPausa.setText("⏸︎");
       framePrincipal.requestFocusInWindow();
     });
 
@@ -1528,7 +1528,7 @@ public class GuiPrototype extends JFrame {
     btnPausa.addActionListener(e -> {
         
       if (btnPausa.getText().equals("▶")) {
-        btnPausa.setText("||");
+        btnPausa.setText("⏸︎");
       }else{
         btnPausa.setText("▶");
       }
@@ -1624,7 +1624,7 @@ public class GuiPrototype extends JFrame {
     });
 
     btnAgregar.addActionListener(e -> { 
-      btnPausa.setText("||");
+      btnPausa.setText("⏸︎");
       canciones.add(reproductorTxt.getText());
       reproductorTxt.setText(null);
       if (canciones.size() == 1) {
