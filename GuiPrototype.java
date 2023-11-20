@@ -16,7 +16,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.Vector;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -52,16 +51,60 @@ public class GuiPrototype extends JFrame {
     public void setMonto(int monto) { this.monto = monto; }
   }
 
+  public JButton toggleButton;
+  public JPanel menuPanel;
+  public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+  public static final int SCREEN_WIDTH = screenSize.width;
+  public static final int SCREEN_HEIGHT = screenSize.height - 15;
+  public static int i, l, a = 0, inicio, nuevoValor, valorEliminar, posicion;
+  public static int numCompradores = 0;
+  public static int numCarrosVendidos = 0;
+  public static int w = 0;
+  public static int switchBtn = 0;
+  public static int get_img = 0;
+  public static int valorAnterior;
+  public static int reproductor_i = 0;
+  public static int oX = 10;
+  public static char eliminar;
+  public static boolean menuExpandido = false;
+  public static boolean confirm2 = true;
+  public static String switchStr = "";
+  public static String x = "";
+  public static Carro carroSeleccionado = new GuiPrototype().new Carro();
   public static Vector<Integer> array = new Vector<>();
   public static Vector<Integer> mesesAdeudo = new Vector<>();
-  public static int i, l, a = 0, inicio, nuevoValor, valorEliminar,
-                          posicion;
-  public static char eliminar;
   public static Vector<String> color = new Vector<>();
   public static Vector<String> marca = new Vector<>();
   public static Vector<String> modelo = new Vector<>();
   public static Vector<Integer> monto = new Vector<>();
   public static Vector<ImageIcon> images = new Vector<>(); 
+  public static Vector<String> nombreComprador = new Vector<>();
+  public static Vector<Integer> edad = new Vector<>();
+  public static Vector<String> metodoPago = new Vector<>();
+  public static Vector<Double> montoEnganche = new Vector<>();
+  public static Vector<Double> liquidacion = new Vector<>();
+  public static Vector<Double> adeudo = new Vector<>();
+  public static Vector<Double> pagoPorMes = new Vector<>();
+  public static Vector<Carro> carrosVendidos = new Vector<>();
+  public static Vector<Carro> compradores = new Vector<>();
+  public static Vector<String> canciones = new Vector<>();
+  public static JTextField marcaTXT = new JTextField();
+  public static JTextField colorTXT = new JTextField();
+  public static JTextField modeloTXT = new JTextField();
+  public static JTextField montoTXT = new JTextField();
+  public static JTextField imgTXT = new JTextField();
+  public static JTextField nombreCompradorTXT = new JTextField();
+  public static JTextField edadTXT = new JTextField();
+  public static JTextField engancheTXT = new JTextField();
+  public static JTextField plazoTXT = new JTextField();
+  public static JTextField archivo_txt = new JTextField();
+  public static JTextField nombre_txt = new JTextField();
+  public static JTextField abrir_txt = new JTextField();
+  public static JTextField reproductorTxt = new JTextField();
+  public static BufferedWriter writer;
+  public static ProcessBuilder processBuilder;
+  public static Process process;
+  public static Process procesoReproductor;
     
   static {
     color.add("Blanco");
@@ -182,57 +225,12 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static Vector<String> nombreComprador = new Vector<>();
-  public static Vector<Integer> edad = new Vector<>();
-  public static Vector<String> metodoPago = new Vector<>();
-  public static Vector<Double> montoEnganche = new Vector<>();
-  public static Vector<Double> liquidacion = new Vector<>();
-  public static Vector<Double> adeudo = new Vector<>();
-  public static Vector<Double> pagoPorMes = new Vector<>();
-  public static Carro carroSeleccionado = new GuiPrototype().new Carro();
-  public static Vector<Carro> carrosVendidos = new Vector<>();
-  public static Vector<Carro> compradores = new Vector<>();
-  public static int numCompradores = 0;
-  public static int numCarrosVendidos = 0;
-  public static int w = 0;
-  public JButton toggleButton;
-  public static boolean menuExpandido = false;
-  public JPanel menuPanel;
-  public static JTextField marcaTXT = new JTextField();
-  public static JTextField colorTXT = new JTextField();
-  public static JTextField modeloTXT = new JTextField();
-  public static JTextField montoTXT = new JTextField();
-  public static JTextField imgTXT = new JTextField();
-  public static JTextField nombreCompradorTXT = new JTextField();
-  public static JTextField edadTXT = new JTextField();
-  public static JTextField engancheTXT = new JTextField();
-  public static JTextField plazoTXT = new JTextField();
-  public static JTextField archivo_txt = new JTextField();
-  public static JTextField nombre_txt = new JTextField();
-  public static JTextField abrir_txt = new JTextField();
-  public static int switchBtn = 0;
-  public static String switchStr = "";
-  public static JTextField reproductorTxt = new JTextField();
-  public static boolean confirm2 = true;
-  public static int reproductor_i = 0;
-  public static int oX = 10;
-  static Vector<String> canciones = new Vector<>();
-  public static int get_img = 0;
-  public static int valorAnterior;
   public boolean ctrlPressed = false;
   public boolean altPressed = false;
   public boolean sPressed = false;
   public boolean shiftPressed = false;
   public boolean xPressed = false;
   public boolean mPressed = false;
-  public static Process process;
-  public static ProcessBuilder processBuilder;
-  public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-  public static Process procesoReproductor;
-  public static final int SCREEN_WIDTH = screenSize.width;
-  public static final int SCREEN_HEIGHT = screenSize.height - 15;
-  public static BufferedWriter writer;
-  public static String x = "";
 
   public GuiPrototype() {}
 
