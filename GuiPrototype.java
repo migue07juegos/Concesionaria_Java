@@ -4,10 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -1396,36 +1393,13 @@ public class GuiPrototype extends JFrame {
 
     valorAnterior = slider.getValue();
 
-    File archivo = new File("vol.bat");
-
-    // if (System.getProperty("os.name").contains("Win")) {
-    //     if (archivo.exists()) {
-    //         archivo.delete();
-    //     }
-    //   }
-
-
     slider.addChangeListener(e -> {
       try {
         if (System.getProperty("os.name").contains("Win")) {
-          FileWriter fileWriter = new FileWriter(archivo);
-          BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);      
-          // processBuilder = new ProcessBuilder("cmd.exe", "/c", String.format("echo set_property volume %d > mpv-ipc", slider.getValue()));
-          String commandBat = String.format("echo { \"command\": [\"set_property\", \"volume\", %d]] } >\\\\.\\pipe\\mpvsocket",slider.getValue());
-          bufferedWriter.write("@echo off");
-          bufferedWriter.newLine();
-          bufferedWriter.write(commandBat);
-          bufferedWriter.newLine();
-          bufferedWriter.close();
-  
-          String tempPath = System.getProperty("java.io.tmpdir");
-          Path tempFilePath = Path.of(tempPath, "vol.bat");
-          Files.copy(archivo.toPath(), tempFilePath, StandardCopyOption.REPLACE_EXISTING);
-          processBuilder = new ProcessBuilder(tempPath + "/" + archivo);
+          processBuilder = new ProcessBuilder("cmd", "/c", String.format("echo { \"command\": [\"set_property\", \"volume\", %d] } > \\\\.\\pipe\\mpvsocket", slider.getValue()));
   
         }else{
-          processBuilder = new ProcessBuilder("bash", "-c", String.format(
-                                              "echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
+          processBuilder = new ProcessBuilder("bash", "-c", String.format("echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
         }
         process = processBuilder.start();
         int exitCode = process.waitFor();
@@ -1460,7 +1434,7 @@ public class GuiPrototype extends JFrame {
     });
     
     btnSalir.addActionListener(e -> {
-      detenerReproductor();  // Llamada para detener el reproductor al presionar "Salir"
+      detenerReproductor();
       btnPausa.setText("||");
     });
 
@@ -1494,9 +1468,20 @@ public class GuiPrototype extends JFrame {
       }else{
         btnPausa.setText("▶");
       }
-      String command = "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket";
-      String fileName = "pause.bat";
-      scripts(command, fileName);
+      if (System.getProperty("os.name").contains("Win")) {
+        try {
+          new ProcessBuilder("cmd","/c", "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket").start();
+        } catch (IOException x) {
+          x.printStackTrace();
+        }
+      
+      } else {
+        try {
+          new ProcessBuilder ("bash", "-c", "echo '{ \"command\": [\"cycle\", \"pause\"] }' | socat - /tmp/mpvsocket").start();
+        } catch (IOException x) {
+          x.printStackTrace();
+        }
+      }
     });
 
     btnSig.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1594,49 +1579,6 @@ public class GuiPrototype extends JFrame {
     
     panel.add(uno);
     panel.add(dos);
-  }
-
-  public static void scripts(String commandBat, String fileNameBat) {
-    if (System.getProperty("os.name").contains("Win")) {
-      try {
-
-        File archivo = new File(fileNameBat);
-        FileWriter fileWriter = new FileWriter(archivo);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-
-        if (archivo.exists()) {
-            archivo.delete();
-        }
-
-        bufferedWriter.write("@echo off");
-        bufferedWriter.newLine();
-        bufferedWriter.write(commandBat);
-        bufferedWriter.newLine();
-
-        bufferedWriter.close();
-
-        String tempPath = System.getProperty("java.io.tmpdir");
-        Path tempFilePath = Path.of(tempPath, fileNameBat);
-
-        Files.copy(archivo.toPath(), tempFilePath, StandardCopyOption.REPLACE_EXISTING);
-
-        archivo.delete();
-
-        try {
-          new ProcessBuilder(tempPath + "/" + fileNameBat).start();
-        } catch (IOException x) {
-          x.printStackTrace();
-        }
-      } catch (IOException x) {
-        x.printStackTrace();
-      }
-    } else {
-      try {
-        new ProcessBuilder ("bash", "-c", "echo '{ \"command\": [\"cycle\", \"pause\"] }' | socat - /tmp/mpvsocket").start();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
   }
 
   public static void detenerReproductor() {
