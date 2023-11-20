@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,6 +11,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.BorderUIResource;
@@ -1359,7 +1362,7 @@ public class GuiPrototype extends JFrame {
         label2.setFont(new Font("Arial", Font.PLAIN, 20));
         panel.add(label2, BorderLayout.CENTER);
 
-        informacion.add(panel);
+        informacion.add(panel);        
       }
     }
 
@@ -1765,7 +1768,18 @@ public class GuiPrototype extends JFrame {
         if (marcax != null && colorx != null && modelox != null && montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
 
           File selectedFile = file.getSelectedFile();
-          ImageIcon icono = new ImageIcon(selectedFile.getAbsolutePath());
+
+          String rutaImagenOriginal = selectedFile.toString();
+          String rutaImagenRedimensionada = selectedFile.toString();
+
+          int anchoDeseado = 300;
+          int altoDeseado = 169;
+
+          Redimensionar(rutaImagenOriginal, rutaImagenRedimensionada, anchoDeseado, altoDeseado);
+
+          System.out.println("Imagen redimensionada con éxito.");
+
+          ImageIcon icono = new ImageIcon(rutaImagenRedimensionada);
 
           color.add(marcax);
           marca.add(colorx);
@@ -1794,6 +1808,22 @@ public class GuiPrototype extends JFrame {
     frame.setSize(new Dimension(450, 320));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     return;
+  }
+
+  public static void Redimensionar(String rutaImagenOriginal, String rutaImagenRedimensionada,
+    int anchoDeseado, int altoDeseado) {
+
+    try {
+      BufferedImage imagenOriginal = ImageIO.read(new File(rutaImagenOriginal));
+      Image imagenRedimensionada = imagenOriginal.getScaledInstance(anchoDeseado, altoDeseado, Image.SCALE_SMOOTH);
+      BufferedImage nuevaImagen = new BufferedImage(anchoDeseado, altoDeseado, BufferedImage.TYPE_INT_RGB);
+  
+      nuevaImagen.createGraphics().drawImage(imagenRedimensionada, 0, 0, null);
+      ImageIO.write(nuevaImagen, "png", new File(rutaImagenRedimensionada));
+  
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public static void relojGui(JFrame frame, JPanel panelInicio,
