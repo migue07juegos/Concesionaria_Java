@@ -60,7 +60,6 @@ public class GuiPrototype extends JFrame {
   public static int w = 0;
   public static int switchBtn = 0;
   public static int get_img = 0;
-  public static int valorAnterior;
   public static int reproductor_i = 0;
   public static int oX = 10;
   public static boolean menuExpandido = false;
@@ -101,7 +100,8 @@ public class GuiPrototype extends JFrame {
   public static ProcessBuilder processBuilder;
   public static Process process;
   public static Process procesoReproductor;
-    
+  public static int volumen;
+
   static {
     color.add("Blanco");
     color.add("Azul");
@@ -1436,7 +1436,7 @@ public class GuiPrototype extends JFrame {
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
     JButton btnAnterior = new JButton("|<-");
-    JButton btnSalir = new JButton("Salir");
+    JButton btnSalir = new JButton("▢");
     JButton btnPausa = new JButton("⏸︎");
     JButton btnSig = new JButton("->|");
     JButton btnAgregar = new JButton("Agregar");
@@ -1453,10 +1453,9 @@ public class GuiPrototype extends JFrame {
     slider.setBackground(Color.black);
     slider.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 0));
 
-    valorAnterior = slider.getValue();
-
     slider.addChangeListener(e -> {
       try {
+        volumen = slider.getValue();
         if (System.getProperty("os.name").contains("Win")) {
           processBuilder = new ProcessBuilder("cmd", "/c", String.format("echo { \"command\": [\"set_property\", \"volume\", %d] } > \\\\.\\pipe\\mpvsocket", slider.getValue()));
   
@@ -1464,13 +1463,8 @@ public class GuiPrototype extends JFrame {
           processBuilder = new ProcessBuilder("bash", "-c", String.format("echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
         }
         process = processBuilder.start();
-        int exitCode = process.waitFor();
-
-        if (exitCode != 0) {
-            System.err.println("Error al ajustar el volumen");
-        }
         
-      } catch (IOException | InterruptedException ex) {
+      } catch (IOException ex) {
           ex.printStackTrace();
       }
       framePrincipal.requestFocusInWindow();
@@ -1673,7 +1667,7 @@ public class GuiPrototype extends JFrame {
       while (reproductor_i <= canciones.size() - 1) {
         try {
             ProcessBuilder processBuilder;
-            processBuilder = new ProcessBuilder("mpv", "--no-video", "--volume=50", "--volume-max=100", "--af=scaletempo", "--input-ipc-server=" + mpvsocket, canciones.get(reproductor_i));
+            processBuilder = new ProcessBuilder("mpv", "--no-video", "--volume="+volumen, "--volume-max=100", "--af=scaletempo", "--input-ipc-server=" + mpvsocket, canciones.get(reproductor_i));
             processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(new File(logFilePath)));
             procesoReproductor = processBuilder.start();
             procesoReproductor.waitFor();
