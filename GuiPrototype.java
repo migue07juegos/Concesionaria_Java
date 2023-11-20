@@ -234,7 +234,6 @@ public class GuiPrototype extends JFrame {
     Random rand = new Random();
     for (int i = 0; i < marca.size(); i++) {
       array.add(rand.nextInt(9000) + 1000);
-      System.err.println(array.get(i));
     }
   }
 
@@ -1032,11 +1031,11 @@ public class GuiPrototype extends JFrame {
           setFocusable(true);
           setSize(screenSize.width, screenSize.height);
           setVisible(true);
-          for (int y = 0;y<m+2;y++){
+          /*for (int y = 0;y<m+2;y++){
               for (int x = 0;x<n+2;x++){
                   System.out.print(mines[x][y]);
               }
-          System.out.println("");}
+          System.out.println("");}*/
           starttime = System.nanoTime();
       }
 
@@ -1196,7 +1195,6 @@ public class GuiPrototype extends JFrame {
             }else if (e.getKeyCode() == KeyEvent.VK_M) {
                 mPressed = true;
             }
-            System.out.println(ctrlPressed + "\nalt: " + altPressed + "\ns:" + sPressed + "\nsh:" + shiftPressed + "\nta:" + xPressed + "\nm:" + mPressed);
             if (ctrlPressed && altPressed && sPressed) {
                 new InnerSnakeGame();
                 ctrlPressed = false;
