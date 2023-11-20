@@ -1,8 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -1776,6 +1778,22 @@ public class GuiPrototype extends JFrame {
           Redimensionar(file.getSelectedFile().toString(), anchoDeseado, altoDeseado);
 
           ImageIcon icono = new ImageIcon(file.getSelectedFile().toString());
+
+          try {
+
+            while (!new File("datos.txt").exists()) {
+              BufferedWriter writer = new BufferedWriter(new FileWriter("datos.txt"));       
+              writer.close();
+            }
+
+
+            BufferedReader reader = new BufferedReader(new FileReader("datos.txt"));
+            String line = reader.readLine();
+            System.out.println(line);
+            reader.close();
+          } catch (IOException a) {
+              a.printStackTrace();
+          }
 
           color.add(marcax);
           marca.add(colorx);
