@@ -1781,7 +1781,7 @@ public class GuiPrototype extends JFrame {
           } catch (IOException e1) {
             e1.printStackTrace();
           }
-          ImageIcon icono = new ImageIcon("images/"+file.getName());
+          ImageIcon icono = new ImageIcon(file.getSelectedFile().toString());
 
           // try {
 
@@ -1836,6 +1836,7 @@ public class GuiPrototype extends JFrame {
     Path rutaDestino = Path.of(rutaCarpetaDestino, nombreArchivo);
 
     Files.copy(archivoOriginal, rutaDestino, StandardCopyOption.REPLACE_EXISTING);
+    
   }
 
   public static void Redimensionar(String rutaImagenOriginal,
