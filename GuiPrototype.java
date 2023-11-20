@@ -490,7 +490,7 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void button(JPanel informacion, int funcion) {
+  public static void button(JPanel informacion, int funcion, JFrame framePrincipal) {
 
     JPanel panel = new JPanel(new BorderLayout());
     panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
@@ -520,7 +520,8 @@ public class GuiPrototype extends JFrame {
       @Override
       public void actionPerformed(ActionEvent arg0) {
 
-        pedir_recibo(informacion, funcion);
+        pedir_recibo(informacion, funcion, framePrincipal);
+        framePrincipal.requestFocusInWindow();
       }
     });
 
@@ -528,7 +529,7 @@ public class GuiPrototype extends JFrame {
     informacion.add(panel);
   }
 
-  public static void pedir_recibo(JPanel informacion, int pregunta) {
+  public static void pedir_recibo(JPanel informacion, int pregunta, JFrame framePrincipal) {
 
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
@@ -618,6 +619,7 @@ public class GuiPrototype extends JFrame {
         nombre_txt.setText("");
         abrir_txt.setText("");
         frame.dispose();
+        framePrincipal.requestFocusInWindow();
         return;
       }
     });
@@ -1291,7 +1293,7 @@ public class GuiPrototype extends JFrame {
 
       SwingUtilities.invokeLater(
           () -> { relojGui(this, inicioPanel, infoPanel); });
-      Realizar_venta(inicioPanel,0);
+      Realizar_venta(inicioPanel, 0, this);
 
       add(scrollPane, BorderLayout.CENTER);
 
@@ -1305,7 +1307,7 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void Realizar_venta(JPanel contentPanel, int o) {
+  public static void Realizar_venta(JPanel contentPanel, int o, JFrame framePrincipal) {
 
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
@@ -1330,7 +1332,7 @@ public class GuiPrototype extends JFrame {
 
       button.setPreferredSize(new Dimension(300, 300));
 
-      button.addActionListener(new BotonListener(button, label, h, panel));
+      button.addActionListener(new BotonListener(button, label, h, panel, framePrincipal));
       
       button.setVerticalTextPosition(SwingConstants.BOTTOM);
       button.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -1353,10 +1355,11 @@ public class GuiPrototype extends JFrame {
       panel.add(button, BorderLayout.EAST);
 
       contentPanel.add(panel);
+      framePrincipal.requestFocusInWindow();
     }
   }
 
-  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton, JPanel iniciox)
+  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton, JPanel iniciox, JFrame framePrincipal)
       throws IOException {
     informacion.removeAll();
     informacion.revalidate();
@@ -1369,30 +1372,32 @@ public class GuiPrototype extends JFrame {
     case 2:
       resStrArr = mostrarDatosComprador(compradores, numCompradores);
       labels(informacion, resStr, false, resStrArr);
+      framePrincipal.requestFocusInWindow();
       break;
     case 3:
       resStrArr = mostrarCarrosVendidos(carrosVendidos, numCarrosVendidos);
       labels(informacion, resStr, false, resStrArr);
+      framePrincipal.requestFocusInWindow();
       break;
     case 4:
       resStrArr = mostrarInfoPago(numCompradores);
       labels(informacion, resStr, false, resStrArr);
+      framePrincipal.requestFocusInWindow();
       break;
     case 5:
       resStr = mostrar_compradores(numCompradores).toString();
       labels(informacion, resStr, true, resStrArr);
-      button(informacion, 1);
+      button(informacion, 1, framePrincipal);
       break;
     case 6:
       labels(informacion, resStr, true, resStrArr);
-      button(informacion, 2);
+      button(informacion, 2, framePrincipal);
       break;
     case 7:
-      reproductor(informacion);
-      // button(informacion, 3);
+      reproductor(informacion, framePrincipal);
       break;
     case 8:
-      agregar_elemento(informacion, iniciox);
+      agregar_elemento(informacion, iniciox, framePrincipal);
       break;
     }
   }
@@ -1428,7 +1433,7 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void reproductor(JPanel panel){
+  public static void reproductor(JPanel panel, JFrame framePrincipal){
 
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
@@ -1470,6 +1475,7 @@ public class GuiPrototype extends JFrame {
       } catch (IOException | InterruptedException ex) {
           ex.printStackTrace();
       }
+      framePrincipal.requestFocusInWindow();
     });
 
     btnSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1495,6 +1501,7 @@ public class GuiPrototype extends JFrame {
     btnSalir.addActionListener(e -> {
       detenerReproductor();
       btnPausa.setText("||");
+      framePrincipal.requestFocusInWindow();
     });
 
     reproductorTxt.setForeground(new Color(155,155,155));
@@ -1541,6 +1548,7 @@ public class GuiPrototype extends JFrame {
           x.printStackTrace();
         }
       }
+      framePrincipal.requestFocusInWindow();
     });
 
     btnSig.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1566,6 +1574,7 @@ public class GuiPrototype extends JFrame {
       if (procesoReproductor != null && reproductor_i <= canciones.size() - 2) {
         procesoReproductor.destroy(); 
       }
+      framePrincipal.requestFocusInWindow();
     });
 
     btnAnterior.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -1593,6 +1602,7 @@ public class GuiPrototype extends JFrame {
         reproductor_i --;
         procesoReproductor.destroy(); 
       }
+      framePrincipal.requestFocusInWindow();
     });
 
     btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1623,6 +1633,7 @@ public class GuiPrototype extends JFrame {
         Reproductor reproductor1 = new Reproductor();
         reproductor1.start();
       }
+      framePrincipal.requestFocusInWindow();
     });
 
     uno.add(btnSalir);
@@ -1681,7 +1692,7 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void agregar_elemento(JPanel panel, JPanel iniciox){
+  public static void agregar_elemento(JPanel panel, JPanel iniciox, JFrame framePrincipal){
     
     JPanel panel2 = new JPanel();
     JButton button = new JButton("Agregar auto");
@@ -1705,7 +1716,10 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    button.addActionListener(e -> pedirCarro(iniciox));
+    button.addActionListener(e -> {
+      pedirCarro(iniciox, framePrincipal);
+      framePrincipal.requestFocusInWindow();
+    });
 
     // JButton button2 = new JButton("Eliminar auto");
     // button2.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1742,7 +1756,7 @@ public class GuiPrototype extends JFrame {
     panel.add(panel2);
   }
 
-  public static void pedirCarro(JPanel iniciox){
+  public static void pedirCarro(JPanel iniciox, JFrame framePrincipal){
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
 
@@ -1942,7 +1956,7 @@ public class GuiPrototype extends JFrame {
           modelo.add(modelox);
           monto.add(Integer.parseInt(montox));
           images.add(icono);
-          Realizar_venta(iniciox, oX);
+          Realizar_venta(iniciox, oX, framePrincipal);
           oX++;
           System.out.println(oX); 
           marcaTXT.setText("");
@@ -1963,6 +1977,7 @@ public class GuiPrototype extends JFrame {
     frame.setResizable(false);
     frame.setSize(new Dimension(450, 320));
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    framePrincipal.requestFocusInWindow();
     return;
   }
 
@@ -2022,7 +2037,7 @@ public class GuiPrototype extends JFrame {
     button.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-        toggleMenu(menuPanel, panelInicio, infoPanel);
+        toggleMenu(menuPanel, panelInicio, infoPanel, frame);
       }
       @Override
       public void mouseEntered(MouseEvent e) {
@@ -2065,17 +2080,18 @@ public class GuiPrototype extends JFrame {
     });
 
     timer.start();
+    frame.requestFocusInWindow();
   }
 
   public static void agregarElementoMenu(JPanel menuPanel, String funcion,
                                          int indexButton, JPanel panelInicio,
-                                         JPanel infoPanel) {
+                                         JPanel infoPanel, JFrame framePrincipal) {
 
     JButton button = new JButton(funcion);
     button.setAlignmentX(Component.CENTER_ALIGNMENT);
     button.setText(funcion);
     button.addActionListener(
-        new MenuBotonListener(indexButton, panelInicio, infoPanel));
+        new MenuBotonListener(indexButton, panelInicio, infoPanel, framePrincipal));
     button.setFocusPainted(false);
     button.getVerifyInputWhenFocusTarget();
     button.setBorder(
@@ -2098,35 +2114,37 @@ public class GuiPrototype extends JFrame {
     buttonPanel.setLayout(new GridLayout());
     buttonPanel.add(button);
     menuPanel.add(buttonPanel);
+    framePrincipal.requestFocusInWindow();
   }
 
   public static void toggleMenu(JPanel panel, JPanel panelInicio,
-                                JPanel infoPanel) {
+                                JPanel infoPanel, JFrame framePrincipal) {
 
     if (menuExpandido) {
-      ocultarMenu(panel);
+      ocultarMenu(panel, framePrincipal);
     } else {
       menuExpandido = true;
-      mostrarMenu(panel, panelInicio, infoPanel);
+      mostrarMenu(panel, panelInicio, infoPanel, framePrincipal);
     }
+    framePrincipal.requestFocusInWindow();
   }
 
   public static void mostrarMenu(JPanel panel, JPanel panelInicio,
-                                 JPanel infoPanel) {
+                                 JPanel infoPanel, JFrame framePrincipal) {
 
     panel.setPreferredSize(new Dimension(200, panel.getHeight()));
     panel.removeAll();
 
-    agregarElementoMenu(panel, "Realizar venta", 1, panelInicio, infoPanel);
+    agregarElementoMenu(panel, "Realizar venta", 1, panelInicio, infoPanel, framePrincipal);
     agregarElementoMenu(panel, "Informacion compradores", 2, panelInicio,
-                        infoPanel);
-    agregarElementoMenu(panel, "Ventas realizadas", 3, panelInicio, infoPanel);
+                        infoPanel, framePrincipal);
+    agregarElementoMenu(panel, "Ventas realizadas", 3, panelInicio, infoPanel, framePrincipal);
     agregarElementoMenu(panel, "Informacion de pago", 4, panelInicio,
-                        infoPanel);
-    agregarElementoMenu(panel, "Recibo personal", 5, panelInicio, infoPanel);
-    agregarElementoMenu(panel, "Recibo General", 6, panelInicio, infoPanel);
-    agregarElementoMenu(panel, "Reproductor", 7, panelInicio, infoPanel);
-    agregarElementoMenu(panel, "Agregar producto", 8, panelInicio, infoPanel);
+                        infoPanel, framePrincipal);
+    agregarElementoMenu(panel, "Recibo personal", 5, panelInicio, infoPanel, framePrincipal);
+    agregarElementoMenu(panel, "Recibo General", 6, panelInicio, infoPanel, framePrincipal);
+    agregarElementoMenu(panel, "Reproductor", 7, panelInicio, infoPanel, framePrincipal);
+    agregarElementoMenu(panel, "Agregar producto", 8, panelInicio, infoPanel, framePrincipal);
 
 
     panel.setBorder(
@@ -2134,9 +2152,10 @@ public class GuiPrototype extends JFrame {
 
     panel.revalidate();
     panel.repaint();
+    framePrincipal.requestFocusInWindow();
   }
 
-  public static void ocultarMenu(JPanel panel) {
+  public static void ocultarMenu(JPanel panel, JFrame framePrincipal) {
 
     panel.setBorder(
         BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0, 85, 119)));
@@ -2146,18 +2165,21 @@ public class GuiPrototype extends JFrame {
     panel.removeAll();
     panel.revalidate();
     panel.repaint();
+    framePrincipal.requestFocusInWindow();
   }
 
   static class MenuBotonListener implements ActionListener {
     public int indexButton;
     public JPanel panelInicio;
     public JPanel infoPanel;
+    public JFrame framePrincipal;
 
     public MenuBotonListener(int indexButton, JPanel panelInicio,
-                             JPanel infoPanel) {
+                             JPanel infoPanel, JFrame framePrincipal) {
       this.indexButton = indexButton;
       this.panelInicio = panelInicio;
       this.infoPanel = infoPanel;
+      this.framePrincipal = framePrincipal;
     }
 
     @Override
@@ -2168,16 +2190,17 @@ public class GuiPrototype extends JFrame {
       } else {
         panelInicio.setVisible(false);
         try {
-          informacion_compradores(menuExpandido, infoPanel, indexButton, panelInicio);
+          informacion_compradores(menuExpandido, infoPanel, indexButton, panelInicio, framePrincipal);
         } catch (IOException e1) {
           e1.printStackTrace();
         }
         infoPanel.setVisible(true);
       }
+      framePrincipal.requestFocusInWindow();
     }
   }
 
-  public static void pedirDatos(int ho) {
+  public static void pedirDatos(int ho, JFrame framePrincipal) {
     switchBtn = 0;
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
@@ -2354,6 +2377,7 @@ public class GuiPrototype extends JFrame {
         engancheTXT.setText("");
         plazoTXT.setText("");
         frame.dispose();
+        framePrincipal.requestFocusInWindow();
         return;
       }
     });
@@ -2374,13 +2398,15 @@ public class GuiPrototype extends JFrame {
     private JLabel associatedLabel;
     private int ho;
     private JPanel associatedPanel;
+    private JFrame framePrincipal;
 
     public BotonListener(JButton button, JLabel associatedLabel, int ho,
-                         JPanel associatedPanel) {
+                         JPanel associatedPanel, JFrame framePrincipal) {
       this.button = button;
       this.associatedLabel = associatedLabel;
       this.ho = ho;
       this.associatedPanel = associatedPanel;
+      this.framePrincipal = framePrincipal;
     }
 
     @Override
@@ -2396,10 +2422,12 @@ public class GuiPrototype extends JFrame {
           JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
           opciones, opciones[0]);
 
+      framePrincipal.requestFocusInWindow();
+
       switch (seleccion) {
       case 0:
         confirm = false;
-          pedirDatos(ho);
+          pedirDatos(ho, framePrincipal);
         break;
       case 1: 
         int seleccion2 = JOptionPane.showOptionDialog(
