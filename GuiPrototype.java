@@ -74,9 +74,9 @@ public class GuiPrototype extends JFrame {
     color.add("Naranja");
     color.add("Plata");
     color.add("Cobre");
-    if (new File("color.txt").exists()) {
+    if (new File("data/color.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("color.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("data/color.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
             color.add(linea);
@@ -97,9 +97,9 @@ public class GuiPrototype extends JFrame {
     marca.add("Nissan");
     marca.add("Mazda");
     marca.add("Renault");
-    if (new File("marca.txt").exists()) {
+    if (new File("data/marca.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("marca.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("data/marca.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
             marca.add(linea);
@@ -120,9 +120,9 @@ public class GuiPrototype extends JFrame {
     modelo.add("Altima");
     modelo.add("Mazda 3");
     modelo.add("Kwid");
-    if (new File("modelo.txt").exists()) {
+    if (new File("data/modelo.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("modelo.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("data/modelo.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
             modelo.add(linea);
@@ -143,9 +143,9 @@ public class GuiPrototype extends JFrame {
     monto.add(737900);
     monto.add(388900);
     monto.add(230100);
-    if (new File("monto.txt").exists()) {
+    if (new File("data/monto.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("monto.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("data/monto.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
               System.out.println("Debug: " + linea);
@@ -168,16 +168,15 @@ public class GuiPrototype extends JFrame {
     images.add(new ImageIcon("images/nissan.png"));
     images.add(new ImageIcon("images/Mazda.png"));
     images.add(new ImageIcon("images/Renault.png"));
-    
-    if (new File("images.txt").exists()) {
+    if (new File("data/images.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("images.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("data/images.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
-            images.add(new ImageIcon("images/"+linea));
+            images.add(new ImageIcon("data/"+linea));
           }
         }
-        } catch (IOException a) {
+      } catch (IOException a) {
         a.printStackTrace();
       }
     }
@@ -1325,7 +1324,7 @@ public class GuiPrototype extends JFrame {
 
     Vector<String> moDaStr = mostrarDatos();
 
-    for (int h = o; h < modelo.size(); h++) {
+    for (int h = o; h < monto.size(); h++) {
 
       JPanel panel = new JPanel(new BorderLayout());
       panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
@@ -1841,17 +1840,25 @@ public class GuiPrototype extends JFrame {
 
           Redimensionar(file.getSelectedFile().toString(), 300, 169);
           try {
-            copiarImagen(file.getSelectedFile().toString(), "images/");
+            copiarImagen(file.getSelectedFile().toString(), "data/");
           } catch (IOException e1) {
             e1.printStackTrace();
           }
 
-          ImageIcon icono = new ImageIcon("images/"+file.getName(file.getSelectedFile()));
+          ImageIcon icono = new ImageIcon("data/"+file.getName(file.getSelectedFile()));
 
           try {
-
-            if (!new File("images.txt").exists()) {
-              writer = new BufferedWriter(new FileWriter("images.txt"));       
+            String carpeta = "data/";  
+            File carpetaFile = new File(carpeta);
+            
+            if (!carpetaFile.exists()) {
+                carpetaFile.mkdirs();  
+            }
+        
+            File archivo = new File(carpeta, "images.txt");
+            
+            if (!archivo.exists()) {
+                writer = new BufferedWriter(new FileWriter(archivo));
             }
 
             x += file.getName(file.getSelectedFile())+"\n";
@@ -1864,19 +1871,19 @@ public class GuiPrototype extends JFrame {
           }
 
           try {
-            if (!new File("color.txt").exists()) {
-              writer = new BufferedWriter(new FileWriter("color.txt"));       
+            String carpeta = "data/";  
+            File carpetaFile = new File(carpeta);
+            
+            if (!carpetaFile.exists()) {
+                carpetaFile.mkdirs();  
             }
-            writer.write(marcax);
-            writer.flush();
-          } catch (IOException a) {
-              a.printStackTrace();
-          }
-
-          try {
-            if (!new File("marca.txt").exists()) {
-              writer = new BufferedWriter(new FileWriter("marca.txt"));       
+        
+            File archivo = new File(carpeta, "color.txt");
+            
+            if (!archivo.exists()) {
+                writer = new BufferedWriter(new FileWriter(archivo));
             }
+        
             writer.write(colorx);
             writer.flush();
           } catch (IOException a) {
@@ -1884,9 +1891,39 @@ public class GuiPrototype extends JFrame {
           }
 
           try {
-            if (!new File("modelo.txt").exists()) {
-              writer = new BufferedWriter(new FileWriter("modelo.txt"));       
+            String carpeta = "data/";  
+            File carpetaFile = new File(carpeta);
+            
+            if (!carpetaFile.exists()) {
+                carpetaFile.mkdirs();  
             }
+        
+            File archivo = new File(carpeta, "marca.txt");
+            
+            if (!archivo.exists()) {
+                writer = new BufferedWriter(new FileWriter(archivo));
+            }
+        
+            writer.write(marcax);
+            writer.flush();
+          } catch (IOException a) {
+              a.printStackTrace();
+          }
+
+          try {
+            String carpeta = "data/";  
+            File carpetaFile = new File(carpeta);
+            
+            if (!carpetaFile.exists()) {
+                carpetaFile.mkdirs();  
+            }
+        
+            File archivo = new File(carpeta, "modelo.txt");
+            
+            if (!archivo.exists()) {
+                writer = new BufferedWriter(new FileWriter(archivo));
+            }
+        
             writer.write(modelox);
             writer.flush();
           } catch (IOException a) {
@@ -1894,17 +1931,27 @@ public class GuiPrototype extends JFrame {
           }
 
           try {
-            if (!new File("monto.txt").exists()) {
-              writer = new BufferedWriter(new FileWriter("monto.txt"));       
+            String carpeta = "data/";  
+            File carpetaFile = new File(carpeta);
+            
+            if (!carpetaFile.exists()) {
+                carpetaFile.mkdirs();  
             }
+        
+            File archivo = new File(carpeta, "monto.txt");
+            
+            if (!archivo.exists()) {
+                writer = new BufferedWriter(new FileWriter(archivo));
+            }
+        
             writer.write(montox);
             writer.flush();
           } catch (IOException a) {
               a.printStackTrace();
           }
 
-          color.add(marcax);
-          marca.add(colorx);
+          color.add(colorx);
+          marca.add(marcax);
           modelo.add(modelox);
           monto.add(Integer.parseInt(montox));
           images.add(icono);
