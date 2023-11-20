@@ -1770,17 +1770,12 @@ public class GuiPrototype extends JFrame {
 
         if (marcax != null && colorx != null && modelox != null && montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
 
-          File selectedFile = file.getSelectedFile();
-
-
           int anchoDeseado = 300;
           int altoDeseado = 169;
 
-          Redimensionar(selectedFile.toString(), anchoDeseado, altoDeseado);
+          Redimensionar(file.getSelectedFile().toString(), anchoDeseado, altoDeseado);
 
-          System.out.println("Imagen redimensionada con éxito.");
-
-          ImageIcon icono = new ImageIcon(selectedFile.toString());
+          ImageIcon icono = new ImageIcon(file.getSelectedFile().toString());
 
           color.add(marcax);
           marca.add(colorx);
