@@ -11,10 +11,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.PosixFilePermission;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -51,7 +54,8 @@ public class GuiPrototype extends JFrame {
     public void setMonto(int monto) { this.monto = monto; }
   }
 
-  public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+  public static Dimension screenSize =
+      Toolkit.getDefaultToolkit().getScreenSize();
   public static final int SCREEN_WIDTH = screenSize.width;
   public static final int SCREEN_HEIGHT = screenSize.height - 15;
   public static int i, l, a = 0, inicio, nuevoValor, valorEliminar, posicion;
@@ -72,7 +76,7 @@ public class GuiPrototype extends JFrame {
   public static Vector<String> marca = new Vector<>();
   public static Vector<String> modelo = new Vector<>();
   public static Vector<Integer> monto = new Vector<>();
-  public static Vector<ImageIcon> images = new Vector<>(); 
+  public static Vector<ImageIcon> images = new Vector<>();
   public static Vector<String> nombreComprador = new Vector<>();
   public static Vector<Integer> edad = new Vector<>();
   public static Vector<String> metodoPago = new Vector<>();
@@ -100,7 +104,7 @@ public class GuiPrototype extends JFrame {
   public static ProcessBuilder processBuilder;
   public static Process process;
   public static Process procesoReproductor;
-  public static int volumen;
+  public static int volumen = 50;
 
   static {
     color.add("Blanco");
@@ -115,13 +119,14 @@ public class GuiPrototype extends JFrame {
     color.add("Cobre");
     if (new File("data/color.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("data/color.txt"))) {
+        try (BufferedReader br =
+                 new BufferedReader(new FileReader("data/color.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
             color.add(linea);
           }
         }
-        } catch (IOException a) {
+      } catch (IOException a) {
         a.printStackTrace();
       }
     }
@@ -138,13 +143,14 @@ public class GuiPrototype extends JFrame {
     marca.add("Renault");
     if (new File("data/marca.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("data/marca.txt"))) {
+        try (BufferedReader br =
+                 new BufferedReader(new FileReader("data/marca.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
             marca.add(linea);
           }
         }
-        } catch (IOException a) {
+      } catch (IOException a) {
         a.printStackTrace();
       }
     }
@@ -161,13 +167,14 @@ public class GuiPrototype extends JFrame {
     modelo.add("Kwid");
     if (new File("data/modelo.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("data/modelo.txt"))) {
+        try (BufferedReader br =
+                 new BufferedReader(new FileReader("data/modelo.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
             modelo.add(linea);
           }
         }
-        } catch (IOException a) {
+      } catch (IOException a) {
         a.printStackTrace();
       }
     }
@@ -184,12 +191,13 @@ public class GuiPrototype extends JFrame {
     monto.add(230100);
     if (new File("data/monto.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("data/monto.txt"))) {
+        try (BufferedReader br =
+                 new BufferedReader(new FileReader("data/monto.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
-              System.out.println("Debug: " + linea);
-              int valor = Integer.parseInt(linea.trim());
-              monto.add(valor);
+            System.out.println("Debug: " + linea);
+            int valor = Integer.parseInt(linea.trim());
+            monto.add(valor);
           }
         }
       } catch (IOException a) {
@@ -209,10 +217,11 @@ public class GuiPrototype extends JFrame {
     images.add(new ImageIcon("images/Renault.png"));
     if (new File("data/images.txt").exists()) {
       try {
-        try (BufferedReader br = new BufferedReader(new FileReader("data/images.txt"))) {
+        try (BufferedReader br =
+                 new BufferedReader(new FileReader("data/images.txt"))) {
           String linea;
           while ((linea = br.readLine()) != null) {
-            images.add(new ImageIcon("data/"+linea));
+            images.add(new ImageIcon("data/" + linea));
           }
         }
       } catch (IOException a) {
@@ -251,19 +260,22 @@ public class GuiPrototype extends JFrame {
     return mostrarDatosStr;
   }
 
-  public static Vector<String> mostrarCarrosVendidos(Vector<Carro> carrosVendidos, int numCarrosVendidos) {
+  public static Vector<String>
+  mostrarCarrosVendidos(Vector<Carro> carrosVendidos, int numCarrosVendidos) {
     Vector<String> CarrosVendidosHastaElMomento = new Vector<>();
 
     for (int i = 0; i < numCarrosVendidos; i++) {
       CarrosVendidosHastaElMomento.add(
-          String.format(
-              "Venta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
-              i + 1, nombreComprador.get(i),
-              carrosVendidos.get(i).getNumeroControl(),
-              carrosVendidos.get(i).getColor(),
-              carrosVendidos.get(i).getMarca(),
-              carrosVendidos.get(i).getModelo(),
-              carrosVendidos.get(i).getMonto()).toString());
+          String
+              .format(
+                  "Venta no.%d\n\nComprador: %s\nCarro no.%d:\nColor: %s\nMarca: %s\nModelo: %s\nPrecio: %d\n",
+                  i + 1, nombreComprador.get(i),
+                  carrosVendidos.get(i).getNumeroControl(),
+                  carrosVendidos.get(i).getColor(),
+                  carrosVendidos.get(i).getMarca(),
+                  carrosVendidos.get(i).getModelo(),
+                  carrosVendidos.get(i).getMonto())
+              .toString());
     }
 
     return CarrosVendidosHastaElMomento;
@@ -275,26 +287,25 @@ public class GuiPrototype extends JFrame {
     for (int i = 0; i < numCompradores; i++) {
 
       if (pagoPorMes.get(i) == 0 && mesesAdeudo.get(i) == 0) {
-        datosCompradorF.add( ((String.format("Comprador %d: %s", i + 1,
-                               nombreComprador.get(i))) +
-                (String.format("\nEdad: %d", edad.get(i))) +
-                (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
-                (String.format("\nSe realizará el pago completo: %.2f",
-                               liquidacion.get(i))) +
-                (String.format("\nModelo solicitado: %s %s\n\n",
-                               compradores.get(i).getMarca(),
-                               compradores.get(i).getModelo()))));
+        datosCompradorF.add((
+            (String.format("Comprador %d: %s", i + 1, nombreComprador.get(i))) +
+            (String.format("\nEdad: %d", edad.get(i))) +
+            (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
+            (String.format("\nSe realizará el pago completo: %.2f",
+                           liquidacion.get(i))) +
+            (String.format("\nModelo solicitado: %s %s\n\n",
+                           compradores.get(i).getMarca(),
+                           compradores.get(i).getModelo()))));
       } else {
-        datosCompradorF.add(((String.format("Comprador %d: %s", i + 1,
-                               nombreComprador.get(i))) +
-                (String.format("\nEdad: %d", edad.get(i))) +
-                (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
-                (String.format("\nMonto de Enganche: %.2f",
-                               montoEnganche.get(i))) +
-                (String.format("\nAdeudo: %.2f", adeudo.get(i))) +
-                (String.format("\nModelo solicitado: %s %s\n\n",
-                               compradores.get(i).getMarca(),
-                               compradores.get(i).getModelo()))));
+        datosCompradorF.add((
+            (String.format("Comprador %d: %s", i + 1, nombreComprador.get(i))) +
+            (String.format("\nEdad: %d", edad.get(i))) +
+            (String.format("\nMétodo de pago: %s", metodoPago.get(i))) +
+            (String.format("\nMonto de Enganche: %.2f", montoEnganche.get(i))) +
+            (String.format("\nAdeudo: %.2f", adeudo.get(i))) +
+            (String.format("\nModelo solicitado: %s %s\n\n",
+                           compradores.get(i).getMarca(),
+                           compradores.get(i).getModelo()))));
       }
     }
     return datosCompradorF;
@@ -386,9 +397,9 @@ public class GuiPrototype extends JFrame {
     b = Double.parseDouble(str2);
 
     a = b / 100;
-    montoEnganche.add( a * carro.monto);
-    adeudo.add( carro.monto - montoEnganche.get(i));
-    liquidacion.add( (double) carro.monto);
+    montoEnganche.add(a * carro.monto);
+    adeudo.add(carro.monto - montoEnganche.get(i));
+    liquidacion.add((double)carro.monto);
 
     if (b > 19 && b < 81) {
       String str3 = plazoTXT.getText();
@@ -399,8 +410,7 @@ public class GuiPrototype extends JFrame {
 
       JOptionPane.showMessageDialog(
           null, String.format("Mensualidad: %.2f", pagoPorMes.get(i)));
-    }
-    else {
+    } else {
       pagoPorMes.add(0.0);
       mesesAdeudo.add(0);
     }
@@ -489,7 +499,8 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void button(JPanel informacion, int funcion, JFrame framePrincipal) {
+  public static void button(JPanel informacion, int funcion,
+                            JFrame framePrincipal) {
 
     JPanel panel = new JPanel(new BorderLayout());
     panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
@@ -528,7 +539,8 @@ public class GuiPrototype extends JFrame {
     informacion.add(panel);
   }
 
-  public static void pedir_recibo(JPanel informacion, int pregunta, JFrame framePrincipal) {
+  public static void pedir_recibo(JPanel informacion, int pregunta,
+                                  JFrame framePrincipal) {
 
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
@@ -718,11 +730,12 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static class SnakeGame extends JPanel implements ActionListener{
+  public static class SnakeGame extends JPanel implements ActionListener {
     public static final int UNIT_SIZE = 23;
-    public static final int GAME_UNITS = (int) (SCREEN_WIDTH/UNIT_SIZE) * (SCREEN_HEIGHT/UNIT_SIZE);
-    public static final int HORIZONTAL_UNITS = SCREEN_WIDTH/UNIT_SIZE;
-    public static final int VERTICAL_UNITS = SCREEN_HEIGHT/UNIT_SIZE;
+    public static final int GAME_UNITS =
+        (int)(SCREEN_WIDTH / UNIT_SIZE) * (SCREEN_HEIGHT / UNIT_SIZE);
+    public static final int HORIZONTAL_UNITS = SCREEN_WIDTH / UNIT_SIZE;
+    public static final int VERTICAL_UNITS = SCREEN_HEIGHT / UNIT_SIZE;
     public static final int DELAY = 100;
     public static final int INITIAL_SNAKE_SIZE = 6;
     private int appleX;
@@ -735,21 +748,21 @@ public class GuiPrototype extends JFrame {
     private int applesEaten;
     boolean keyInput = false;
     String randomGameOverMessage = "";
-      
-    SnakeGame(JFrame frame){
-        frame.setFocusable(true);
-        frame.requestFocus();
-        frame.addKeyListener(new MyKeyAdapter(frame));
-        this.setSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));
-        this.setBackground(Color.DARK_GRAY);
+
+    SnakeGame(JFrame frame) {
+      frame.setFocusable(true);
+      frame.requestFocus();
+      frame.addKeyListener(new MyKeyAdapter(frame));
+      this.setSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+      this.setBackground(Color.DARK_GRAY);
     }
-  
-    public void startGame(){
+
+    public void startGame() {
       snakeSize = INITIAL_SNAKE_SIZE;
       applesEaten = 0;
-      for(int i = 0; i < snakeSize; i++){
-          snakeX[i] = 0;
-          snakeY[i] = 0;
+      for (int i = 0; i < snakeSize; i++) {
+        snakeX[i] = 0;
+        snakeY[i] = 0;
       }
       direction = 'R';
       timer.start();
@@ -757,420 +770,431 @@ public class GuiPrototype extends JFrame {
       randomGameOverMessage = "Perdiste :(";
     }
 
-    public void actionPerformed(ActionEvent ev){
-        move();
-        checkCollision();
-        eatApple();
-        repaint();
+    public void actionPerformed(ActionEvent ev) {
+      move();
+      checkCollision();
+      eatApple();
+      repaint();
     }
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g); 
-        g.setColor(Color.red);
-        g.fillOval(appleX , appleY, UNIT_SIZE, UNIT_SIZE);
-        g.setColor(Color.blue);
-        g.fillRect(snakeX[0], snakeY[0], UNIT_SIZE, UNIT_SIZE);
-        for(int i = 1; i < snakeSize; i++){
-            g.fillRect(snakeX[i], snakeY[i], UNIT_SIZE, UNIT_SIZE);
-        }
-
-        g.setColor(Color.white);
-        g.setFont(new Font("Liberation Mono", Font.PLAIN, 25));
-        FontMetrics fontSize = g.getFontMetrics();
-        int fontX = SCREEN_WIDTH - fontSize.stringWidth("Score: " + applesEaten + "  ") - 10;
-        int fontY = fontSize.getHeight();
-        g.drawString("Score: " + applesEaten, fontX, fontY);
-        
-        if(!timer.isRunning()){
-            g.setColor(Color.white);
-            g.setFont(new Font("Liberation Mono", Font.PLAIN, 58));
-            
-            String message = randomGameOverMessage;
-            fontSize = g.getFontMetrics();
-            fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2 ;
-            fontY = (SCREEN_HEIGHT - fontSize.getHeight()) /2;
-            g.drawString(message, fontX, fontY);
-
-            g.setFont(new Font("Liberation Mono", Font.PLAIN, 24));
-            message = "Presiona R para reiniciar el juego";
-            fontSize = g.getFontMetrics();
-            fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2 ;
-            fontY = fontY + fontSize.getHeight() + 20;
-            g.drawString(message, fontX, fontY);
-
-            g.setFont(new Font("Liberation Mono", Font.PLAIN, 24));
-            message = "Presiona Esc para salir";
-            fontSize = g.getFontMetrics();
-            fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2 ;
-            fontY = fontY + fontSize.getHeight() + 20;
-            g.drawString(message, fontX, fontY);
-            
-        }
-    }
-  
-    public void newApple(){
-        int x = random(HORIZONTAL_UNITS) * UNIT_SIZE;
-        int y = random(VERTICAL_UNITS) * UNIT_SIZE;
-        Point provisional = new Point(x,y);
-        Point snakePos = new Point();
-        boolean newApplePermission = true;
-        for(int i = 0; i < snakeSize; i++){
-            snakePos.setLocation(snakeX[i], snakeY[i]);
-            if(provisional.equals(snakePos)){
-                newApplePermission = false;
-            }
-        }
-        if(newApplePermission){
-            appleX = x;
-            appleY = y;
-        }else{
-            newApple();
-        }
-    }
-
-    public void checkCollision(){
-        if(snakeX[0] >= (SCREEN_WIDTH) || snakeX[0] < 0 || snakeY[0] >= (SCREEN_HEIGHT-20) || snakeY[0] < 0){
-            gameOver();
-        }
-        for(int i = 1; i < snakeSize; i++){
-            if((snakeX[0] == snakeX[i]) && (snakeY[0] == snakeY[i])){
-                gameOver();
-            }
-        }
-    }
-    
-    public void eatApple(){
-        if(snakeX[0] == appleX && snakeY[0] == appleY){
-            snakeSize++;
-            applesEaten++;
-            newApple();
-        }
-    }
-    
-    public void move(){
-        for(int i = snakeSize; i > 0; i--){
-            snakeX[i] = snakeX[i-1]; 
-            snakeY[i] = snakeY[i-1]; 
-        }
-        switch(direction){
-            case 'R':
-                snakeX[0] += UNIT_SIZE;
-                break;
-            case 'L':
-                snakeX[0] -= UNIT_SIZE;
-                break;
-            case 'U':
-                snakeY[0] -= UNIT_SIZE;
-                break;
-            case 'D':
-                snakeY[0] += UNIT_SIZE;
-                break;
-        }
-
-        keyInput = false;
-    }
-    
-    public void gameOver(){
-        timer.stop();
-    }
-
-    public int random(int range){
-        return (int)(Math.random() * range);
-    }
-      
-    class MyKeyAdapter extends KeyAdapter{
-      JFrame frame;
-      MyKeyAdapter(JFrame frame){
-        this.frame = frame;
+    public void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      g.setColor(Color.red);
+      g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+      g.setColor(Color.blue);
+      g.fillRect(snakeX[0], snakeY[0], UNIT_SIZE, UNIT_SIZE);
+      for (int i = 1; i < snakeSize; i++) {
+        g.fillRect(snakeX[i], snakeY[i], UNIT_SIZE, UNIT_SIZE);
       }
-        public void keyPressed(KeyEvent k){
-          switch(k.getKeyCode()){
-              case (KeyEvent.VK_5) :
-                  snakeSize++;
-                  applesEaten++;
-              break;
-              case (KeyEvent.VK_DOWN):
-                  if(direction != 'U' && keyInput == false){
-                      direction = 'D';
-                      keyInput = true;
-                  }
-                  break;
-              case (KeyEvent.VK_UP):
-                  if(direction != 'D' && !keyInput){
-                      direction = 'U';
-                      keyInput = true;
-                  }
-                  break;
-              case (KeyEvent.VK_LEFT):
-                  if(direction != 'R' && keyInput == false){
-                      direction = 'L';
-                      keyInput = true;
-                  }
-                  break;
-              case (KeyEvent.VK_RIGHT):
-                  if(direction != 'L' && keyInput == false){
-                      direction = 'R';
-                      keyInput = true;
-                  }
-                  break;
-              case (KeyEvent.VK_R):
-                  if(!timer.isRunning()){
-                      startGame();
-                  }
-                  break;
-              case KeyEvent.VK_ESCAPE:
-                  frame.dispose();
-                  break;
-          }
+
+      g.setColor(Color.white);
+      g.setFont(new Font("Liberation Mono", Font.PLAIN, 25));
+      FontMetrics fontSize = g.getFontMetrics();
+      int fontX = SCREEN_WIDTH -
+                  fontSize.stringWidth("Score: " + applesEaten + "  ") - 10;
+      int fontY = fontSize.getHeight();
+      g.drawString("Score: " + applesEaten, fontX, fontY);
+
+      if (!timer.isRunning()) {
+        g.setColor(Color.white);
+        g.setFont(new Font("Liberation Mono", Font.PLAIN, 58));
+
+        String message = randomGameOverMessage;
+        fontSize = g.getFontMetrics();
+        fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2;
+        fontY = (SCREEN_HEIGHT - fontSize.getHeight()) / 2;
+        g.drawString(message, fontX, fontY);
+
+        g.setFont(new Font("Liberation Mono", Font.PLAIN, 24));
+        message = "Presiona R para reiniciar el juego";
+        fontSize = g.getFontMetrics();
+        fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2;
+        fontY = fontY + fontSize.getHeight() + 20;
+        g.drawString(message, fontX, fontY);
+
+        g.setFont(new Font("Liberation Mono", Font.PLAIN, 24));
+        message = "Presiona Esc para salir";
+        fontSize = g.getFontMetrics();
+        fontX = (SCREEN_WIDTH - fontSize.stringWidth(message)) / 2;
+        fontY = fontY + fontSize.getHeight() + 20;
+        g.drawString(message, fontX, fontY);
+      }
+    }
+
+    public void newApple() {
+      int x = random(HORIZONTAL_UNITS) * UNIT_SIZE;
+      int y = random(VERTICAL_UNITS) * UNIT_SIZE;
+      Point provisional = new Point(x, y);
+      Point snakePos = new Point();
+      boolean newApplePermission = true;
+      for (int i = 0; i < snakeSize; i++) {
+        snakePos.setLocation(snakeX[i], snakeY[i]);
+        if (provisional.equals(snakePos)) {
+          newApplePermission = false;
         }
-    }   
+      }
+      if (newApplePermission) {
+        appleX = x;
+        appleY = y;
+      } else {
+        newApple();
+      }
+    }
+
+    public void checkCollision() {
+      if (snakeX[0] >= (SCREEN_WIDTH) || snakeX[0] < 0 ||
+          snakeY[0] >= (SCREEN_HEIGHT - 20) || snakeY[0] < 0) {
+        gameOver();
+      }
+      for (int i = 1; i < snakeSize; i++) {
+        if ((snakeX[0] == snakeX[i]) && (snakeY[0] == snakeY[i])) {
+          gameOver();
+        }
+      }
+    }
+
+    public void eatApple() {
+      if (snakeX[0] == appleX && snakeY[0] == appleY) {
+        snakeSize++;
+        applesEaten++;
+        newApple();
+      }
+    }
+
+    public void move() {
+      for (int i = snakeSize; i > 0; i--) {
+        snakeX[i] = snakeX[i - 1];
+        snakeY[i] = snakeY[i - 1];
+      }
+      switch (direction) {
+      case 'R':
+        snakeX[0] += UNIT_SIZE;
+        break;
+      case 'L':
+        snakeX[0] -= UNIT_SIZE;
+        break;
+      case 'U':
+        snakeY[0] -= UNIT_SIZE;
+        break;
+      case 'D':
+        snakeY[0] += UNIT_SIZE;
+        break;
+      }
+
+      keyInput = false;
+    }
+
+    public void gameOver() { timer.stop(); }
+
+    public int random(int range) { return (int)(Math.random() * range); }
+
+    class MyKeyAdapter extends KeyAdapter {
+      JFrame frame;
+      MyKeyAdapter(JFrame frame) { this.frame = frame; }
+      public void keyPressed(KeyEvent k) {
+        switch (k.getKeyCode()) {
+        case (KeyEvent.VK_5):
+          snakeSize++;
+          applesEaten++;
+          break;
+        case (KeyEvent.VK_DOWN):
+          if (direction != 'U' && keyInput == false) {
+            direction = 'D';
+            keyInput = true;
+          }
+          break;
+        case (KeyEvent.VK_UP):
+          if (direction != 'D' && !keyInput) {
+            direction = 'U';
+            keyInput = true;
+          }
+          break;
+        case (KeyEvent.VK_LEFT):
+          if (direction != 'R' && keyInput == false) {
+            direction = 'L';
+            keyInput = true;
+          }
+          break;
+        case (KeyEvent.VK_RIGHT):
+          if (direction != 'L' && keyInput == false) {
+            direction = 'R';
+            keyInput = true;
+          }
+          break;
+        case (KeyEvent.VK_R):
+          if (!timer.isRunning()) {
+            startGame();
+          }
+          break;
+        case KeyEvent.VK_ESCAPE:
+          frame.dispose();
+          break;
+        }
+      }
+    }
   }
 
   public static class InnerSnakeGame extends JFrame {
-      SnakeGame SnakeGame = new SnakeGame(this);
-      InnerSnakeGame(){
-          this.setTitle("Snake"); 
-          this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-          this.pack();
-          this.setSize(new Dimension(SCREEN_WIDTH + 20,SCREEN_HEIGHT + 20));
-          this.setResizable(false);
-          this.setLocationRelativeTo(null);
-          this.setVisible(true);
-          this.getContentPane().setBackground(Color.DARK_GRAY);
-          
-          this.add(SnakeGame);
-          SnakeGame.startGame();
-      } 
+    SnakeGame SnakeGame = new SnakeGame(this);
+    InnerSnakeGame() {
+      this.setTitle("Snake");
+      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.pack();
+      this.setSize(new Dimension(SCREEN_WIDTH + 20, SCREEN_HEIGHT + 20));
+      this.setResizable(false);
+      this.setLocationRelativeTo(null);
+      this.setVisible(true);
+      this.getContentPane().setBackground(Color.DARK_GRAY);
+
+      this.add(SnakeGame);
+      SnakeGame.startGame();
+    }
   }
 
-  public static class Mine extends JFrame implements ActionListener, MouseListener{
-      int nomines = 80;
-      int perm[][];
-      String tmp;
-      boolean found = false;
-      int row;
-      int column;
-      int guesses[][];
-      JButton b[][];
-      int[][] mines;
-      boolean allmines;
-      int n = 30;
-      int m = 30;
-      int deltax[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-      int deltay[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-      double starttime;
-      double endtime;
-      public Mine(){
-          addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent k) {
-              if (k.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                  dispose();
-              }
-            }
-          });
-          getRootPane().setBackground(Color.BLACK);
-          setTitle("Busca minas");
-          setDefaultCloseOperation(EXIT_ON_CLOSE);
-          setResizable(false);
-          perm = new int[n][m];
-          boolean allmines = false;
-          guesses = new int [n+2][m+2];
-          mines = new int[n+2][m+2];
-          b = new JButton [n][m];
-          setLayout(new GridLayout(n,m));
-          for (int y = 0;y<m+2;y++){
-              mines[0][y] = 3;
-              mines[n+1][y] = 3;
-              guesses[0][y] = 3;
-              guesses[n+1][y] = 3;
+  public static class Mine
+      extends JFrame implements ActionListener, MouseListener {
+    int nomines = 80;
+    int perm[][];
+    String tmp;
+    boolean found = false;
+    int row;
+    int column;
+    int guesses[][];
+    JButton b[][];
+    int[][] mines;
+    boolean allmines;
+    int n = 30;
+    int m = 30;
+    int deltax[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+    int deltay[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+    double starttime;
+    double endtime;
+    public Mine() {
+      addKeyListener(new KeyAdapter() {
+        public void keyPressed(KeyEvent k) {
+          if (k.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            dispose();
           }
-          for (int x = 0;x<n+2;x++){
-              mines[x][0] = 3;
-              mines[x][m+1] = 3;
-              guesses[x][0] = 3;
-              guesses[x][m+1] = 3;
-          }
-          do {
-              int check = 0;
-              for (int y = 1;y<m+1;y++){
-                  for (int x = 1;x<n+1;x++){
-                      mines[x][y] = 0;
-                      guesses[x][y] = 0;
-                  }
-              }
-              for (int x = 0;x<nomines;x++){
-                  mines [(int) (Math.random()*(n)+1)][(int) (Math.random()*(m)+1)] = 1;
-              }
-              for (int x = 0;x<n;x++){
-                  for (int y = 0;y<m;y++){
-                  if (mines[x+1][y+1] == 1){
-                          check++;
-                      }
-                  }
-              }
-              if (check == nomines){
-                  allmines = true;
-              }
-          }while (allmines == false);
-          for (int y = 0;y<m;y++){
-              for (int x = 0;x<n;x++){
-                  if ((mines[x+1][y+1] == 0) || (mines[x+1][y+1] == 1)){
-                      perm[x][y] = perimcheck(x,y);
-                  }
-                  b[x][y] = new JButton("?");
-                  b[x][y].setBackground(Color.BLACK);
-                  b[x][y].setForeground(new Color(155, 155, 155));
-                  b[x][y].setFocusPainted(false);
-                  b[x][y].addActionListener(this);
-                  b[x][y].addMouseListener(this);
-                  add(b[x][y]);
-                  b[x][y].setEnabled(true);
-              }
-          }
-          pack();
-          setFocusable(true);
-          setSize(screenSize.width, screenSize.height);
-          setVisible(true);
-          /*for (int y = 0;y<m+2;y++){
-              for (int x = 0;x<n+2;x++){
-                  System.out.print(mines[x][y]);
-              }
-          System.out.println("");}*/
-          starttime = System.nanoTime();
-      }
-
-      class MyKeyAdapter extends KeyAdapter{
-      JFrame frame;
-      MyKeyAdapter(JFrame frame){
-          this.frame = frame;
         }
-          public void keyPressed(KeyEvent k){
-            switch(k.getKeyCode()){
-                case KeyEvent.VK_ESCAPE:
-                    frame.dispose();
-                    break;
+      });
+      getRootPane().setBackground(Color.BLACK);
+      setTitle("Busca minas");
+      setDefaultCloseOperation(EXIT_ON_CLOSE);
+      setResizable(false);
+      perm = new int[n][m];
+      boolean allmines = false;
+      guesses = new int[n + 2][m + 2];
+      mines = new int[n + 2][m + 2];
+      b = new JButton[n][m];
+      setLayout(new GridLayout(n, m));
+      for (int y = 0; y < m + 2; y++) {
+        mines[0][y] = 3;
+        mines[n + 1][y] = 3;
+        guesses[0][y] = 3;
+        guesses[n + 1][y] = 3;
+      }
+      for (int x = 0; x < n + 2; x++) {
+        mines[x][0] = 3;
+        mines[x][m + 1] = 3;
+        guesses[x][0] = 3;
+        guesses[x][m + 1] = 3;
+      }
+      do {
+        int check = 0;
+        for (int y = 1; y < m + 1; y++) {
+          for (int x = 1; x < n + 1; x++) {
+            mines[x][y] = 0;
+            guesses[x][y] = 0;
+          }
+        }
+        for (int x = 0; x < nomines; x++) {
+          mines[(int)(Math.random() * (n) + 1)]
+               [(int)(Math.random() * (m) + 1)] = 1;
+        }
+        for (int x = 0; x < n; x++) {
+          for (int y = 0; y < m; y++) {
+            if (mines[x + 1][y + 1] == 1) {
+              check++;
             }
           }
-      } 
-  
-      public void actionPerformed(ActionEvent e){
-          found =  false;
-          JButton current = (JButton)e.getSource();
-          for (int y = 0;y<m;y++){
-              for (int x = 0;x<n;x++){
-                  JButton t = b[x][y];
-                  if(t == current){
-                      row=x;column=y; found =true;
-                  }
-              }//end inner for
-          }//end for
-          if(!found) {
-              System.out.println("No se encontro el botón, hubo un error"); System.exit(-1);
+        }
+        if (check == nomines) {
+          allmines = true;
+        }
+      } while (allmines == false);
+      for (int y = 0; y < m; y++) {
+        for (int x = 0; x < n; x++) {
+          if ((mines[x + 1][y + 1] == 0) || (mines[x + 1][y + 1] == 1)) {
+            perm[x][y] = perimcheck(x, y);
           }
-          Component temporaryLostComponent = null;
-          if (b[row][column].getBackground() == Color.orange){
-              return;
-          }else if (mines[row+1][column+1] == 1){
-                  JOptionPane.showMessageDialog(temporaryLostComponent, "Perdiste!!!!.");
-                  dispose();
-          } else {
-              tmp = Integer.toString(perm[row][column]);
-              if (perm[row][column] == 0){
-                      tmp = " ";
-              }
-              b[row][column].setText(tmp);
-              b[row][column].setEnabled(false);
-              checkifend();
-              if (perm[row][column] == 0){
-                  scan(row, column);
-                  checkifend();
-              }
-          }
+          b[x][y] = new JButton("?");
+          b[x][y].setBackground(Color.BLACK);
+          b[x][y].setForeground(new Color(155, 155, 155));
+          b[x][y].setFocusPainted(false);
+          b[x][y].addActionListener(this);
+          b[x][y].addMouseListener(this);
+          add(b[x][y]);
+          b[x][y].setEnabled(true);
+        }
       }
-  
-      public void checkifend(){
-          int check= 0;
-          for (int y = 0; y<m;y++){
-              for (int x = 0;x<n;x++){
-          if (b[x][y].isEnabled()){
-              check++;
+      pack();
+      setFocusable(true);
+      setSize(screenSize.width, screenSize.height);
+      setVisible(true);
+      /*for (int y = 0;y<m+2;y++){
+          for (int x = 0;x<n+2;x++){
+              System.out.print(mines[x][y]);
           }
-              }}
-          if (check == nomines){
-              endtime = System.nanoTime();
-              Component temporaryLostComponent = null;
-              JOptionPane.showMessageDialog(temporaryLostComponent, "Felicidades Has Ganado!!! \nTe Tomo "+(int)((endtime-starttime)/1000000000)+" segundos!");
-          }
-      }
-  
-      public void scan(int x, int y){
-          for (int a = 0;a<8;a++){
-              if (mines[x+1+deltax[a]][y+1+deltay[a]] == 3){
-  
-              } else if ((perm[x+deltax[a]][y+deltay[a]] == 0) && (mines[x+1+deltax[a]][y+1+deltay[a]] == 0) && (guesses[x+deltax[a]+1][y+deltay[a]+1] == 0)){
-                  if (b[x+deltax[a]][y+deltay[a]].isEnabled()){
-                      b[x+deltax[a]][y+deltay[a]].setText(" ");
-                      b[x+deltax[a]][y+deltay[a]].setEnabled(false);
-                      scan(x+deltax[a], y+deltay[a]);
-                  }
-              } else if ((perm[x+deltax[a]][y+deltay[a]] != 0) && (mines[x+1+deltax[a]][y+1+deltay[a]] == 0)  && (guesses[x+deltax[a]+1][y+deltay[a]+1] == 0)){
-                  //tmp = tmp = String.valueOf(perm[x+deltax[a]][y+deltay[a]]);
-                  b[x+deltax[a]][y+deltay[a]].setText(Integer.toString(perm[x+deltax[a]][y+deltay[a]]));
-                  b[x+deltax[a]][y+deltay[a]].setEnabled(false);
-              }
-          }
-      }
-  
-      public int perimcheck(int a, int y){
-          int minecount = 0;
-          for (int x = 0;x<8;x++){
-              if (mines[a+deltax[x]+1][y+deltay[x]+1] == 1){
-                  minecount++;
-              }
-          }
-          return minecount;
-      }
-  
-      public void windowIconified(WindowEvent e){}
-  
-      public void mouseClicked(MouseEvent e) {}
+      System.out.println("");}*/
+      starttime = System.nanoTime();
+    }
 
-      @Override
-      public void mouseEntered(MouseEvent arg0) {}
-
-      @Override
-      public void mouseExited(MouseEvent arg0) {}
-  
-      @Override
-      public void mousePressed(MouseEvent e) {
-          if (e.getButton() == MouseEvent.BUTTON3) {
-              found =  false;
-              Object current = e.getSource();
-              for (int y = 0;y<m;y++){
-                      for (int x = 0;x<n;x++){
-                              JButton t = b[x][y];
-                              if(t == current){
-                                      row=x;column=y; found =true;
-                              }
-                      }
-              }
-              if(!found) {
-                  System.out.println("No se encontro el botón, hubo un error"); System.exit(-1);
-              }
-              if ((guesses[row+1][column+1] == 0) && (b[row][column].isEnabled())){
-                  b[row][column].setText("x");
-                  guesses[row+1][column+1] = 1;
-                  b[row][column].setBackground(Color.orange);
-              } else if (guesses[row+1][column+1] == 1){
-                  b[row][column].setText("?");
-                  guesses[row+1][column+1] = 0;
-                  b[row][column].setBackground(Color.BLACK);
-              }
-          }
+    class MyKeyAdapter extends KeyAdapter {
+      JFrame frame;
+      MyKeyAdapter(JFrame frame) { this.frame = frame; }
+      public void keyPressed(KeyEvent k) {
+        switch (k.getKeyCode()) {
+        case KeyEvent.VK_ESCAPE:
+          frame.dispose();
+          break;
+        }
       }
-  
-      @Override
-      public void mouseReleased(MouseEvent arg0) {}
+    }
+
+    public void actionPerformed(ActionEvent e) {
+      found = false;
+      JButton current = (JButton)e.getSource();
+      for (int y = 0; y < m; y++) {
+        for (int x = 0; x < n; x++) {
+          JButton t = b[x][y];
+          if (t == current) {
+            row = x;
+            column = y;
+            found = true;
+          }
+        } // end inner for
+      }   // end for
+      if (!found) {
+        System.out.println("No se encontro el botón, hubo un error");
+        System.exit(-1);
+      }
+      Component temporaryLostComponent = null;
+      if (b[row][column].getBackground() == Color.orange) {
+        return;
+      } else if (mines[row + 1][column + 1] == 1) {
+        JOptionPane.showMessageDialog(temporaryLostComponent, "Perdiste!!!!.");
+        dispose();
+      } else {
+        tmp = Integer.toString(perm[row][column]);
+        if (perm[row][column] == 0) {
+          tmp = " ";
+        }
+        b[row][column].setText(tmp);
+        b[row][column].setEnabled(false);
+        checkifend();
+        if (perm[row][column] == 0) {
+          scan(row, column);
+          checkifend();
+        }
+      }
+    }
+
+    public void checkifend() {
+      int check = 0;
+      for (int y = 0; y < m; y++) {
+        for (int x = 0; x < n; x++) {
+          if (b[x][y].isEnabled()) {
+            check++;
+          }
+        }
+      }
+      if (check == nomines) {
+        endtime = System.nanoTime();
+        Component temporaryLostComponent = null;
+        JOptionPane.showMessageDialog(
+            temporaryLostComponent,
+            "Felicidades Has Ganado!!! \nTe Tomo " +
+                (int)((endtime - starttime) / 1000000000) + " segundos!");
+      }
+    }
+
+    public void scan(int x, int y) {
+      for (int a = 0; a < 8; a++) {
+        if (mines[x + 1 + deltax[a]][y + 1 + deltay[a]] == 3) {
+
+        } else if ((perm[x + deltax[a]][y + deltay[a]] == 0) &&
+                   (mines[x + 1 + deltax[a]][y + 1 + deltay[a]] == 0) &&
+                   (guesses[x + deltax[a] + 1][y + deltay[a] + 1] == 0)) {
+          if (b[x + deltax[a]][y + deltay[a]].isEnabled()) {
+            b[x + deltax[a]][y + deltay[a]].setText(" ");
+            b[x + deltax[a]][y + deltay[a]].setEnabled(false);
+            scan(x + deltax[a], y + deltay[a]);
+          }
+        } else if ((perm[x + deltax[a]][y + deltay[a]] != 0) &&
+                   (mines[x + 1 + deltax[a]][y + 1 + deltay[a]] == 0) &&
+                   (guesses[x + deltax[a] + 1][y + deltay[a] + 1] == 0)) {
+          // tmp = tmp = String.valueOf(perm[x+deltax[a]][y+deltay[a]]);
+          b[x + deltax[a]][y + deltay[a]].setText(
+              Integer.toString(perm[x + deltax[a]][y + deltay[a]]));
+          b[x + deltax[a]][y + deltay[a]].setEnabled(false);
+        }
+      }
+    }
+
+    public int perimcheck(int a, int y) {
+      int minecount = 0;
+      for (int x = 0; x < 8; x++) {
+        if (mines[a + deltax[x] + 1][y + deltay[x] + 1] == 1) {
+          minecount++;
+        }
+      }
+      return minecount;
+    }
+
+    public void windowIconified(WindowEvent e) {}
+
+    public void mouseClicked(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent arg0) {}
+
+    @Override
+    public void mouseExited(MouseEvent arg0) {}
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+      if (e.getButton() == MouseEvent.BUTTON3) {
+        found = false;
+        Object current = e.getSource();
+        for (int y = 0; y < m; y++) {
+          for (int x = 0; x < n; x++) {
+            JButton t = b[x][y];
+            if (t == current) {
+              row = x;
+              column = y;
+              found = true;
+            }
+          }
+        }
+        if (!found) {
+          System.out.println("No se encontro el botón, hubo un error");
+          System.exit(-1);
+        }
+        if ((guesses[row + 1][column + 1] == 0) &&
+            (b[row][column].isEnabled())) {
+          b[row][column].setText("x");
+          guesses[row + 1][column + 1] = 1;
+          b[row][column].setBackground(Color.orange);
+        } else if (guesses[row + 1][column + 1] == 1) {
+          b[row][column].setText("?");
+          guesses[row + 1][column + 1] = 0;
+          b[row][column].setBackground(Color.BLACK);
+        }
+      }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent arg0) {}
   }
 
   public GuiPrototype(boolean Ventana) {
@@ -1182,48 +1206,47 @@ public class GuiPrototype extends JFrame {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-                ctrlPressed = true;
-            } else if (e.getKeyCode() == KeyEvent.VK_ALT) {
-                altPressed = true;
-            } else if (e.getKeyCode() == KeyEvent.VK_S) {
-                sPressed = true;
-            }else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-                shiftPressed = true;
-            }else if (e.getKeyCode() == KeyEvent.VK_X) {
-                xPressed = true;
-            }else if (e.getKeyCode() == KeyEvent.VK_M) {
-                mPressed = true;
-            }
-            if (ctrlPressed && altPressed && sPressed) {
-                new InnerSnakeGame();
-                ctrlPressed = false;
-                altPressed = false;
-                sPressed = false;
-            }
-            else if (shiftPressed && xPressed && mPressed) {
-                new Mine();
-                shiftPressed = false;
-                xPressed = false;
-                mPressed = false;
-            }
+          if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+            ctrlPressed = true;
+          } else if (e.getKeyCode() == KeyEvent.VK_ALT) {
+            altPressed = true;
+          } else if (e.getKeyCode() == KeyEvent.VK_S) {
+            sPressed = true;
+          } else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+            shiftPressed = true;
+          } else if (e.getKeyCode() == KeyEvent.VK_X) {
+            xPressed = true;
+          } else if (e.getKeyCode() == KeyEvent.VK_M) {
+            mPressed = true;
+          }
+          if (ctrlPressed && altPressed && sPressed) {
+            new InnerSnakeGame();
+            ctrlPressed = false;
+            altPressed = false;
+            sPressed = false;
+          } else if (shiftPressed && xPressed && mPressed) {
+            new Mine();
+            shiftPressed = false;
+            xPressed = false;
+            mPressed = false;
+          }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
-                ctrlPressed = false;
-            } else if (e.getKeyCode() == KeyEvent.VK_ALT) {
-                altPressed = false;
-            } else if (e.getKeyCode() == KeyEvent.VK_S) {
-                sPressed = false;
-            }else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-                shiftPressed = false;
-            }else if (e.getKeyCode() == KeyEvent.VK_X) {
-                xPressed = false;
-            }else if (e.getKeyCode() == KeyEvent.VK_M) {
-                mPressed = false;
-            }
+          if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+            ctrlPressed = false;
+          } else if (e.getKeyCode() == KeyEvent.VK_ALT) {
+            altPressed = false;
+          } else if (e.getKeyCode() == KeyEvent.VK_S) {
+            sPressed = false;
+          } else if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+            shiftPressed = false;
+          } else if (e.getKeyCode() == KeyEvent.VK_X) {
+            xPressed = false;
+          } else if (e.getKeyCode() == KeyEvent.VK_M) {
+            mPressed = false;
+          }
         }
       });
 
@@ -1252,7 +1275,6 @@ public class GuiPrototype extends JFrame {
       JPanel panelPrincipal = new JPanel();
 
       panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
-
 
       panelPrincipal.add(inicioPanel);
       panelPrincipal.add(infoPanel);
@@ -1305,7 +1327,8 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void Realizar_venta(JPanel contentPanel, int o, JFrame framePrincipal) {
+  public static void Realizar_venta(JPanel contentPanel, int o,
+                                    JFrame framePrincipal) {
 
     contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
@@ -1318,10 +1341,10 @@ public class GuiPrototype extends JFrame {
       panel.setBorder(
           BorderFactory.createMatteBorder(0, 0, 1, 1, new Color(0, 85, 119)));
 
-      JLabel label =
-          new JLabel("<html><font color='#9B9B9B'> " +
-                     moDaStr.get(h).replace("\n", "<br>").replace("\t", "&nbsp;") +
-                     "</font></html>");
+      JLabel label = new JLabel(
+          "<html><font color='#9B9B9B'> " +
+          moDaStr.get(h).replace("\n", "<br>").replace("\t", "&nbsp;") +
+          "</font></html>");
       label.setPreferredSize(new Dimension(300, 300));
       label.setFont(new Font("Arial", Font.PLAIN, 25));
       panel.add(label, BorderLayout.CENTER);
@@ -1330,8 +1353,9 @@ public class GuiPrototype extends JFrame {
 
       button.setPreferredSize(new Dimension(300, 300));
 
-      button.addActionListener(new BotonListener(button, label, h, panel, framePrincipal));
-      
+      button.addActionListener(
+          new BotonListener(button, label, h, panel, framePrincipal));
+
       button.setVerticalTextPosition(SwingConstants.BOTTOM);
       button.setHorizontalTextPosition(SwingConstants.CENTER);
       button.setBorder(
@@ -1357,7 +1381,9 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void informacion_compradores(boolean ventana, JPanel informacion, int indexButton, JPanel iniciox, JFrame framePrincipal)
+  public static void
+  informacion_compradores(boolean ventana, JPanel informacion, int indexButton,
+                          JPanel iniciox, JFrame framePrincipal)
       throws IOException {
     informacion.removeAll();
     informacion.revalidate();
@@ -1421,7 +1447,7 @@ public class GuiPrototype extends JFrame {
         label2.setFont(new Font("Arial", Font.PLAIN, 20));
         panel.add(label2, BorderLayout.CENTER);
 
-        informacion.add(panel);        
+        informacion.add(panel);
       }
     }
 
@@ -1431,14 +1457,14 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void reproductor(JPanel panel, JFrame framePrincipal){
+  public static void reproductor(JPanel panel, JFrame framePrincipal) {
 
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-    JButton btnAnterior = new JButton("|<-");
-    JButton btnSalir = new JButton("▢");
-    JButton btnPausa = new JButton("⏸︎");
-    JButton btnSig = new JButton("->|");
+    JButton btnAnterior = new JButton("Anterior");
+    JButton btnSalir = new JButton("Salir");
+    JButton btnPausa = new JButton("Pausa");
+    JButton btnSig = new JButton("Siguiente");
     JButton btnAgregar = new JButton("Agregar");
 
     JPanel uno = new JPanel();
@@ -1457,15 +1483,22 @@ public class GuiPrototype extends JFrame {
       try {
         volumen = slider.getValue();
         if (System.getProperty("os.name").contains("Win")) {
-          processBuilder = new ProcessBuilder("cmd", "/c", String.format("echo { \"command\": [\"set_property\", \"volume\", %d] } > \\\\.\\pipe\\mpvsocket", slider.getValue()));
-  
-        }else{
-          processBuilder = new ProcessBuilder("bash", "-c", String.format("echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket", slider.getValue()));
+          processBuilder = new ProcessBuilder(
+              "cmd", "/c",
+              String.format(
+                  "echo { \"command\": [\"set_property\", \"volume\", %d] } > \\\\.\\pipe\\mpvsocket",
+                  slider.getValue()));
+          process = processBuilder.start();
+
+        } else {
+          String comando = String.format(
+              "echo '{ \"command\": [\"set_property\", \"volume\", %d] }' | socat - /tmp/mpvsocket",
+              slider.getValue());
+          volumen1(comando, "volumen.sh");
         }
-        process = processBuilder.start();
-        
+
       } catch (IOException ex) {
-          ex.printStackTrace();
+        ex.printStackTrace();
       }
       framePrincipal.requestFocusInWindow();
     });
@@ -1489,14 +1522,14 @@ public class GuiPrototype extends JFrame {
         btnSalir.setBackground(null);
       }
     });
-    
+
     btnSalir.addActionListener(e -> {
       detenerReproductor();
-      btnPausa.setText("⏸︎");
+      btnPausa.setText("Pausa");
       framePrincipal.requestFocusInWindow();
     });
 
-    reproductorTxt.setForeground(new Color(155,155,155));
+    reproductorTxt.setForeground(new Color(155, 155, 155));
     reproductorTxt.setBackground(Color.black);
     reproductorTxt.setPreferredSize(new Dimension(600, 100));
 
@@ -1520,25 +1553,25 @@ public class GuiPrototype extends JFrame {
       }
     });
     btnPausa.addActionListener(e -> {
-        
-      if (btnPausa.getText().equals("▶")) {
-        btnPausa.setText("⏸︎");
-      }else{
-        btnPausa.setText("▶");
+      if (btnPausa.getText().equals("Reproducir")) {
+        btnPausa.setText("Pausar");
+      } else {
+        btnPausa.setText("Reproducir");
       }
       if (System.getProperty("os.name").contains("Win")) {
         try {
-          new ProcessBuilder("cmd","/c", "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket").start();
+          new ProcessBuilder(
+              "cmd", "/c",
+              "echo { \"command\": [\"cycle\", \"pause\"] } >\\\\.\\pipe\\mpvsocket")
+              .start();
         } catch (IOException x) {
           x.printStackTrace();
         }
-      
+
       } else {
-        try {
-          new ProcessBuilder ("bash", "-c", "echo '{ \"command\": [\"cycle\", \"pause\"] }' | socat - /tmp/mpvsocket").start();
-        } catch (IOException x) {
-          x.printStackTrace();
-        }
+        String comando =
+            "echo '{ \"command\": [\"cycle\", \"pause\"] }' | socat - /tmp/mpvsocket";
+        volumen1(comando, "pausa.sh");
       }
       framePrincipal.requestFocusInWindow();
     });
@@ -1564,7 +1597,7 @@ public class GuiPrototype extends JFrame {
     });
     btnSig.addActionListener(e -> {
       if (procesoReproductor != null && reproductor_i <= canciones.size() - 2) {
-        procesoReproductor.destroy(); 
+        procesoReproductor.destroy();
       }
       framePrincipal.requestFocusInWindow();
     });
@@ -1590,9 +1623,9 @@ public class GuiPrototype extends JFrame {
     });
     btnAnterior.addActionListener(e -> {
       if (procesoReproductor != null && reproductor_i >= 1) {
-        reproductor_i --;
-        reproductor_i --;
-        procesoReproductor.destroy(); 
+        reproductor_i--;
+        reproductor_i--;
+        procesoReproductor.destroy();
       }
       framePrincipal.requestFocusInWindow();
     });
@@ -1617,8 +1650,8 @@ public class GuiPrototype extends JFrame {
       }
     });
 
-    btnAgregar.addActionListener(e -> { 
-      btnPausa.setText("⏸︎");
+    btnAgregar.addActionListener(e -> {
+      btnPausa.setText("Pausar");
       canciones.add(reproductorTxt.getText());
       reproductorTxt.setText(null);
       if (canciones.size() == 1) {
@@ -1638,43 +1671,88 @@ public class GuiPrototype extends JFrame {
     dos.add(btnSig);
     dos.add(slider);
     dos.setBorder(BorderFactory.createEmptyBorder(0, 130, 500, 0));
-    
+
     panel.add(uno);
     panel.add(dos);
   }
 
+  public static void volumen1(String comando, String nombreArchivo) {
+    try {
+      // Obtén el directorio temporal
+      String directorioTemp = System.getProperty("java.io.tmpdir");
+
+      // Crea el path completo del archivo en el directorio temporal
+      Path pathArchivoTemp = Path.of(directorioTemp, nombreArchivo);
+
+      if (new File(pathArchivoTemp.toString()).exists()) {
+        new File(pathArchivoTemp.toString()).delete();
+      }
+      BufferedWriter escribir =
+          new BufferedWriter(new FileWriter(pathArchivoTemp.toString()));
+      escribir.write(comando);
+      escribir.close();
+      // Files.createFile(pathArchivoTemp);
+      Set<PosixFilePermission> perms = new HashSet<>();
+      perms.add(PosixFilePermission.OTHERS_READ);
+      perms.add(PosixFilePermission.OTHERS_WRITE);
+      perms.add(PosixFilePermission.OTHERS_EXECUTE);
+      perms.add(PosixFilePermission.OWNER_EXECUTE);
+      perms.add(PosixFilePermission.OWNER_READ);
+
+      Files.setPosixFilePermissions(pathArchivoTemp, perms);
+
+      // Puedes agregar contenido al archivo si es necesario
+      Process ejecutar = new ProcessBuilder(pathArchivoTemp.toString()).start();
+      try {
+        ejecutar.waitFor();
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      ejecutar.destroy();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   public static void detenerReproductor() {
     if (procesoReproductor != null) {
-        canciones.clear();
-        reproductor_i = 0;
-        procesoReproductor.destroy(); 
+      canciones.clear();
+      reproductor_i = 0;
+      procesoReproductor.destroy();
     }
   }
 
   static class Reproductor extends Thread {
-    @Override //https://stackoverflow.com/questions/2865315/threads-in-java dice que es override, entonces ha de ser polimorfismo
-    public void run() {
+    @Override // https://stackoverflow.com/questions/2865315/threads-in-java
+              // dice que es override, entonces ha de ser polimorfismo
+              public void run() {
       String mpvsocket;
       String logFilePath;
       if (System.getProperty("os.name").contains("Win")) {
-        mpvsocket = "\\\\.\\" + "pipe\\mpvsocket";
+        mpvsocket = "\\\\.\\"
+                    + "pipe\\mpvsocket";
         logFilePath = "NUL";
       } else {
-        mpvsocket = Paths.get(System.getProperty("java.io.tmpdir"), "mpvsocket").toString();
+        mpvsocket = Paths.get(System.getProperty("java.io.tmpdir"), "mpvsocket")
+                        .toString();
         logFilePath = "/dev/null";
       }
 
       while (reproductor_i <= canciones.size() - 1) {
         try {
-            ProcessBuilder processBuilder;
-            processBuilder = new ProcessBuilder("mpv", "--no-video", "--volume="+volumen, "--volume-max=100", "--af=scaletempo", "--input-ipc-server=" + mpvsocket, canciones.get(reproductor_i));
-            processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(new File(logFilePath)));
-            procesoReproductor = processBuilder.start();
-            procesoReproductor.waitFor();
-            procesoReproductor.destroy();
-            reproductor_i ++;
+          ProcessBuilder processBuilder;
+          processBuilder = new ProcessBuilder(
+              "mpv", "--no-video", "--volume=" + volumen, "--volume-max=100",
+              "--input-ipc-server=" + mpvsocket, canciones.get(reproductor_i));
+          processBuilder.redirectError(
+              ProcessBuilder.Redirect.appendTo(new File(logFilePath)));
+          procesoReproductor = processBuilder.start();
+          procesoReproductor.waitFor();
+          procesoReproductor.destroy();
+          reproductor_i++;
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+          e.printStackTrace();
         }
       }
       canciones.clear();
@@ -1684,8 +1762,9 @@ public class GuiPrototype extends JFrame {
     }
   }
 
-  public static void agregar_elemento(JPanel panel, JPanel iniciox, JFrame framePrincipal){
-    
+  public static void agregar_elemento(JPanel panel, JPanel iniciox,
+                                      JFrame framePrincipal) {
+
     JPanel panel2 = new JPanel();
     JButton button = new JButton("Agregar auto");
     button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1748,7 +1827,7 @@ public class GuiPrototype extends JFrame {
     panel.add(panel2);
   }
 
-  public static void pedirCarro(JPanel iniciox, JFrame framePrincipal){
+  public static void pedirCarro(JPanel iniciox, JFrame framePrincipal) {
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
 
@@ -1762,10 +1841,11 @@ public class GuiPrototype extends JFrame {
 
     Color labelColor = new Color(155, 155, 155);
     Font labelFont = new Font("Arial", Font.PLAIN, 16);
-    
+
     btn_img.addActionListener(e -> a = file.showOpenDialog(frame));
     btn_img.setFocusPainted(false);
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen", "png");
+    FileNameExtensionFilter filter =
+        new FileNameExtensionFilter("Archivos de Imagen", "png");
     file.setFileFilter(filter);
     file.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -1814,152 +1894,155 @@ public class GuiPrototype extends JFrame {
     JButton aceptarButton = new JButton("Aceptar");
     aceptarButton.setFocusPainted(false);
 
-    aceptarButton.addActionListener( e -> {
-        String marcax = marcaTXT.getText();
-        String colorx = colorTXT.getText();
-        String modelox = modeloTXT.getText();
-        String montox = montoTXT.getText();
+    aceptarButton.addActionListener(e -> {
+      String marcax = marcaTXT.getText();
+      String colorx = colorTXT.getText();
+      String modelox = modeloTXT.getText();
+      String montox = montoTXT.getText();
 
-        boolean itegerCorrect = false;
+      boolean itegerCorrect = false;
 
+      try {
+        Integer.parseInt(montox);
+        itegerCorrect = true;
+      } catch (Exception p) {
+        JOptionPane.showMessageDialog(null,
+                                      "Ingresa un número válido sin décimal");
+      }
+
+      if (marcax != null && colorx != null && modelox != null &&
+          montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
+
+        Redimensionar(file.getSelectedFile().toString(), 300, 169);
         try {
-          Integer.parseInt(montox);
-          itegerCorrect = true;
-        } catch (Exception p) {
-          JOptionPane.showMessageDialog(null, "Ingresa un número válido sin décimal");
+          copiarImagen(file.getSelectedFile().toString(), "data/");
+        } catch (IOException e1) {
+          e1.printStackTrace();
         }
 
-        if (marcax != null && colorx != null && modelox != null && montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
+        ImageIcon icono =
+            new ImageIcon("data/" + file.getName(file.getSelectedFile()));
 
-          Redimensionar(file.getSelectedFile().toString(), 300, 169);
-          try {
-            copiarImagen(file.getSelectedFile().toString(), "data/");
-          } catch (IOException e1) {
-            e1.printStackTrace();
+        try {
+          String carpeta = "data/";
+          File carpetaFile = new File(carpeta);
+
+          if (!carpetaFile.exists()) {
+            carpetaFile.mkdirs();
           }
 
-          ImageIcon icono = new ImageIcon("data/"+file.getName(file.getSelectedFile()));
+          File archivo = new File(carpeta, "images.txt");
 
-          try {
-            String carpeta = "data/";  
-            File carpetaFile = new File(carpeta);
-            
-            if (!carpetaFile.exists()) {
-                carpetaFile.mkdirs();  
-            }
-        
-            File archivo = new File(carpeta, "images.txt");
-            
-            if (!archivo.exists()) {
-                writer = new BufferedWriter(new FileWriter(archivo));
-            }
-
-            x += file.getName(file.getSelectedFile())+"\n";
-
-            writer.write(x);
-            writer.flush();
-
-          } catch (IOException a) {
-              a.printStackTrace();
+          if (!archivo.exists()) {
+            writer = new BufferedWriter(new FileWriter(archivo));
           }
 
-          try {
-            String carpeta = "data/";  
-            File carpetaFile = new File(carpeta);
-            
-            if (!carpetaFile.exists()) {
-                carpetaFile.mkdirs();  
-            }
-        
-            File archivo = new File(carpeta, "color.txt");
-            
-            if (!archivo.exists()) {
-                writer = new BufferedWriter(new FileWriter(archivo));
-            }
-        
-            writer.write(colorx);
-            writer.flush();
-          } catch (IOException a) {
-              a.printStackTrace();
+          x += file.getName(file.getSelectedFile()) + "\n";
+
+          writer.write(x);
+          writer.flush();
+
+        } catch (IOException a) {
+          a.printStackTrace();
+        }
+
+        try {
+          String carpeta = "data/";
+          File carpetaFile = new File(carpeta);
+
+          if (!carpetaFile.exists()) {
+            carpetaFile.mkdirs();
           }
 
-          try {
-            String carpeta = "data/";  
-            File carpetaFile = new File(carpeta);
-            
-            if (!carpetaFile.exists()) {
-                carpetaFile.mkdirs();  
-            }
-        
-            File archivo = new File(carpeta, "marca.txt");
-            
-            if (!archivo.exists()) {
-                writer = new BufferedWriter(new FileWriter(archivo));
-            }
-        
-            writer.write(marcax);
-            writer.flush();
-          } catch (IOException a) {
-              a.printStackTrace();
+          File archivo = new File(carpeta, "color.txt");
+
+          if (!archivo.exists()) {
+            writer = new BufferedWriter(new FileWriter(archivo));
           }
 
-          try {
-            String carpeta = "data/";  
-            File carpetaFile = new File(carpeta);
-            
-            if (!carpetaFile.exists()) {
-                carpetaFile.mkdirs();  
-            }
-        
-            File archivo = new File(carpeta, "modelo.txt");
-            
-            if (!archivo.exists()) {
-                writer = new BufferedWriter(new FileWriter(archivo));
-            }
-        
-            writer.write(modelox);
-            writer.flush();
-          } catch (IOException a) {
-              a.printStackTrace();
+          writer.write(colorx);
+          writer.flush();
+        } catch (IOException a) {
+          a.printStackTrace();
+        }
+
+        try {
+          String carpeta = "data/";
+          File carpetaFile = new File(carpeta);
+
+          if (!carpetaFile.exists()) {
+            carpetaFile.mkdirs();
           }
 
-          try {
-            String carpeta = "data/";  
-            File carpetaFile = new File(carpeta);
-            
-            if (!carpetaFile.exists()) {
-                carpetaFile.mkdirs();  
-            }
-        
-            File archivo = new File(carpeta, "monto.txt");
-            
-            if (!archivo.exists()) {
-                writer = new BufferedWriter(new FileWriter(archivo));
-            }
-        
-            writer.write(montox);
-            writer.flush();
-          } catch (IOException a) {
-              a.printStackTrace();
+          File archivo = new File(carpeta, "marca.txt");
+
+          if (!archivo.exists()) {
+            writer = new BufferedWriter(new FileWriter(archivo));
           }
 
-          color.add(colorx);
-          marca.add(marcax);
-          modelo.add(modelox);
-          monto.add(Integer.parseInt(montox));
-          images.add(icono);
-          Realizar_venta(iniciox, oX, framePrincipal);
-          oX++;
-          System.out.println(oX); 
-          marcaTXT.setText("");
-          colorTXT.setText("");
-          modeloTXT.setText("");
-          montoTXT.setText("");
-          imgTXT.setText("");
-          frame.dispose();
-          return;
+          writer.write(marcax);
+          writer.flush();
+        } catch (IOException a) {
+          a.printStackTrace();
+        }
+
+        try {
+          String carpeta = "data/";
+          File carpetaFile = new File(carpeta);
+
+          if (!carpetaFile.exists()) {
+            carpetaFile.mkdirs();
           }
-        });
+
+          File archivo = new File(carpeta, "modelo.txt");
+
+          if (!archivo.exists()) {
+            writer = new BufferedWriter(new FileWriter(archivo));
+          }
+
+          writer.write(modelox);
+          writer.flush();
+        } catch (IOException a) {
+          a.printStackTrace();
+        }
+
+        try {
+          String carpeta = "data/";
+          File carpetaFile = new File(carpeta);
+
+          if (!carpetaFile.exists()) {
+            carpetaFile.mkdirs();
+          }
+
+          File archivo = new File(carpeta, "monto.txt");
+
+          if (!archivo.exists()) {
+            writer = new BufferedWriter(new FileWriter(archivo));
+          }
+
+          writer.write(montox);
+          writer.flush();
+        } catch (IOException a) {
+          a.printStackTrace();
+        }
+
+        color.add(colorx);
+        marca.add(marcax);
+        modelo.add(modelox);
+        monto.add(Integer.parseInt(montox));
+        images.add(icono);
+        Realizar_venta(iniciox, oX, framePrincipal);
+        oX++;
+        System.out.println(oX);
+        marcaTXT.setText("");
+        colorTXT.setText("");
+        modeloTXT.setText("");
+        montoTXT.setText("");
+        imgTXT.setText("");
+        frame.dispose();
+        return;
+      }
+    });
 
     aceptarButton.setBorder(null);
     componentesPanel.add(new Label(""));
@@ -1973,28 +2056,32 @@ public class GuiPrototype extends JFrame {
     return;
   }
 
-  public static void copiarImagen(String rutaImagenOriginal, String rutaCarpetaDestino) throws IOException {
+  public static void copiarImagen(String rutaImagenOriginal,
+                                  String rutaCarpetaDestino)
+      throws IOException {
 
     Path archivoOriginal = Path.of(rutaImagenOriginal);
     String nombreArchivo = archivoOriginal.getFileName().toString();
 
     Path rutaDestino = Path.of(rutaCarpetaDestino, nombreArchivo);
 
-    Files.copy(archivoOriginal, rutaDestino, StandardCopyOption.REPLACE_EXISTING);
-    
+    Files.copy(archivoOriginal, rutaDestino,
+               StandardCopyOption.REPLACE_EXISTING);
   }
 
-  public static void Redimensionar(String rutaImagenOriginal,
-    int anchoDeseado, int altoDeseado) {
+  public static void Redimensionar(String rutaImagenOriginal, int anchoDeseado,
+                                   int altoDeseado) {
 
     try {
       BufferedImage imagenOriginal = ImageIO.read(new File(rutaImagenOriginal));
-      Image imagenRedimensionada = imagenOriginal.getScaledInstance(anchoDeseado, altoDeseado, Image.SCALE_SMOOTH);
-      BufferedImage nuevaImagen = new BufferedImage(anchoDeseado, altoDeseado, BufferedImage.TYPE_INT_RGB);
-  
+      Image imagenRedimensionada = imagenOriginal.getScaledInstance(
+          anchoDeseado, altoDeseado, Image.SCALE_SMOOTH);
+      BufferedImage nuevaImagen = new BufferedImage(anchoDeseado, altoDeseado,
+                                                    BufferedImage.TYPE_INT_RGB);
+
       nuevaImagen.createGraphics().drawImage(imagenRedimensionada, 0, 0, null);
       ImageIO.write(nuevaImagen, "png", new File(rutaImagenOriginal));
-  
+
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -2025,7 +2112,7 @@ public class GuiPrototype extends JFrame {
     button.setOpaque(isDefaultLookAndFeelDecorated());
     button.setBackground(Color.gray);
     button.setBorder(
-        BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0, 85, 119)));    
+        BorderFactory.createMatteBorder(0, 1, 0, 1, new Color(0, 85, 119)));
     button.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
@@ -2042,7 +2129,6 @@ public class GuiPrototype extends JFrame {
 
         button.setBackground(null);
       }
-
     });
 
     panel.setLayout(new BorderLayout());
@@ -2077,13 +2163,14 @@ public class GuiPrototype extends JFrame {
 
   public static void agregarElementoMenu(JPanel menuPanel, String funcion,
                                          int indexButton, JPanel panelInicio,
-                                         JPanel infoPanel, JFrame framePrincipal) {
+                                         JPanel infoPanel,
+                                         JFrame framePrincipal) {
 
     JButton button = new JButton(funcion);
     button.setAlignmentX(Component.CENTER_ALIGNMENT);
     button.setText(funcion);
-    button.addActionListener(
-        new MenuBotonListener(indexButton, panelInicio, infoPanel, framePrincipal));
+    button.addActionListener(new MenuBotonListener(indexButton, panelInicio,
+                                                   infoPanel, framePrincipal));
     button.setFocusPainted(false);
     button.getVerifyInputWhenFocusTarget();
     button.setBorder(
@@ -2127,17 +2214,22 @@ public class GuiPrototype extends JFrame {
     panel.setPreferredSize(new Dimension(200, panel.getHeight()));
     panel.removeAll();
 
-    agregarElementoMenu(panel, "Realizar venta", 1, panelInicio, infoPanel, framePrincipal);
+    agregarElementoMenu(panel, "Realizar venta", 1, panelInicio, infoPanel,
+                        framePrincipal);
     agregarElementoMenu(panel, "Informacion compradores", 2, panelInicio,
                         infoPanel, framePrincipal);
-    agregarElementoMenu(panel, "Ventas realizadas", 3, panelInicio, infoPanel, framePrincipal);
-    agregarElementoMenu(panel, "Informacion de pago", 4, panelInicio,
-                        infoPanel, framePrincipal);
-    agregarElementoMenu(panel, "Recibo personal", 5, panelInicio, infoPanel, framePrincipal);
-    agregarElementoMenu(panel, "Recibo General", 6, panelInicio, infoPanel, framePrincipal);
-    agregarElementoMenu(panel, "Reproductor", 7, panelInicio, infoPanel, framePrincipal);
-    agregarElementoMenu(panel, "Agregar producto", 8, panelInicio, infoPanel, framePrincipal);
-
+    agregarElementoMenu(panel, "Ventas realizadas", 3, panelInicio, infoPanel,
+                        framePrincipal);
+    agregarElementoMenu(panel, "Informacion de pago", 4, panelInicio, infoPanel,
+                        framePrincipal);
+    agregarElementoMenu(panel, "Recibo personal", 5, panelInicio, infoPanel,
+                        framePrincipal);
+    agregarElementoMenu(panel, "Recibo General", 6, panelInicio, infoPanel,
+                        framePrincipal);
+    agregarElementoMenu(panel, "Reproductor", 7, panelInicio, infoPanel,
+                        framePrincipal);
+    agregarElementoMenu(panel, "Agregar producto", 8, panelInicio, infoPanel,
+                        framePrincipal);
 
     panel.setBorder(
         BorderFactory.createMatteBorder(0, 0, 0, 0, new Color(0, 0, 0)));
@@ -2182,7 +2274,8 @@ public class GuiPrototype extends JFrame {
       } else {
         panelInicio.setVisible(false);
         try {
-          informacion_compradores(menuExpandido, infoPanel, indexButton, panelInicio, framePrincipal);
+          informacion_compradores(menuExpandido, infoPanel, indexButton,
+                                  panelInicio, framePrincipal);
         } catch (IOException e1) {
           e1.printStackTrace();
         }
@@ -2206,11 +2299,23 @@ public class GuiPrototype extends JFrame {
     JRadioButton radio3 = new JRadioButton("Efectivo");
     ButtonGroup bg = new ButtonGroup();
 
-    radio1.addChangeListener(e -> { if(radio1.isSelected()){ switchBtn = 1; }});
+    radio1.addChangeListener(e -> {
+      if (radio1.isSelected()) {
+        switchBtn = 1;
+      }
+    });
 
-    radio2.addChangeListener(e -> { if(radio2.isSelected()){ switchBtn = 2; }});
+    radio2.addChangeListener(e -> {
+      if (radio2.isSelected()) {
+        switchBtn = 2;
+      }
+    });
 
-    radio3.addChangeListener(e -> { if(radio3.isSelected()){ switchBtn = 3; }});
+    radio3.addChangeListener(e -> {
+      if (radio3.isSelected()) {
+        switchBtn = 3;
+      }
+    });
 
     Color labelColor = new Color(155, 155, 155);
     Font labelFont = new Font("Arial", Font.PLAIN, 16);
@@ -2271,8 +2376,7 @@ public class GuiPrototype extends JFrame {
 
     JButton aceptarButton = new JButton("Aceptar");
     aceptarButton.setFocusPainted(false);
-    aceptarButton.addActionListener( e -> {
-
+    aceptarButton.addActionListener(e -> {
       boolean[] confirmBuscar = new boolean[4];
       int aC = 0;
       double bC = 0;
@@ -2297,8 +2401,7 @@ public class GuiPrototype extends JFrame {
         }
       } catch (NumberFormatException p) {
         JOptionPane.showMessageDialog(
-            null,
-            "Entrada no válida. Ingresa un número válido para la edad.");
+            null, "Entrada no válida. Ingresa un número válido para la edad.");
       }
 
       try {
@@ -2359,7 +2462,7 @@ public class GuiPrototype extends JFrame {
       if (confirmBuscar[0] && confirmBuscar[1] && confirmBuscar[2] &&
           confirmBuscar[3]) {
         buscar(carroSeleccionado, carrosVendidos, numCarrosVendidos,
-                compradores, numCompradores, array.get(ho));
+               compradores, numCompradores, array.get(ho));
         datos(w, carroSeleccionado);
         numCompradores++;
         numCarrosVendidos++;
@@ -2405,9 +2508,8 @@ public class GuiPrototype extends JFrame {
     public void actionPerformed(ActionEvent e) {
       boolean confirm = true;
 
-      String[] opciones = { "Realizar venta" , "Eliminar auto", "Cancelar"};
+      String[] opciones = {"Realizar venta", "Eliminar auto", "Cancelar"};
       String[] opciones2 = {"Confirmar", "Cancelar"};
-
 
       int seleccion = JOptionPane.showOptionDialog(
           null, "Selecciona una opción", "Venta del auto seleccionado",
@@ -2419,13 +2521,13 @@ public class GuiPrototype extends JFrame {
       switch (seleccion) {
       case 0:
         confirm = false;
-          pedirDatos(ho, framePrincipal);
+        pedirDatos(ho, framePrincipal);
         break;
-      case 1: 
+      case 1:
         int seleccion2 = JOptionPane.showOptionDialog(
-        null, "Esta seguro que desea eliminar el auto?", null,
-        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-        opciones2, opciones[0]);
+            null, "Esta seguro que desea eliminar el auto?", null,
+            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+            opciones2, opciones[0]);
 
         if (seleccion2 == 0) {
           confirm = false;
