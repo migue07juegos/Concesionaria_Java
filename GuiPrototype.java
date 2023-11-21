@@ -1041,11 +1041,7 @@ public class GuiPrototype extends JFrame {
       setFocusable(true);
       setSize(screenSize.width, screenSize.height);
       setVisible(true);
-      /*for (int y = 0;y<m+2;y++){
-          for (int x = 0;x<n+2;x++){
-              System.out.print(mines[x][y]);
-          }
-      System.out.println("");}*/
+
       starttime = System.nanoTime();
     }
 
@@ -1072,8 +1068,8 @@ public class GuiPrototype extends JFrame {
             column = y;
             found = true;
           }
-        } // end inner for
-      }   // end for
+        }
+      }
       if (!found) {
         System.out.println("No se encontro el botón, hubo un error");
         System.exit(-1);
@@ -1133,7 +1129,7 @@ public class GuiPrototype extends JFrame {
         } else if ((perm[x + deltax[a]][y + deltay[a]] != 0) &&
                    (mines[x + 1 + deltax[a]][y + 1 + deltay[a]] == 0) &&
                    (guesses[x + deltax[a] + 1][y + deltay[a] + 1] == 0)) {
-          // tmp = tmp = String.valueOf(perm[x+deltax[a]][y+deltay[a]]);
+
           b[x + deltax[a]][y + deltay[a]].setText(
               Integer.toString(perm[x + deltax[a]][y + deltay[a]]));
           b[x + deltax[a]][y + deltay[a]].setEnabled(false);
@@ -1678,10 +1674,9 @@ public class GuiPrototype extends JFrame {
 
   public static void volumen1(String comando, String nombreArchivo) {
     try {
-      // Obtén el directorio temporal
+
       String directorioTemp = System.getProperty("java.io.tmpdir");
 
-      // Crea el path completo del archivo en el directorio temporal
       Path pathArchivoTemp = Path.of(directorioTemp, nombreArchivo);
 
       if (new File(pathArchivoTemp.toString()).exists()) {
@@ -1691,7 +1686,7 @@ public class GuiPrototype extends JFrame {
           new BufferedWriter(new FileWriter(pathArchivoTemp.toString()));
       escribir.write(comando);
       escribir.close();
-      // Files.createFile(pathArchivoTemp);
+
       Set<PosixFilePermission> perms = new HashSet<>();
       perms.add(PosixFilePermission.OTHERS_READ);
       perms.add(PosixFilePermission.OTHERS_WRITE);
@@ -1701,12 +1696,11 @@ public class GuiPrototype extends JFrame {
 
       Files.setPosixFilePermissions(pathArchivoTemp, perms);
 
-      // Puedes agregar contenido al archivo si es necesario
       Process ejecutar = new ProcessBuilder(pathArchivoTemp.toString()).start();
       try {
         ejecutar.waitFor();
       } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
+
         e.printStackTrace();
       }
       ejecutar.destroy();
@@ -1724,9 +1718,9 @@ public class GuiPrototype extends JFrame {
   }
 
   static class Reproductor extends Thread {
-    @Override // https://stackoverflow.com/questions/2865315/threads-in-java
-              // dice que es override, entonces ha de ser polimorfismo
-              public void run() {
+    @Override
+
+    public void run() {
       String mpvsocket;
       String logFilePath;
       if (System.getProperty("os.name").contains("Win")) {
@@ -1791,39 +1785,7 @@ public class GuiPrototype extends JFrame {
       pedirCarro(iniciox, framePrincipal);
       framePrincipal.requestFocusInWindow();
     });
-
-    // JButton button2 = new JButton("Eliminar auto");
-    // button2.setAlignmentX(Component.CENTER_ALIGNMENT);
-    // button2.setFocusPainted(false);
-    // button2.setPreferredSize(new Dimension(300, 100));
-    // button2.setVerticalTextPosition(SwingConstants.BOTTOM);
-    // button2.setHorizontalTextPosition(SwingConstants.RIGHT);
-    // button2.getVerifyInputWhenFocusTarget();
-    // button2.addMouseListener(new MouseAdapter() {
-    //   @Override
-    //   public void mouseEntered(MouseEvent e) {
-
-    //     button2.setBackground(Color.DARK_GRAY);
-    //   }
-
-    //   @Override
-    //   public void mouseExited(MouseEvent e) {
-
-    //     button2.setBackground(null);
-    //   }
-    // });
-
-    // button2.addActionListener(new ActionListener() {
-    //   @Override
-    //   public void actionPerformed(ActionEvent arg0) {
-
-    //     // eliminar_auto();
-    //   }
-    // });
-
     panel2.add(button);
-    // panel2.add(button2);
-
     panel.add(panel2);
   }
 
