@@ -1875,12 +1875,12 @@ public class GuiPrototype extends JFrame {
       if (marcax != null && colorx != null && modelox != null &&
           montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
 
-        Redimensionar(file.getSelectedFile().toString(), 300, 169);
         try {
           copiarImagen(file.getSelectedFile().toString(), "data/");
         } catch (IOException e1) {
           e1.printStackTrace();
         }
+        Redimensionar("data/"+file.getName(file.getSelectedFile()), 300, 169);
 
         ImageIcon icono =
             new ImageIcon("data/" + file.getName(file.getSelectedFile()));
