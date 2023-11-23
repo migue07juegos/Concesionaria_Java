@@ -1812,7 +1812,6 @@ public class GuiPrototype extends JFrame {
           icono = new ImageIcon(
               Redimensionar(ImageIO.read(file.getSelectedFile()), 300, 169));
         } catch (IOException e1) {
-          // TODO Auto-generated catch block
           e1.printStackTrace();
         }
 
