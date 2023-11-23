@@ -1,10 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -117,19 +115,6 @@ public class GuiPrototype extends JFrame {
     color.add("Naranja");
     color.add("Plata");
     color.add("Cobre");
-    if (new File("data/color.txt").exists()) {
-      try {
-        try (BufferedReader br =
-                 new BufferedReader(new FileReader("data/color.txt"))) {
-          String linea;
-          while ((linea = br.readLine()) != null) {
-            color.add(linea);
-          }
-        }
-      } catch (IOException a) {
-        a.printStackTrace();
-      }
-    }
 
     marca.add("Audi");
     marca.add("BMW");
@@ -141,19 +126,6 @@ public class GuiPrototype extends JFrame {
     marca.add("Nissan");
     marca.add("Mazda");
     marca.add("Renault");
-    if (new File("data/marca.txt").exists()) {
-      try {
-        try (BufferedReader br =
-                 new BufferedReader(new FileReader("data/marca.txt"))) {
-          String linea;
-          while ((linea = br.readLine()) != null) {
-            marca.add(linea);
-          }
-        }
-      } catch (IOException a) {
-        a.printStackTrace();
-      }
-    }
 
     modelo.add("A1");
     modelo.add("325i");
@@ -165,19 +137,6 @@ public class GuiPrototype extends JFrame {
     modelo.add("Altima");
     modelo.add("Mazda 3");
     modelo.add("Kwid");
-    if (new File("data/modelo.txt").exists()) {
-      try {
-        try (BufferedReader br =
-                 new BufferedReader(new FileReader("data/modelo.txt"))) {
-          String linea;
-          while ((linea = br.readLine()) != null) {
-            modelo.add(linea);
-          }
-        }
-      } catch (IOException a) {
-        a.printStackTrace();
-      }
-    }
 
     monto.add(599900);
     monto.add(975000);
@@ -189,21 +148,6 @@ public class GuiPrototype extends JFrame {
     monto.add(737900);
     monto.add(388900);
     monto.add(230100);
-    if (new File("data/monto.txt").exists()) {
-      try {
-        try (BufferedReader br =
-                 new BufferedReader(new FileReader("data/monto.txt"))) {
-          String linea;
-          while ((linea = br.readLine()) != null) {
-            System.out.println("Debug: " + linea);
-            int valor = Integer.parseInt(linea.trim());
-            monto.add(valor);
-          }
-        }
-      } catch (IOException a) {
-        a.printStackTrace();
-      }
-    }
 
     images.add(new ImageIcon("images/Audi.png"));
     images.add(new ImageIcon("images/bmw.png"));
@@ -215,19 +159,6 @@ public class GuiPrototype extends JFrame {
     images.add(new ImageIcon("images/nissan.png"));
     images.add(new ImageIcon("images/Mazda.png"));
     images.add(new ImageIcon("images/Renault.png"));
-    if (new File("data/images.txt").exists()) {
-      try {
-        try (BufferedReader br =
-                 new BufferedReader(new FileReader("data/images.txt"))) {
-          String linea;
-          while ((linea = br.readLine()) != null) {
-            images.add(new ImageIcon("data/" + linea));
-          }
-        }
-      } catch (IOException a) {
-        a.printStackTrace();
-      }
-    }
   }
 
   public boolean ctrlPressed = false;
@@ -1875,17 +1806,17 @@ public class GuiPrototype extends JFrame {
       if (marcax != null && colorx != null && modelox != null &&
           montox != null && a == JFileChooser.APPROVE_OPTION && itegerCorrect) {
 
+        ImageIcon icono = new ImageIcon();
+
         try {
-          copiarImagen(file.getSelectedFile().toString(), "data/");
+          icono = new ImageIcon(
+              Redimensionar(ImageIO.read(file.getSelectedFile()), 300, 169));
         } catch (IOException e1) {
+          // TODO Auto-generated catch block
           e1.printStackTrace();
         }
-        Redimensionar("data/"+file.getName(file.getSelectedFile()), 300, 169);
 
-        ImageIcon icono =
-            new ImageIcon("data/" + file.getName(file.getSelectedFile()));
-
-        try {
+        /*try {
           String carpeta = "data/";
           File carpetaFile = new File(carpeta);
 
@@ -1986,7 +1917,7 @@ public class GuiPrototype extends JFrame {
           writer.flush();
         } catch (IOException a) {
           a.printStackTrace();
-        }
+        }*/
 
         color.add(colorx);
         marca.add(marcax);
@@ -2018,35 +1949,22 @@ public class GuiPrototype extends JFrame {
     return;
   }
 
-  public static void copiarImagen(String rutaImagenOriginal,
-                                  String rutaCarpetaDestino)
-      throws IOException {
-
-    Path archivoOriginal = Path.of(rutaImagenOriginal);
-    String nombreArchivo = archivoOriginal.getFileName().toString();
-
-    Path rutaDestino = Path.of(rutaCarpetaDestino, nombreArchivo);
-
-    Files.copy(archivoOriginal, rutaDestino,
-               StandardCopyOption.REPLACE_EXISTING);
+  public static void copiarImagen(Path rutaImagenOriginal) throws IOException {
+    Path copied = Paths.get(System.getProperty("user.dir") + "/data/"
+                            + "imagen.png");
+    Path originalPath = rutaImagenOriginal;
+    Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
   }
 
-  public static void Redimensionar(String rutaImagenOriginal, int anchoDeseado,
-                                   int altoDeseado) {
-
-    try {
-      BufferedImage imagenOriginal = ImageIO.read(new File(rutaImagenOriginal));
-      Image imagenRedimensionada = imagenOriginal.getScaledInstance(
-          anchoDeseado, altoDeseado, Image.SCALE_SMOOTH);
-      BufferedImage nuevaImagen = new BufferedImage(anchoDeseado, altoDeseado,
-                                                    BufferedImage.TYPE_INT_RGB);
-
-      nuevaImagen.createGraphics().drawImage(imagenRedimensionada, 0, 0, null);
-      ImageIO.write(nuevaImagen, "png", new File(rutaImagenOriginal));
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  static BufferedImage Redimensionar(BufferedImage originalImage,
+                                     int targetWidth, int targetHeight)
+      throws IOException {
+    Image resultingImage = originalImage.getScaledInstance(
+        targetWidth, targetHeight, Image.SCALE_DEFAULT);
+    BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight,
+                                                  BufferedImage.TYPE_INT_RGB);
+    outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
+    return outputImage;
   }
 
   public static void relojGui(JFrame frame, JPanel panelInicio,
