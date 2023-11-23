@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermission;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -1843,13 +1842,6 @@ public class GuiPrototype extends JFrame {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     framePrincipal.requestFocusInWindow();
     return;
-  }
-
-  public static void copiarImagen(Path rutaImagenOriginal) throws IOException {
-    Path copied = Paths.get(System.getProperty("user.dir") + "/data/"
-                            + "imagen.png");
-    Path originalPath = rutaImagenOriginal;
-    Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
   }
 
   static BufferedImage Redimensionar(BufferedImage originalImage,
