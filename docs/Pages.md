@@ -1,6 +1,1 @@
-title: Inicio
-layout: support-page
-permalink: /home/
-description: "Prueba de pages, hola mundo dice ale"
-
-#### Prueba de Github Pages
+## Prueba de Github Pages
