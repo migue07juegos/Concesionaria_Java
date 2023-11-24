@@ -1,5 +1,5 @@
 # Funciones
- - Compra, venta y registro de autos
+ - Venta y registro de autos
  - Métodos de entretenimiento integrados
  - Generación de recibos
  - Reproductor de música
@@ -29,4 +29,4 @@
 # Ejecución
  - `java -jar Concesionaria.jar`
 
-# [Guía de uso](https://migue07juegos.github.io/Concesionaria_Java/Howto.html)
+# [Guía de usuario](https://migue07juegos.github.io/Concesionaria_Java/Howto.html)
