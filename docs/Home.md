@@ -30,3 +30,17 @@
  - `java -jar Concesionaria.jar`
 
 # [Guía de usuario](https://migue07juegos.github.io/Concesionaria_Java/Howto.html)
+
+<pre>
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mi Página HTML</title>
+</head>
+<body>
+  <h1>Hola, mundo desde html incrustado!</h1>
+</body>
+</html>
+```
+</pre>
