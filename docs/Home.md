@@ -27,4 +27,6 @@
 
 
 # Ejecución
-`java -jar JavaProyect.jar`
+ - `java -jar JavaProyect.jar`
+
+# [Guía de uso](https://migue07juegos.github.io/Concesionaria_Java/Howto.html)
