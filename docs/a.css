@@ -1,25 +1,9 @@
-* {
+/*@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');*/
+    
+    * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-@media screen and (min-width: 1280px) {
-    section {
-        margin-left: 3.5vw !important;
-    }
-}
-
-@media screen and (max-width: 500px) {
-    section {
-        margin-left: 8vw !important;
-    }
-}
-
-@media screen and (min-width: 501px ) and ( max-width: 1279px) {
-    section {
-        margin-left: 6.5vw !important;
-    }
 }
 
 #main-container {
@@ -58,9 +42,21 @@
 .material-symbols-outlined {
     font-size: 25px;
     margin-right: 10px;
-    background: #0c0c0c;
+    /*background: #0c0c0c;*/
+    filter: invert(100%) sepia(100%) saturate(2%) hue-rotate(76deg) brightness(104%) contrast(101%) !important;
     border-radius: 50%;
     padding: 10px;
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
 }
 
 .liM:hover {
@@ -77,6 +73,24 @@
 
 .menu:hover li span:nth-child(2) {
     display: block;
+}
+
+@media screen and (min-width: 1280px) {
+    section {
+        margin-left: 3.5vw !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    section {
+        margin-left: 8vw !important;
+    }
+}
+
+@media screen and (min-width: 501px ) and ( max-width: 1279px) {
+    section {
+        margin-left: 6.5vw !important;
+    }
 }
 
 ul{
