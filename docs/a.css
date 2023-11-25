@@ -59,20 +59,28 @@
     -webkit-font-smoothing: antialiased;
 }
 
-.liM:hover {
-    background: #0c0c0c;
+@media screen and (min-width: 1043px) {
+    .liM:hover {
+        background: #0c0c0c;
+    }
+
+    .liM span:nth-child(2) {
+        display: none;
+    }
+
+    .menu:hover {
+        width: 260px;
+    }
+
+    .menu:hover li span:nth-child(2) {
+        display: block;
+    }
 }
 
-.liM span:nth-child(2) {
-    display: none;
-}
-
-.menu:hover {
-    width: 260px;
-}
-
-.menu:hover li span:nth-child(2) {
-    display: block;
+@media screen and (max-width: 1042px) {
+    .liM span:nth-child(2) {
+        display: none;
+    }
 }
 
 @media screen and (min-width: 1280px) {
