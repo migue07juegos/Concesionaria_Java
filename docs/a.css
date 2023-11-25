@@ -31,7 +31,7 @@
     padding-left: 20px;
 }
 
-a {
+.aM {
     text-decoration: none;
     color: rgb(213, 213, 213);
     display: flex;
@@ -47,11 +47,11 @@ a {
     padding: 10px;
 }
 
-li:hover {
+.liM:hover {
     background: #0c0c0c;
 }
 
-li span:nth-child(2) {
+.liM span:nth-child(2) {
     display: none;
 }
 
@@ -86,10 +86,6 @@ ul{
     padding: 0 !important;
     box-sizing: border-box !important;
 }
-
-section {
-    font-size: 25px; /* Ajusta el tamaño de la fuente según tus preferencias */
-  }
 
 .ulM {
     display: block !important;
