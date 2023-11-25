@@ -81,7 +81,7 @@ li span:nth-child(2) {
     }
 }
 
-ul {
+.ulM {
     display: block !important;
     list-style-type: disc !important;
     margin-block-start: 1em !important;
