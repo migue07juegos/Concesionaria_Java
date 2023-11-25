@@ -13,7 +13,7 @@
 }
 
 .menu {
-    height: 100%;
+    height: auto;
     transition: .3s;
     background: #ffffff12;
     padding: 20px 20px 20px 0;
@@ -86,6 +86,10 @@ ul{
     padding: 0 !important;
     box-sizing: border-box !important;
 }
+
+section {
+    font-size: 25px; /* Ajusta el tamaño de la fuente según tus preferencias */
+  }
 
 .ulM {
     display: block !important;
