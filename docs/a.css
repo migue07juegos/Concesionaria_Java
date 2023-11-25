@@ -63,6 +63,20 @@ li span:nth-child(2) {
     display: block;
 }
 
-section {
-    margin-left: 3.5vw !important;
+@media screen and (min-width: 1280px) {
+    section {
+        margin-left: 3.5vw !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    section {
+        margin-left: 8vw !important;
+    }
+}
+
+@media screen and (min-width: 501px ) and ( max-width: 1279px) {
+    section {
+        margin-left: 6.5vw !important;
+    }
 }
