@@ -81,6 +81,12 @@ li span:nth-child(2) {
     }
 }
 
+ul{
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
 .ulM {
     display: block !important;
     list-style-type: disc !important;
