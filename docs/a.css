@@ -61,7 +61,7 @@
     -webkit-font-smoothing: antialiased;
 }
 
-@media (hover: hover) {
+@media screen  and (min-width: 1043px) {
     .liM:hover {
         background: #0c0c0c;
     }
@@ -79,7 +79,7 @@
     }
 }
 
-@media (hover: none) {
+@media screen and (max-width: 1042px) {
     .liM:active {
         background: #0c0c0c;
     }
