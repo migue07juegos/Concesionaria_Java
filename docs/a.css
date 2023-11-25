@@ -62,3 +62,7 @@ li span:nth-child(2) {
 .menu:hover li span:nth-child(2) {
     display: block;
 }
+
+section {
+    margin-left: 3.5vw !important;
+}
