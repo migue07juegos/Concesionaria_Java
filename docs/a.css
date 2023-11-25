@@ -1,9 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
-    
-    * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+@media screen and (min-width: 1280px) {
+    section {
+        margin-left: 3.5vw !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    section {
+        margin-left: 8vw !important;
+    }
+}
+
+@media screen and (min-width: 501px ) and ( max-width: 1279px) {
+    section {
+        margin-left: 6.5vw !important;
+    }
 }
 
 #main-container {
@@ -61,24 +77,6 @@
 
 .menu:hover li span:nth-child(2) {
     display: block;
-}
-
-@media screen and (min-width: 1280px) {
-    section {
-        margin-left: 3.5vw !important;
-    }
-}
-
-@media screen and (max-width: 500px) {
-    section {
-        margin-left: 8vw !important;
-    }
-}
-
-@media screen and (min-width: 501px ) and ( max-width: 1279px) {
-    section {
-        margin-left: 6.5vw !important;
-    }
 }
 
 ul{
