@@ -475,7 +475,7 @@ public class GuiPrototype extends JFrame {
     JFrame frame = new JFrame();
     frame.setLayout(new GridLayout(1, 2));
 
-    JLabel nombre_recibo = new JLabel("Nombre del Recibo:");
+    JLabel nombre_recibo = new JLabel("Nombre del recibo:");
     JLabel nombre_comprador = new JLabel("Nombre comprador:");
     JCheckBox check = new JCheckBox("Abrir archivo");
 
@@ -1727,8 +1727,8 @@ public class GuiPrototype extends JFrame {
     JLabel colorLabel = new JLabel("Color del carro:");
     JLabel modeloLabel = new JLabel("Modelo del carro:");
     JLabel montoLabel = new JLabel("Monto del carro: ");
-    JLabel rutaImgLabel = new JLabel("Ruta de la imagen del carro:");
-    JButton btn_img = new JButton("Imagen");
+    JLabel rutaImgLabel = new JLabel("Ruta de la imágen del carro:");
+    JButton btn_img = new JButton("Imágen");
     JFileChooser file = new JFileChooser();
 
     Color labelColor = new Color(155, 155, 155);
@@ -1988,11 +1988,11 @@ public class GuiPrototype extends JFrame {
                         infoPanel, framePrincipal);
     agregarElementoMenu(panel, "Ventas realizadas", 3, panelInicio, infoPanel,
                         framePrincipal);
-    agregarElementoMenu(panel, "Informacion de pago", 4, panelInicio, infoPanel,
+    agregarElementoMenu(panel, "Información de pago", 4, panelInicio, infoPanel,
                         framePrincipal);
     agregarElementoMenu(panel, "Recibo personal", 5, panelInicio, infoPanel,
                         framePrincipal);
-    agregarElementoMenu(panel, "Recibo General", 6, panelInicio, infoPanel,
+    agregarElementoMenu(panel, "Recibo general", 6, panelInicio, infoPanel,
                         framePrincipal);
     agregarElementoMenu(panel, "Reproductor", 7, panelInicio, infoPanel,
                         framePrincipal);
