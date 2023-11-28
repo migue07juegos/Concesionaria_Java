@@ -127,3 +127,8 @@ img {
     max-width: 500px !important;
     height: auto;
 }
+
+.imgD{
+    max-width: 150px !important;
+    height: auto;
+}
