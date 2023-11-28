@@ -132,3 +132,7 @@ img {
     max-width: 150px !important;
     height: auto;
 }
+
+section{
+    max-width: 50vw;
+}
