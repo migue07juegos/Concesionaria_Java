@@ -122,3 +122,8 @@ ul{
     margin-inline-end: 0px !important;
     padding-inline-start: 40px !important;
 }
+
+img {
+    max-width: 150px;
+    height: auto;
+}
