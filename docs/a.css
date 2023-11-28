@@ -133,6 +133,14 @@ img {
     height: auto;
 }
 
+.divM{
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
 section{
     max-width: 50vw;
+    text-align: justify;
 }
+
