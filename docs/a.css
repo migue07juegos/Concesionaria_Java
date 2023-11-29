@@ -15,14 +15,16 @@
 }
 
 .menu {
+    position: sticky;
     height: auto;
+    top: 0;
     transition: .3s;
     background: #ffffff12;
     padding: 20px 20px 20px 0;
     width: 85px;
     box-shadow: 8px 0px 9px 0px #00000014;
     backdrop-filter: blur(5px);
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .menu-content li {
