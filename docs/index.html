@@ -88,5 +88,14 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('scroll', function () {
+          const scrollPosition = window.scrollY;
+          const topOffset = 500;
+          const cubeContainer = document.querySelector('.cubeContainer');
+    
+          cubeContainer.style.top = `${scrollPosition + topOffset}px`;
+        });
+    </script>
 </body>
 </html>
