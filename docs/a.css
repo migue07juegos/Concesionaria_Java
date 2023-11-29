@@ -92,9 +92,78 @@
 @media screen and (min-width: 1280px) {
     section {
         margin-left: 3.5vw !important;
-        
-        max-width: 50vw;
+        max-width: 50%;
+        min-width: 50%;
         text-align: justify;
+    }
+
+    .cubeContainer{
+        align-items: end;
+    }
+    
+    .cube{
+        position: relative;
+        left: 6vw;
+        width: 300px;
+        height: 300px;
+        transform-style: preserve-3d;
+        transform: rotateX(-30deg);
+        animation: animate 15s linear infinite;
+    }
+    
+    @keyframes animate{
+        0%{
+            transform: rotateX(-30deg) rotateY(0deg);
+        }
+        100%{
+            transform: rotateX(-30deg) rotateY(360deg);
+        }
+    }
+    
+    .cube div{
+        position: absolute;
+        top: 20vh;
+        left: 6vw;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+    }
+    
+    .cube div span{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(#051f30,#B5E853);
+        transform: rotateY(calc(90deg * var(--i))) translateZ(150px);
+    }
+
+    .top{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 300px;
+        height: 300px;
+        background: linear-gradient(#051f30, #000000);
+        transform:  rotateX(90deg) translateZ(150px);
+    }
+
+    .top::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 300px;
+        height: 300px;
+        background: #B5E853;
+        transform:  translateZ(-400px);
+        filter: blur(25px);
+        box-shadow: 0 0 120px rgba(181, 232, 83, .2),
+        0 0 200px rgba(181, 232, 83, .4),
+        0 0 300px rgba(181, 232, 83, .6),
+        0 0 400px rgba(181, 232, 83, .8),
+        0 0 500px rgba(181, 232, 83, 1);
     }
 }
 
